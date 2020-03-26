@@ -1,0 +1,183 @@
+<!DOCTYPE html><html lang="zh-Hans"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta name="description" content="Sqlmap的基础使用"><meta name="keywords" content="SQL"><meta name="author" content="Extrader"><meta name="copyright" content="Extrader"><title>Sqlmap的基础使用 | Extrader</title><link rel="shortcut icon" href="/melody-favicon.ico"><link rel="stylesheet" href="/css/index.css?version=1.7.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css?version=1.7.0"><meta name="format-detection" content="telephone=no"><meta http-equiv="x-dns-prefetch-control" content="on"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/gitalk/dist/gitalk.min.css"><script src="https://cdn.jsdelivr.net/npm/gitalk@latest/dist/gitalk.min.js"></script><script src="https://cdn.jsdelivr.net/npm/blueimp-md5@2.10.0/js/md5.min.js"></script><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><script src="https://v1.hitokoto.cn/?encode=js&amp;charset=utf-8&amp;select=.footer_custom_text" defer></script><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容:${query}"}},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  }
+} </script><meta name="generator" content="Hexo 4.2.0"></head><body><canvas class="fireworks"></canvas><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true"></i><div id="sidebar" data-display="false"><div class="toggle-sidebar-info text-center"><span data-toggle="切换文章详情">切换站点概览</span><hr></div><div class="sidebar-toc"><div class="sidebar-toc__title">目录</div><div class="sidebar-toc__progress"><span class="progress-notice">你已经读了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar"></div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#安装sqlmap"><span class="toc-number">1.</span> <span class="toc-text">安装sqlmap</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#输出级别"><span class="toc-number">2.</span> <span class="toc-text">输出级别</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#指定目标"><span class="toc-number">3.</span> <span class="toc-text">指定目标</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#直连连接数据库"><span class="toc-number">3.1.</span> <span class="toc-text">直连连接数据库</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#指定目标URL"><span class="toc-number">3.2.</span> <span class="toc-text">指定目标URL</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#从代理日志中解析目标"><span class="toc-number">3.3.</span> <span class="toc-text">从代理日志中解析目标</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#从站点地图文件中解析目标"><span class="toc-number">3.4.</span> <span class="toc-text">从站点地图文件中解析目标</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#从文本文件中解析目标"><span class="toc-number">3.5.</span> <span class="toc-text">从文本文件中解析目标</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#从文件载入HTTP请求"><span class="toc-number">3.6.</span> <span class="toc-text">从文件载入HTTP请求</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#将Google搜索结果作为攻击目标"><span class="toc-number">3.7.</span> <span class="toc-text">将Google搜索结果作为攻击目标</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#从配置文件中载入攻击目标"><span class="toc-number">3.8.</span> <span class="toc-text">从配置文件中载入攻击目标</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#请求"><span class="toc-number">4.</span> <span class="toc-text">请求</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP方法"><span class="toc-number">4.1.</span> <span class="toc-text">HTTP方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#POST参数"><span class="toc-number">4.2.</span> <span class="toc-text">POST参数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#指定分隔符"><span class="toc-number">4.3.</span> <span class="toc-text">指定分隔符</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#cookie"><span class="toc-number">4.4.</span> <span class="toc-text">cookie</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#User-Agent"><span class="toc-number">4.5.</span> <span class="toc-text">User-Agent</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Host"><span class="toc-number">4.6.</span> <span class="toc-text">Host</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Referer"><span class="toc-number">4.7.</span> <span class="toc-text">Referer</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#额外的HTTP头"><span class="toc-number">4.8.</span> <span class="toc-text">额外的HTTP头</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#身份认证"><span class="toc-number">4.9.</span> <span class="toc-text">身份认证</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#基于证书的身份认证"><span class="toc-number">4.10.</span> <span class="toc-text">基于证书的身份认证</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#忽略401"><span class="toc-number">4.11.</span> <span class="toc-text">忽略401</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Tor匿名网络"><span class="toc-number">4.12.</span> <span class="toc-text">Tor匿名网络</span></a></li></ol></li></ol></div></div><div class="author-info hide"><div class="author-info__avatar text-center"><img src="/img/avatar.png"></div><div class="author-info__name text-center">Extrader</div><div class="author-info__description text-center">error天上来</div><hr><div class="author-info-articles"><a class="author-info-articles__archives article-meta" href="/archives"><span class="pull-left">文章</span><span class="pull-right">25</span></a><a class="author-info-articles__tags article-meta" href="/tags"><span class="pull-left">标签</span><span class="pull-right">19</span></a><a class="author-info-articles__categories article-meta" href="/categories"><span class="pull-left">分类</span><span class="pull-right">4</span></a></div><hr><div class="author-info-links"><div class="author-info-links__title text-center">Links</div><a class="author-info-links__name text-center" href="http://wlaport.top/" target="_blank" rel="noopener">Zhu</a><a class="author-info-links__name text-center" href="https://www.suk1.top/" target="_blank" rel="noopener">Manayakko</a><a class="author-info-links__name text-center" href="https://www.zhaoj.in/" target="_blank" rel="noopener">Glzjin</a><a class="author-info-links__name text-center" href="https://www.leavesongs.com/" target="_blank" rel="noopener">Phithon</a></div></div></div><div id="content-outer"><div id="top-container" style="background-image: url(/img/blog/QQ图片20200129144108.png)"><div id="page-header"><span class="pull-left"> <a id="site-name" href="/">Extrader</a></span><i class="fa fa-bars toggle-menu pull-right" aria-hidden="true"></i><span class="pull-right menus">   <a class="site-page" href="/">Home</a><a class="site-page" href="/archives">Archives</a><a class="site-page" href="/tags">Tags</a><a class="site-page" href="/categories">Categories</a></span><span class="pull-right"><a class="site-page social-icon search"><i class="fa fa-search"></i><span> 搜索</span></a></span></div><div id="post-info"><div id="post-title">Sqlmap的基础使用</div><div id="post-meta"><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2020-03-26</time><span class="post-meta__separator">|</span><i class="fa fa-inbox post-meta__icon" aria-hidden="true"></i><a class="post-meta__categories" href="/categories/%E5%A4%87%E5%BF%98%E5%BD%95/">备忘录</a><div class="post-meta-wordcount"><span>字数总计: </span><span class="word-count">3k</span><span class="post-meta__separator">|</span><span>阅读时长: 10 分钟</span></div></div></div></div><div class="layout" id="content-inner"><article id="post"><div class="article-container" id="post-content"><p>Sqlmap是开源的自动化SQL注入工具，有python写成，具有如下特点：</p>
+<ul>
+<li>完全支持MySQL、Oracle、PostgreSQL、Microsoft SQL Server、Microsoft Access、IBM DB2、SQLite、Firebird、Sybase、SAP MaxDB、HSQLDB和Informix等多种数据库管理系统。</li>
+<li>完全支持布尔型盲注、时间型盲注、基于错误信息的注入、联合查询注入和堆查询注入。</li>
+<li>在数据库证书、IP地址、端口和数据库名等条件允许的情况下支持不通过SQL注入点而直接连接数据库。</li>
+<li>支持枚举用户、密码、哈希、权限、角色、数据库、数据表和列。</li>
+<li>支持自动识别密码哈希格式并通过字典破解密码哈希。</li>
+<li>支持完全地下载某个数据库中的某个表，也可以只下载某个表中的某几列，甚至只下载某一列中的部分数据，这完全取决于用户的选择。</li>
+<li>支持在数据库管理系统中搜索指定的数据库名、表名或列名</li>
+<li>当数据库管理系统是MySQL、PostgreSQL或Microsoft SQL Server时支持下载或上传文件。</li>
+<li>当数据库管理系统是MySQL、PostgreSQL或Microsoft SQL Server时支持执行任意命令并回现标准输出。</li>
+</ul>
+<p><img src="/.top//inner.png" alt="inner"></p>
+<h1 id="安装sqlmap"><a href="#安装sqlmap" class="headerlink" title="安装sqlmap"></a>安装sqlmap</h1><p><img src="/.top//image-29.png" alt></p>
+<p>命令行代码如下：</p>
+<ul>
+<li>git clone <a href="https://github.com/sqlmapproject/sqlmap.git" target="_blank" rel="noopener">https://github.com/sqlmapproject/sqlmap.git</a></li>
+<li>cd sqlmap</li>
+<li>ls</li>
+<li>python sqlmap.py</li>
+</ul>
+<h1 id="输出级别"><a href="#输出级别" class="headerlink" title="输出级别"></a>输出级别</h1><p>———-参数：-v</p>
+<p>sqlmap的输出信息按从简到繁分为7个级别，依次为0,1,2,3,4,5,6。</p>
+<p>使用参数“-v &lt;级别&gt;”来指定某个等级，如使用参数“-v 6”来指定输出级别为6。默认输出级别为1.各个输出级别的描述如下：</p>
+<ul>
+<li>0：只显示Python的tracebacks信息，错误信息[ERROR]和关键信息[CRITICAL]；</li>
+<li>1：同时显示普通信息[INFO]和警告信息[WARNING];</li>
+<li>2：同时显示调时信息[DEBUG]；</li>
+<li>3：同时显示注入使用的攻击荷载；</li>
+<li>4：同时显示HTTP请求；</li>
+<li>5：同时显示HTTP响应头；</li>
+<li>6：同时显示HTTP响应体。</li>
+</ul>
+<h1 id="指定目标"><a href="#指定目标" class="headerlink" title="指定目标"></a>指定目标</h1><h2 id="直连连接数据库"><a href="#直连连接数据库" class="headerlink" title="直连连接数据库"></a><strong>直连连接数据库</strong></h2><p>———-参数 ：-d</p>
+<p>使用参数“-d”直接连接数据库，该参数后跟一个表示数据库的字符串，该字符串有以下两种格式：</p>
+<p>（1）当数据库管理系统是MySQL，Oracle，Mircrosoft SQL Server 或PostgreSQL等格式为：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DBMS://USER:PASSWORD@DBMS_IP:DBMS_PORT/DATABASE_NAME</span><br></pre></td></tr></table></figure>
+
+<p>（2）当数据库管理系统是SQLite，Mircrosoft Access或Firebird等格式为：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DBMS://DATABASE_FILEPATH</span><br></pre></td></tr></table></figure>
+
+<p>需安装Python连接MySQL用的第三方库python-pymysql。</p>
+<p>命令如下：</p>
+<ul>
+<li>git clone <a href="https://github.com/petehunt/PyMySQL" target="_blank" rel="noopener">https://github.com/petehunt/PyMySQL</a></li>
+<li>cd PyMySQL</li>
+<li>sudo python setup.py install</li>
+</ul>
+<h2 id="指定目标URL"><a href="#指定目标URL" class="headerlink" title="指定目标URL"></a><strong>指定目标URL</strong></h2><p>———-参数：-u 或 -url</p>
+<p>使用参数“-u”或“-url”指定一个URL作为目标，该参数后跟一个表示URL的字符串，可以是http协议也可以是https协议，还可以指定端口</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python sqlmap.py -u "http://127.0.0.1:8080/index.php?id=1"</span><br></pre></td></tr></table></figure>
+
+<h2 id="从代理日志中解析目标"><a href="#从代理日志中解析目标" class="headerlink" title="从代理日志中解析目标"></a><strong>从代理日志中解析目标</strong></h2><p>———-参数：-l</p>
+<p>BP或者webscarab的代理日志文件，sqlmap将从日志中解析出可能的攻击目标，并逐个尝试进行注入，该参数后跟一个表示日志的路径</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python sqlmap.py -l ../1.log</span><br></pre></td></tr></table></figure>
+
+<p>手动开启BP记录日志功能：</p>
+<p><img src="/.top//image-65-1024x702.png" alt></p>
+<p>注意日志文件的路径要写正确。执行该命令时，每找到一个可能的攻击目，Sqlmap都会询问是否要检测该目标。，默认回答为“Y”，想要测试该目标，直接按回车键就行。另外可以用-scope过滤日志</p>
+<h2 id="从站点地图文件中解析目标"><a href="#从站点地图文件中解析目标" class="headerlink" title="从站点地图文件中解析目标"></a><strong>从站点地图文件中解析目标</strong></h2><p>———-参数：-x</p>
+<p>为便于搜索引擎收录，许多网站专门为搜索引擎生成了xml格式的站点地图，如百度Sitemap支持xml格式。Sqlmap可以直接解析xml格式的站点地图，从中提取攻击目标，对一个网站全方位无死角地进行注入检测，此时使用的参数是“-x”，如：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python sqlmap.py -x https://www.bilibili.com/sitemap.xml</span><br></pre></td></tr></table></figure>
+
+<p>若执行结果为：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[WARNING] no usable links found (with GET parameters)</span><br></pre></td></tr></table></figure>
+
+<p>没有找到有GET参数的可用链接。站点地图中的URL很少包含GET参数，POST参数就更不用说了</p>
+<h2 id="从文本文件中解析目标"><a href="#从文本文件中解析目标" class="headerlink" title="从文本文件中解析目标"></a><strong>从文本文件中解析目标</strong></h2><p>———-参数：-m</p>
+<p>参数“-u”一次只能指定一个URL，若有多个URL需要测试就显得很不方便，我们可用将多个URL以一行一个的格式保存在文本文件中，然后使用参数“-m”，后跟该文本文件路径，让Sqlmap依次读取文件中的URL作为攻击目标</p>
+<p>执行命令行格式如下：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python sqlmap.py -m url.txt</span><br></pre></td></tr></table></figure>
+
+<h2 id="从文件载入HTTP请求"><a href="#从文件载入HTTP请求" class="headerlink" title="从文件载入HTTP请求"></a><strong>从文件载入HTTP请求</strong></h2><p>———-参数：-r</p>
+<p>可以将一个HTTP请求保存在文件中，然后使用参数“-r”加载该文件，Sqlmap会解析该文件，从该文件分析目标并进行测试。</p>
+<p>即可将BP抓下来的数据复制到文本当中：</p>
+<p><img src="/.top//image-66-1024x677.png" alt></p>
+<p>则使用如下命令让Sqlmap解析该文件，以该文件中HTTP请求目标为攻击目标进行测试：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python sqlmap.py -r get.txt</span><br></pre></td></tr></table></figure>
+
+<h2 id="将Google搜索结果作为攻击目标"><a href="#将Google搜索结果作为攻击目标" class="headerlink" title="将Google搜索结果作为攻击目标"></a><strong>将Google搜索结果作为攻击目标</strong></h2><p>———-参数：-g</p>
+<p>Sqlmap能自动获取Google搜索的前一百个结果，对其中有GET参数的URL进行注入测试。当然，所处的网络环境要能访问Google才行。下面是Sqlmap手册中“-g”参数的例子：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python sqlmap.py -g "inurl:\".php?id=1\""</span><br></pre></td></tr></table></figure>
+
+<h2 id="从配置文件中载入攻击目标"><a href="#从配置文件中载入攻击目标" class="headerlink" title="从配置文件中载入攻击目标"></a><strong>从配置文件中载入攻击目标</strong></h2><p>———-参数：-c</p>
+<p>使用参数“-c”指定一个配置文件（如：sqlmap.conf），Sqlmap会解析该配置文件，按照该配置文件的配置执行动作。配置文件中可以指定攻击目标，实际上除了攻击目标外，配置文件还可以指定各种参数的值。</p>
+<h1 id="请求"><a href="#请求" class="headerlink" title="请求"></a>请求</h1><p>HTTP是一个复杂的协议。HTTP请求有很多种方法（method），可以在不同位置（GET、POST、cookie和User-Agent等）携带不同参数。往往只有在特定位置携带了特定参数以特定方法发起的请求才是合法有效的请求。Sqlmap运行时除了需要指定目标，有时还需要指定HTTP请求的一些细节。下面这些参数都用于指定HTTP请求细节。</p>
+<h2 id="HTTP方法"><a href="#HTTP方法" class="headerlink" title="HTTP方法"></a><strong>HTTP方法</strong></h2><p>———-参数：-method</p>
+<p>一般来说，Sqlmap能自动判断出是使用GET方法还是POST方法，但在某些情况下需要的可能是PUT等很少见的方法，此时就需要用参数“–method”来指定方法。如：“–method=PUT”。</p>
+<h2 id="POST参数"><a href="#POST参数" class="headerlink" title="POST参数"></a><strong>POST参数</strong></h2><p>———-参数：-data</p>
+<p>该参数指定的数据会被作为POST数据提交，Sqlmap也会检测该参数指定数据是否存在注入漏洞。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python sqlmap.py -u "http://192.168.56.102:8080/user.php" --data="id=0&amp;name=werner"</span><br></pre></td></tr></table></figure>
+
+<h2 id="指定分隔符"><a href="#指定分隔符" class="headerlink" title="指定分隔符"></a><strong>指定分隔符</strong></h2><p>———-参数：–param-del</p>
+<p>上一个例子中“–data”的数据“id=0&amp;name=werner”其实由两个部分组成：“id=0”和“name=werner”，默认地以“&amp;”作为分隔符。我们可以使用“–param-del”来指定分隔符，如：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python sqlmap.py -u "http://192.168.56.102:8080/user.php" --data="id=0;name=werner" --param-del=";"</span><br></pre></td></tr></table></figure>
+
+<h2 id="cookie"><a href="#cookie" class="headerlink" title="cookie"></a><strong>cookie</strong></h2><p>———-参数： –cookie、–cookie-del、–drop-set-cookie和–load-cookies</p>
+<p>有两种情况会用到这些参数：</p>
+<ul>
+<li>要测试的页面只有在登录状态下才能访问，登录状态用cookie识别</li>
+<li>想要检测是否存在cookie注入</li>
+</ul>
+<p>当“–level”设置为2或更高时，Sqlmap会检测cookie是否存在注入漏洞，关于“–level”的更多信息见下文。</p>
+<p>“–cookie”和“–cookie-del”</p>
+<p>在浏览器中登录目标网站后复制出维持登录状态的cookie，用参数“–cookie”来指定这些cookie，如：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python sqlmap.py -u "http://127.0.0.1:8080/user.php" --cookie "JSESSIONID=E5D6C8C81;NAME=werner;"</span><br></pre></td></tr></table></figure>
+
+<p>与POST参数不同，cookie默认的分隔符为“;”，想要指定cookie中的分隔符，使用参数“–cookie-del”。</p>
+<p>“–drop-set-cookie”</p>
+<p>若HTTP响应头中有“Set-Cookie”，Sqlmap会自动设置“Set-Cookie”设置的cookie，并对这些cookie进行检测。若不想让Sqlmap这么做，添加参数“–drop-set-cookie”即可，这样，Sqlmap会忽略“Set-Cookie”。</p>
+<p>“–load-cookies”</p>
+<p>该参数用于从文件中载入Netscape或wget格式的cookie。</p>
+<h2 id="User-Agent"><a href="#User-Agent" class="headerlink" title="User-Agent"></a><strong>User-Agent</strong></h2><p>———-参数： –user-agent和–random-agent</p>
+<p>默认情况下Sqlmap发送的HTTP请求中的User-Agent值为：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sqlmap/1.0-dev-xxxxxxx (http://sqlmap.org)</span><br></pre></td></tr></table></figure>
+
+<p>使用参数“–user-agent”可以指定一个User-Agent值。但正常的User-Agent值长什么样我们可能并不记得，所以有了参数“–random-agent”，使用该参数，Sqlmap会从文件./txt/user-agents.txt中随机地取一个User-Agent。注意，在一次会话中只有使用同一个User-Agent，并不是每发一个HTTP请求包，都随机一个User-Agent。</p>
+<p>用如下命令统计user-agents.txt行数：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat sqlmap/txt/user-agents.txt | wc -l</span><br></pre></td></tr></table></figure>
+
+<p>结果为4211，当然其中还包含空行、注释等，但总的来说该文件中存储的User-Agent也有4千多个。当“–level”设置为3或更高时，Sqlmap会检测User-Agent是否存在注入漏洞</p>
+<h2 id="Host"><a href="#Host" class="headerlink" title="Host"></a><strong>Host</strong></h2><p>———-参数：-host</p>
+<p>使用该参数可以手动指定HTTP头中的Host值。</p>
+<p>当“–level”设置为5或更高时，Sqlmap会检测Host是否存在注入漏洞</p>
+<h2 id="Referer"><a href="#Referer" class="headerlink" title="Referer"></a><strong>Referer</strong></h2><p>———-参数：-referer</p>
+<p>使用该参数可以指定HTTP头中的Referer值。Sqlmap发送的HTTP请求头部默认无Referer字段。</p>
+<p>当“–level”设置为3或更高时，Sqlmap会检测Referer是否存在注入漏洞，关于“–level”的更多信息见下文。</p>
+<h2 id="额外的HTTP头"><a href="#额外的HTTP头" class="headerlink" title="额外的HTTP头"></a><strong>额外的HTTP头</strong></h2><p>———-参数：-headers</p>
+<p>使用该参数可以在Sqlmap发送的HTTP请求报文头部添加字段，若添加多个字段，用“\n”分隔。如命令：</p>
+<p>python sqlmap.py -u “<a href="http://192.168.56.101:8080/&quot;" target="_blank" rel="noopener">http://192.168.56.101:8080/&quot;</a> -v 5 –headers “X-A:A\nX-B: B”</p>
+<p>发送的HTTP请求包为：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">GET / HTTP/1.1</span><br><span class="line">X-B: B</span><br><span class="line">Host: 192.168.56.101:8080</span><br><span class="line">Accept-encoding: gzip,deflate</span><br><span class="line">X-A: A</span><br><span class="line">Accept: */*</span><br><span class="line">User-agent: sqlmap/1.1.10#stable (http://sqlmap.org)</span><br><span class="line">Connection: close</span><br></pre></td></tr></table></figure>
+
+<p>加参数“-v 5”是为了让Sqlamp输出发送的HTTP请求包，便于我们观察。</p>
+<h2 id="身份认证"><a href="#身份认证" class="headerlink" title="身份认证"></a><strong>身份认证</strong></h2><p>———-参数： –auth-type和–auth-cred</p>
+<p>这些参数用于进行身份认证。“–auth-type”用于指定认证方式，支持以下三种身份认证方式：</p>
+<ul>
+<li>Basic</li>
+<li>Digest</li>
+<li>NTLM</li>
+</ul>
+<p>“–auth-cred”用于给出身份认证的凭证，格式是“username:password”。如：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python sqlmap.py -u "http://192.168.136.131/sqlmap/mysql/basic/get_int.php?id=1" --auth-type Basic --auth-cred "testuser:testpass"</span><br></pre></td></tr></table></figure>
+
+<h2 id="基于证书的身份认证"><a href="#基于证书的身份认证" class="headerlink" title="基于证书的身份认证"></a><strong>基于证书的身份认证</strong></h2><p>———-参数： –auth-file</p>
+<p>若Web服务器要求客户端提供证书则可以使用此参数指定一个PEM格式的证书文件。我们知道SSL协议的客户端认证是可选的，实践中一般都只用服务器端提供自己的证书供客户端验证，很少要求客户端提供自己的证书。</p>
+<h2 id="忽略401"><a href="#忽略401" class="headerlink" title="忽略401"></a><strong>忽略401</strong></h2><p>———-参数： –ignore-401</p>
+<p>使用该参数忽略401错误（未认证）。</p>
+<p><strong>HTTP(S)代理</strong></p>
+<p>———-参数： –proxy、–proxy-cred、–proxy-file和–ignore-proxy</p>
+<p>使用参数“–proxy”来设置一个HTTP(S)代理，格式是“http(s)://url:port”。若代理需要认证，使用参数“–proxy-cred”来提供认证凭证，格式是“username:password”。</p>
+<p>使用参数“–proxy-file”指定一个存储着代理列表的文件，Sqlmap会依次使用文件中的代理，当某个代理有任何连接问题时就会被弃用而换下一个代理。</p>
+<p>使用参数“–ignore-proxy”忽略本地代理设置。</p>
+<h2 id="Tor匿名网络"><a href="#Tor匿名网络" class="headerlink" title="Tor匿名网络"></a><strong>Tor匿名网络</strong></h2><p>———-参数： –tor、–tor-type、–tor-port和–check-tor</p>
+<p>不管出于什么原因，如果想要保持匿名状态与其使用单个的HTTP(S)代理，不如安装类似Privoxy这样的软件按照Tor的安装指导配置一个Tor客户端。设置好后使用参数“–tor”让Sqlmap自动设置使用Tor代理。</p>
+<p>如果想要手动指定Tor的类型和端口可以使用参数“–tor-type”和“–tor-port”，如：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">--tor-type=SOCKS5 --tor-port 9050</span><br></pre></td></tr></table></figure>
+
+<p>如果要求高度的匿名性可以使用参数“–check-tor”，加上该参数后Sqlmap会确保所有流量都走Tor代理，若Tor代理失效，Sqlmap会发出警告并退出。检测方法是访问Are you using Tor?。</p>
+</div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Extrader</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://www.extrader.top/2020/01/12/Sqlmap%E7%9A%84%E5%9F%BA%E7%A1%80%E4%BD%BF%E7%94%A8/">https://www.extrader.top/2020/01/12/Sqlmap%E7%9A%84%E5%9F%BA%E7%A1%80%E4%BD%BF%E7%94%A8/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://www.extrader.top">Extrader</a>！</span></div></div><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/SQL/">SQL</a></div><nav id="pagination"><div class="prev-post pull-left"><a href="/2020/01/13/ZigBee%E5%85%A5%E9%97%A8/"><i class="fa fa-chevron-left">  </i><span>ZigBee入门</span></a></div><div class="next-post pull-right"><a href="/2020/01/12/Nmap%E7%9A%84%E5%9F%BA%E7%A1%80%E4%BD%BF%E7%94%A8/"><span>Nmap的基础使用</span><i class="fa fa-chevron-right"></i></a></div></nav><div id="gitalk-container"></div><script>var gitalk = new Gitalk({
+  clientID: 'dcbaba23dd5d2cbb1cc2',
+  clientSecret: '39bc1e41152f9936638fa5d9f2c542ac945d9fe1',
+  repo: 'Extrader-home.github.io',
+  owner: 'Extrader-home',
+  admin: 'Extrader-home',
+  id: md5(decodeURI(location.pathname)),
+  language: 'zh-CN'
+})
+gitalk.render('gitalk-container')</script></div></div><footer class="footer-bg" style="background-image: url(/img/blog/QQ图片20200129144108.png)"><div class="layout" id="footer"><div class="copyright">&copy;2020 By Extrader</div><div class="framework-info"><span>驱动 - </span><a href="http://hexo.io" target="_blank" rel="noopener"><span>Hexo</span></a><span class="footer-separator">|</span><span>主题 - </span><a href="https://github.com/Molunerfinn/hexo-theme-melody" target="_blank" rel="noopener"><span>Melody</span></a></div><div class="footer_custom_text">hitokoto</div><div class="busuanzi"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_page_pv"><i class="fa fa-file"></i><span id="busuanzi_value_page_pv"></span><span></span></span></div></div></footer><i class="fa fa-arrow-up" id="go-up" aria-hidden="true"></i><script src="https://cdn.jsdelivr.net/npm/animejs@latest/anime.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@latest/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-ui-pack@latest/velocity.ui.min.js"></script><script src="/js/utils.js?version=1.7.0"></script><script src="/js/fancybox.js?version=1.7.0"></script><script src="/js/sidebar.js?version=1.7.0"></script><script src="/js/copy.js?version=1.7.0"></script><script src="/js/fireworks.js?version=1.7.0"></script><script src="/js/transition.js?version=1.7.0"></script><script src="/js/scroll.js?version=1.7.0"></script><script src="/js/head.js?version=1.7.0"></script><script src="/js/search/local-search.js"></script><script>if(/Android|webOS|iPhone|iPod|iPad|BlackBerry/i.test(navigator.userAgent)) {
+  $('#nav').addClass('is-mobile')
+  $('footer').addClass('is-mobile')
+  $('#top-container').addClass('is-mobile')
+}</script><div class="search-dialog" id="local-search"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章"></div></div></div><hr><div id="local-search-results"><div id="local-hits"></div><div id="local-stats"><div class="local-search-stats__hr" id="hr"><span>由</span> <a href="https://github.com/wzpan/hexo-generator-search" target="_blank" rel="noopener" style="color:#49B1F5;">hexo-generator-search</a>
+ <span>提供支持</span></div></div></div><span class="search-close-button"><i class="fa fa-times"></i></span></div><div class="search-mask"></div></body></html>

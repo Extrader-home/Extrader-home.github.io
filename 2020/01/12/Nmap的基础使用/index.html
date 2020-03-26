@@ -1,0 +1,168 @@
+<!DOCTYPE html><html lang="zh-Hans"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta name="description" content="Nmap的基础使用"><meta name="keywords" content="Nmap"><meta name="author" content="Extrader"><meta name="copyright" content="Extrader"><title>Nmap的基础使用 | Extrader</title><link rel="shortcut icon" href="/melody-favicon.ico"><link rel="stylesheet" href="/css/index.css?version=1.7.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css?version=1.7.0"><meta name="format-detection" content="telephone=no"><meta http-equiv="x-dns-prefetch-control" content="on"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/gitalk/dist/gitalk.min.css"><script src="https://cdn.jsdelivr.net/npm/gitalk@latest/dist/gitalk.min.js"></script><script src="https://cdn.jsdelivr.net/npm/blueimp-md5@2.10.0/js/md5.min.js"></script><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><script src="https://v1.hitokoto.cn/?encode=js&amp;charset=utf-8&amp;select=.footer_custom_text" defer></script><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容:${query}"}},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  }
+} </script><meta name="generator" content="Hexo 4.2.0"></head><body><canvas class="fireworks"></canvas><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true"></i><div id="sidebar" data-display="false"><div class="toggle-sidebar-info text-center"><span data-toggle="切换文章详情">切换站点概览</span><hr></div><div class="sidebar-toc"><div class="sidebar-toc__title">目录</div><div class="sidebar-toc__progress"><span class="progress-notice">你已经读了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar"></div></div><div class="sidebar-toc__content"></div></div><div class="author-info hide"><div class="author-info__avatar text-center"><img src="/img/avatar.png"></div><div class="author-info__name text-center">Extrader</div><div class="author-info__description text-center">error天上来</div><hr><div class="author-info-articles"><a class="author-info-articles__archives article-meta" href="/archives"><span class="pull-left">文章</span><span class="pull-right">25</span></a><a class="author-info-articles__tags article-meta" href="/tags"><span class="pull-left">标签</span><span class="pull-right">19</span></a><a class="author-info-articles__categories article-meta" href="/categories"><span class="pull-left">分类</span><span class="pull-right">4</span></a></div><hr><div class="author-info-links"><div class="author-info-links__title text-center">Links</div><a class="author-info-links__name text-center" href="http://wlaport.top/" target="_blank" rel="noopener">Zhu</a><a class="author-info-links__name text-center" href="https://www.suk1.top/" target="_blank" rel="noopener">Manayakko</a><a class="author-info-links__name text-center" href="https://www.zhaoj.in/" target="_blank" rel="noopener">Glzjin</a><a class="author-info-links__name text-center" href="https://www.leavesongs.com/" target="_blank" rel="noopener">Phithon</a></div></div></div><div id="content-outer"><div id="top-container" style="background-image: url(/img/blog/nmap.png)"><div id="page-header"><span class="pull-left"> <a id="site-name" href="/">Extrader</a></span><i class="fa fa-bars toggle-menu pull-right" aria-hidden="true"></i><span class="pull-right menus">   <a class="site-page" href="/">Home</a><a class="site-page" href="/archives">Archives</a><a class="site-page" href="/tags">Tags</a><a class="site-page" href="/categories">Categories</a></span><span class="pull-right"><a class="site-page social-icon search"><i class="fa fa-search"></i><span> 搜索</span></a></span></div><div id="post-info"><div id="post-title">Nmap的基础使用</div><div id="post-meta"><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2020-03-26</time><span class="post-meta__separator">|</span><i class="fa fa-inbox post-meta__icon" aria-hidden="true"></i><a class="post-meta__categories" href="/categories/%E5%A4%87%E5%BF%98%E5%BD%95/">备忘录</a><div class="post-meta-wordcount"><span>字数总计: </span><span class="word-count">1.6k</span><span class="post-meta__separator">|</span><span>阅读时长: 5 分钟</span></div></div></div></div><div class="layout" id="content-inner"><article id="post"><div class="article-container" id="post-content"><p>nmap这个渗透工具一般有在渗透的准备阶段，用于收集用户的信息，为后面的渗透做情报支持</p>
+<p>Nmap是主机扫描工具，他的图形化界面是Zenmap，分布式框架为Dnmap。</p>
+<p>Nmap可以完成以下任务：</p>
+<ul>
+<li>主机探测</li>
+<li>端口扫描</li>
+<li>版本检测</li>
+<li>系统检测</li>
+<li>支持探测脚本的编写</li>
+</ul>
+<p>Nmap在实际中应用场合如下：</p>
+<ul>
+<li>通过对设备或者防火墙的探测来审计它的安全性</li>
+<li>探测目标主机所开放的端口</li>
+<li>通过识别新的服务器审计网络的安全性</li>
+<li>探测网络上的主机</li>
+</ul>
+<p>常见服务对应端口号：</p>
+<table>
+<thead>
+<tr>
+<th align="center"><strong>服务</strong></th>
+<th align="center"><strong>端口号</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">HTTP</td>
+<td align="center">80</td>
+</tr>
+<tr>
+<td align="center">HTTPS</td>
+<td align="center">443</td>
+</tr>
+<tr>
+<td align="center">Telnet（远程登录）</td>
+<td align="center">23</td>
+</tr>
+<tr>
+<td align="center">SSH（安全登录），SCP（文件传输），端口重定向</td>
+<td align="center">22</td>
+</tr>
+<tr>
+<td align="center"><a href="https://baike.baidu.com/item/SMTP/175887?fr=aladdin" target="_blank" rel="noopener">SMTP</a>（简单邮件传输协议）</td>
+<td align="center">25</td>
+</tr>
+<tr>
+<td align="center"><a href="https://baike.baidu.com/item/POP3/175122?fr=aladdin" target="_blank" rel="noopener">POP3</a>（ 邮局协议版本3 ）</td>
+<td align="center">110</td>
+</tr>
+<tr>
+<td align="center"><a href="https://baike.baidu.com/item/weblogic/451978?fr=aladdin" target="_blank" rel="noopener">WebLogic</a></td>
+<td align="center">7001</td>
+</tr>
+<tr>
+<td align="center"><a href="https://baike.baidu.com/item/tomcat/255751?fr=aladdin" target="_blank" rel="noopener">TOMCAT</a>（ Java Web服务器 ）</td>
+<td align="center">8080</td>
+</tr>
+<tr>
+<td align="center">WIN2003远程登录</td>
+<td align="center">3389</td>
+</tr>
+<tr>
+<td align="center">Oracle数据库</td>
+<td align="center">1521</td>
+</tr>
+<tr>
+<td align="center">MY SQL SERVER数据库</td>
+<td align="center">1433</td>
+</tr>
+<tr>
+<td align="center">MySQL数据库</td>
+<td align="center">3306</td>
+</tr>
+</tbody></table>
+<p>在kali中使用：命令行nmap即可使用</p>
+<p>nmap -version即可查看nmap的版本信息</p>
+<p><img src="/.top//image-27.png" alt></p>
+<p>扫描简单来说就是四个动作</p>
+<ul>
+<li>统一沟通语言（TCP/IP协议）</li>
+<li>发出刺激（ICMP报文头）</li>
+<li>受到刺激的反馈（ICMP的反馈）</li>
+<li>通过比对刺激和反馈完成扫描</li>
+</ul>
+<p>说实话这四个动作具体是啥意思我也不是很明白</p>
+<p>将你要扫描的设备地址告诉nmap可以通过下面的方法实现统一的格式</p>
+<ul>
+<li>namp [扫描类型] [设置] {设备地址}</li>
+</ul>
+<p><strong>nmap常用的参数及意义</strong></p>
+<ol>
+<li>-A ：选择用于使用进攻性方式扫描；全面系统检测，启用脚本检测，扫描。（推荐）</li>
+<li>-T4：指定扫描过程使用的时序，表示禁止动态扫描延时超过的时间；总共有6个级别（0-5）。级别越高，扫描速度越快，但也容易被防火墙或IDS检测并屏蔽掉，在网络通讯状况较好的情况下推荐使用T4 。*（ 假如防火墙是一幢大楼的门锁，那么IDS就是这幢大楼里的监视系统。一旦小偷爬窗进入大楼，或内部人员有越界行为，只有实时监视系统才能发现情况并发出警告。 ）（推荐）</li>
+<li>-oX test.xml：将扫描结果生成test.xml文件</li>
+<li>-oG test.txt：将扫描结果生成test.txt文件</li>
+<li>-sn：只进行主机发现，不进行端口扫描</li>
+<li>-O：指定Nmap进行系统版本扫描</li>
+<li>-sV：指定Nmap进行服务版本扫描</li>
+<li>-p <code>&lt;port ranges&gt;</code>：扫描指定的端口</li>
+<li>-sS/sT/sA/sW/sM：指定使用 TCP SYN/Connect()/ACK/Window/Maimon scans的方式来对目标主机进行扫描</li>
+<li>-sU: 指定使用UDP扫描方式确定目标主机的UDP端口状况</li>
+<li>-script  <code>&lt;script name&gt;</code> : 指定扫描脚本</li>
+<li>-Pn ： 不进行ping扫描（推荐）</li>
+<li>-sP : 用ping扫描判断主机是否存活，只有主机存活，nmap才会继续扫描，一般最好不加，因为有的主机会禁止ping</li>
+<li>-PI : 设置这个选项，让nmap使用真正的ping(ICMP echo请求)来扫描目标主机是否正在运行。</li>
+<li>-iL 1.txt : 批量扫描1.txt中的目标地址</li>
+<li>-sL: List Scan 列表扫描，仅将指定的目标的IP列举出来，不进行主机发现</li>
+<li>-sY/sZ: 使用SCTP INIT/COOKIE-ECHO来扫描SCTP协议端口的开放的情况</li>
+<li>-sO: 使用IP protocol 扫描确定目标机支持的协议类型</li>
+<li>-PO : 使用IP协议包探测对方主机是否开启</li>
+<li>-PE/PP/PM : 使用ICMP echo、 ICMP timestamp、ICMP netmask 请求包发现主机</li>
+<li>-PS/PA/PU/PY : 使用TCP SYN/TCP ACK或SCTP INIT/ECHO方式进行发现</li>
+<li>-sN/sF/sX: 指定使用TCP Null, FIN, and Xmas scans秘密扫描方式来协助探测对方的TCP端口状态</li>
+<li>-e eth0：指定使用eth0网卡进行探测</li>
+<li>-f : –mtu <code>&lt;val&gt;</code>: 指定使用分片、指定数据包的 MTU.</li>
+<li>-b <code>&lt;FTP relay host&gt;</code>: 使用FTP bounce scan扫描方式</li>
+<li>-g： 指定发送的端口号</li>
+<li>-r：不进行端口随机打乱的操作（如无该参数，nmap会将要扫描的端口以随机顺序方式扫描，以让nmap的扫描不易被对方防火墙检测到）</li>
+<li>-v ：表示显示冗余信息，在扫描过程中显示扫描的细节，从而让用户了解当前的扫描状态（推荐）</li>
+<li>-n : 表示不进行DNS解析；</li>
+<li>-D &lt;decoy1,decoy2[,ME],…&gt;: 用一组 IP 地址掩盖真实地址，其中 ME 填入自己的 IP 地址</li>
+<li>-R ：表示总是进行DNS解析。</li>
+<li>-F : 快速模式，仅扫描TOP 100的端口</li>
+<li>-S <IP_Address>: 伪装成其他 IP 地址</IP_Address></li>
+<li>–ttl <code>&lt;val&gt;</code>: 设置 time-to-live 时间</li>
+<li>–badsum: 使用错误的 checksum 来发送数据包（正常情况下，该类数据包被抛弃，如果收到回复，说明回复来自防火墙或 IDS/IPS）</li>
+<li>–dns-servers : 指定DNS服务器</li>
+<li>–system-dns : 指定使用系统的DNS服务器</li>
+<li>–traceroute : 追踪每个路由节点</li>
+<li>–scanflags <code>&lt;flags&gt;</code>: 定制TCP包的flags</li>
+<li>–top-ports <code>&lt;number&gt;</code> :扫描开放概率最高的number个端口</li>
+<li>–port-ratio <code>&lt;ratio&gt;</code>: 扫描指定频率以上的端口。与上述–top-ports类似，这里以概率作为参数</li>
+<li>–version-trace: 显示出详细的版本侦测过程信息</li>
+<li>–osscan-limit: 限制Nmap只对确定的主机的进行OS探测（至少需确知该主机分别有一个open和closed的端口）</li>
+<li>–osscan-guess: 大胆猜测对方的主机的系统类型。由此准确性会下降不少，但会尽可能多为用户提供潜在的操作系统</li>
+<li>–data-length <code>&lt;num&gt;</code>: 填充随机数据让数据包长度达到 Num</li>
+<li>–ip-options <code>&lt;options&gt;</code>: 使用指定的 IP 选项来发送数据包</li>
+<li>–spoof-mac &lt;mac address/prefix/vendor name&gt; : 伪装 MAC 地址</li>
+<li>–version-intensity <code>&lt;level&gt;</code>: 指定版本侦测强度（0-9），默认为7。数值越高，探测出的服务越准确，但是运行时间会比较长。</li>
+<li>–version-light: 指定使用轻量侦测方式 (intensity 2)</li>
+<li>–version-all: 尝试使用所有的probes进行侦测 (intensity 9)</li>
+</ol>
+<p><img src="/.top//image-28.png" alt></p>
+<p>参考原文链接：<a href="https://www.cnblogs.com/bonelee/p/9188122.html" target="_blank" rel="noopener">1</a>，<a href="https://www.cnblogs.com/liaopeng123/p/11281516.html" target="_blank" rel="noopener">2</a></p>
+</div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Extrader</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://www.extrader.top/2020/01/12/Nmap%E7%9A%84%E5%9F%BA%E7%A1%80%E4%BD%BF%E7%94%A8/">https://www.extrader.top/2020/01/12/Nmap%E7%9A%84%E5%9F%BA%E7%A1%80%E4%BD%BF%E7%94%A8/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://www.extrader.top">Extrader</a>！</span></div></div><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Nmap/">Nmap</a></div><nav id="pagination"><div class="prev-post pull-left"><a href="/2020/01/12/Sqlmap%E7%9A%84%E5%9F%BA%E7%A1%80%E4%BD%BF%E7%94%A8/"><i class="fa fa-chevron-left">  </i><span>Sqlmap的基础使用</span></a></div><div class="next-post pull-right"><a href="/2020/01/10/VS2017%E4%B8%AD%E5%B0%86C-Windows%E7%AA%97%E4%BD%93%E5%BA%94%E7%94%A8%E6%89%93%E5%8C%85%E6%88%90msi%E6%88%96%E8%80%85exe/"><span>VS2017中将C#Windows窗体应用打包成msi或者exe</span><i class="fa fa-chevron-right"></i></a></div></nav><div id="gitalk-container"></div><script>var gitalk = new Gitalk({
+  clientID: 'dcbaba23dd5d2cbb1cc2',
+  clientSecret: '39bc1e41152f9936638fa5d9f2c542ac945d9fe1',
+  repo: 'Extrader-home.github.io',
+  owner: 'Extrader-home',
+  admin: 'Extrader-home',
+  id: md5(decodeURI(location.pathname)),
+  language: 'zh-CN'
+})
+gitalk.render('gitalk-container')</script></div></div><footer class="footer-bg" style="background-image: url(/img/blog/nmap.png)"><div class="layout" id="footer"><div class="copyright">&copy;2020 By Extrader</div><div class="framework-info"><span>驱动 - </span><a href="http://hexo.io" target="_blank" rel="noopener"><span>Hexo</span></a><span class="footer-separator">|</span><span>主题 - </span><a href="https://github.com/Molunerfinn/hexo-theme-melody" target="_blank" rel="noopener"><span>Melody</span></a></div><div class="footer_custom_text">hitokoto</div><div class="busuanzi"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_page_pv"><i class="fa fa-file"></i><span id="busuanzi_value_page_pv"></span><span></span></span></div></div></footer><i class="fa fa-arrow-up" id="go-up" aria-hidden="true"></i><script src="https://cdn.jsdelivr.net/npm/animejs@latest/anime.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@latest/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-ui-pack@latest/velocity.ui.min.js"></script><script src="/js/utils.js?version=1.7.0"></script><script src="/js/fancybox.js?version=1.7.0"></script><script src="/js/sidebar.js?version=1.7.0"></script><script src="/js/copy.js?version=1.7.0"></script><script src="/js/fireworks.js?version=1.7.0"></script><script src="/js/transition.js?version=1.7.0"></script><script src="/js/scroll.js?version=1.7.0"></script><script src="/js/head.js?version=1.7.0"></script><script src="/js/search/local-search.js"></script><script>if(/Android|webOS|iPhone|iPod|iPad|BlackBerry/i.test(navigator.userAgent)) {
+  $('#nav').addClass('is-mobile')
+  $('footer').addClass('is-mobile')
+  $('#top-container').addClass('is-mobile')
+}</script><div class="search-dialog" id="local-search"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章"></div></div></div><hr><div id="local-search-results"><div id="local-hits"></div><div id="local-stats"><div class="local-search-stats__hr" id="hr"><span>由</span> <a href="https://github.com/wzpan/hexo-generator-search" target="_blank" rel="noopener" style="color:#49B1F5;">hexo-generator-search</a>
+ <span>提供支持</span></div></div></div><span class="search-close-button"><i class="fa fa-times"></i></span></div><div class="search-mask"></div></body></html>

