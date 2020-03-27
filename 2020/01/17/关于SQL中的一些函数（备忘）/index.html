@@ -17,23 +17,23 @@
 
 <h2 id="FOR-XML-PATH-‘’"><a href="#FOR-XML-PATH-‘’" class="headerlink" title="FOR XML PATH(‘’)"></a><strong>FOR XML PATH(‘’)</strong></h2><p>通常与stuff函数结合起来使用， 将查询结果集以<a href="https://baike.baidu.com/item/%E5%8F%AF%E6%89%A9%E5%B1%95%E6%A0%87%E8%AE%B0%E8%AF%AD%E8%A8%80/2885849?fromtitle=xml&fromid=86251&fr=aladdin" target="_blank" rel="noopener">XML</a>形式展现</p>
 <p>现有表</p>
-<p><img src="/.top//image-107.png" alt></p>
+<p><img src="https://i.loli.net/2020/03/26/Yk6cAE1UL5Ffmbv.png" alt="image-107.png"></p>
 <p>执行</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="keyword">stuff</span>((<span class="keyword">select</span> <span class="string">','</span>+test_name+test_pass <span class="keyword">from</span> <span class="keyword">test</span> <span class="keyword">for</span> <span class="keyword">xml</span> <span class="keyword">path</span>(<span class="string">'root'</span>)),<span class="number">1</span>,<span class="number">1</span>,<span class="string">''</span>)</span><br></pre></td></tr></table></figure>
 
-<p><img src="/.top//image-108.png" alt></p>
+<p><img src="https://i.loli.net/2020/03/26/maTwGxQHfDVW7F5.png" alt="image-108.png"></p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="keyword">stuff</span>((<span class="keyword">select</span> <span class="string">','</span>+test_name+test_pass <span class="keyword">from</span> <span class="keyword">test</span> <span class="keyword">for</span> <span class="keyword">xml</span> <span class="keyword">path</span>(<span class="string">''</span>)),<span class="number">1</span>,<span class="number">1</span>,<span class="string">''</span>)</span><br></pre></td></tr></table></figure>
 
-<p><img src="/.top//image-109.png" alt></p>
+<p><img src="https://i.loli.net/2020/03/26/WYqSPABecmgJvGy.png" alt="image-109.png"></p>
 <h1 id="MySQL"><a href="#MySQL" class="headerlink" title="MySQL"></a><strong>MySQL</strong></h1><h2 id="Concat-str1-str2-…"><a href="#Concat-str1-str2-…" class="headerlink" title="Concat( str1,str2,… )"></a><strong>Concat( str1,str2,… )</strong></h2><p>返回结果为连续参数产生的字符串。如果任何一个参数为NULL，则返回值为NULL。</p>
-<p><img src="/.top//image-138.png" alt></p>
+<p><img src="https://i.loli.net/2020/03/26/G6HyAqlKioakU1n.png" alt="image-138.png"></p>
 <h2 id="Concat-ws-separator-str1-str2-…"><a href="#Concat-ws-separator-str1-str2-…" class="headerlink" title="Concat_ws(separator,str1,str2,…)"></a><strong>Concat_ws(separator,str1,str2,…)</strong></h2><p>concat_ws()代表concat with separator ，是concat的特殊形式。第一个参数是其它参数的分隔符，如果分隔符为NULL，则结果为NULL</p>
 <p>函数返回结果为连接参数产生的字符串</p>
-<p><img src="/.top//image-139.png" alt></p>
+<p><img src="https://i.loli.net/2020/03/26/U8ApuLMnX1Vayts.png" alt="image-139.png"></p>
 <h2 id="Group-concat"><a href="#Group-concat" class="headerlink" title="Group_concat()"></a>Group_concat()</h2><p>group_concat([DISTINCT] 要连接的字段 [Order BY ASC/DESC 排序字段] [Separator ‘分隔符’])</p>
 <p>将同一个分组中的值连接起来，返回一个字符串结果。</p>
 <p>通过使用distinct可以排除重复值；如果希望对结果中的值进行排序，可以使用order by子句；separator是一个字符串值，缺省为一个逗号。</p>
-<p><img src="/.top//image-20200203144159549.png" alt="image-20200203144159549"></p>
+<p><img src="https://i.loli.net/2020/03/26/iw26TDL4XzZcxkN.png" alt="image-20200203144159549.png"></p>
 <h2 id="Updatexml-XML-document-XPath-string-new-value"><a href="#Updatexml-XML-document-XPath-string-new-value" class="headerlink" title="Updatexml (XML_document, XPath_string, new_value)"></a><strong>Updatexml (XML_document, XPath_string, new_value)</strong></h2><ul>
 <li>XML_document：String格式，为XML文档对象的名称</li>
 <li>XPath_string：XPath格式的字符串</li>
@@ -42,7 +42,7 @@
 <p>SQL注入通常用于显错注入；XPath_string出参数错误报错，得到信息，方法：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">updatexml(1,concat(1,(SELECT database())),1);</span><br></pre></td></tr></table></figure>
 
-<p><img src="/.top//image-141.png" alt></p>
+<p><img src="https://i.loli.net/2020/03/26/tSkErsdx7wme5pH.png" alt="image-141.png"></p>
 <h2 id="Extractvalue-XML-document-XPath-string"><a href="#Extractvalue-XML-document-XPath-string" class="headerlink" title="Extractvalue (XML_document, XPath_string)"></a><strong>Extractvalue (XML_document, XPath_string)</strong></h2><ul>
 <li><p>XML_document：String格式，为XML文档对象的名称</p>
 </li>
@@ -50,21 +50,21 @@
 <p>extractvalue(1,concat(1,database()));</p>
 </li>
 </ul>
-<p><img src="/.top//image-142.png" alt></p>
+<p><img src="https://i.loli.net/2020/03/26/VTlharikYuJGUbI.png" alt="image-142.png"></p>
 <h2 id="Left-ARG-LENGTH-、Right-ARG-LENGTH"><a href="#Left-ARG-LENGTH-、Right-ARG-LENGTH" class="headerlink" title="Left(ARG,LENGTH)、Right(ARG,LENGTH)"></a><strong>Left(ARG,LENGTH)、Right(ARG,LENGTH)</strong></h2><p>此函数返回ARG最左边，右边的LENGTH个字符串，ARG可是char或binary，string</p>
-<p><img src="/.top//image-143.png" alt></p>
+<p><img src="https://i.loli.net/2020/03/26/974o3IPca8wExvr.png" alt="image-143.png"></p>
 <h2 id="Substr-stirng-strat-length"><a href="#Substr-stirng-strat-length" class="headerlink" title="Substr(stirng,strat,length)"></a><strong>Substr(stirng,strat,length)</strong></h2><ul>
 <li>string：需要截取的字符串</li>
 <li>start：开始截取的位置</li>
 <li>length：需要截取字符串的个数，若无此项，则从截取位置一直截取到最后</li>
 </ul>
-<p><img src="/.top//image-152.png" alt></p>
+<p><img src="https://i.loli.net/2020/03/26/PpfLyAzUgM4Huls.png" alt="image-152.png"></p>
 <h2 id="Ascii-str"><a href="#Ascii-str" class="headerlink" title="Ascii(str)"></a><strong>Ascii(str)</strong></h2><p>返回字符串str的最左字符的数值。返回0，如果str为空字符串。返回NULL，如果str为NULL。 ASCII()返回数值是从0到255。</p>
-<p><img src="/.top//image-166.png" alt></p>
+<p><img src="https://i.loli.net/2020/03/26/qVHkE3IsLg6mYux.png" alt="image-166.png"></p>
 <h2 id="Pow-x-y"><a href="#Pow-x-y" class="headerlink" title="Pow(x,y)"></a>Pow(x,y)</h2><p>pow(x,y)表示计算x的y次方，当计算值过大时，会发生DOUBLE溢出，数据库报错</p>
-<p><img src="/.top//image-20200203151717577.png" alt="image-20200203151717577"></p>
-<h2 id="MID-column-name-start-length"><a href="#MID-column-name-start-length" class="headerlink" title="MID(column_name,start[,length])"></a>MID(column_name,start[,length])</h2><p><img src="/.top//image-20200224203301659.png" alt="image-20200224203301659"></p>
-<p><img src="/.top//image-20200224204817021.png" alt="image-20200224204817021"></p>
+<p><img src="https://i.loli.net/2020/03/26/dFDIkC75anAwVWf.png" alt="image-20200203151717577.png"></p>
+<h2 id="MID-column-name-start-length"><a href="#MID-column-name-start-length" class="headerlink" title="MID(column_name,start[,length])"></a>MID(column_name,start[,length])</h2><p><img src="https://i.loli.net/2020/03/26/xTWc64pjmuRQ7Os.png" alt="image-20200224203301659.png"></p>
+<p><img src="https://i.loli.net/2020/03/26/XE5Nab7z4Alg3DL.png" alt="image-20200224204817021.png"></p>
 </div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Extrader</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://www.extrader.top/2020/01/17/%E5%85%B3%E4%BA%8ESQL%E4%B8%AD%E7%9A%84%E4%B8%80%E4%BA%9B%E5%87%BD%E6%95%B0%EF%BC%88%E5%A4%87%E5%BF%98%EF%BC%89/">https://www.extrader.top/2020/01/17/%E5%85%B3%E4%BA%8ESQL%E4%B8%AD%E7%9A%84%E4%B8%80%E4%BA%9B%E5%87%BD%E6%95%B0%EF%BC%88%E5%A4%87%E5%BF%98%EF%BC%89/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://www.extrader.top">Extrader</a>！</span></div></div><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/SQL/">SQL</a></div><nav id="pagination"><div class="prev-post pull-left"><a href="/2020/01/21/%E8%AE%B0%E5%BD%95%E4%B8%80%E6%AC%A1%E6%9C%89%E6%83%8A%E6%97%A0%E9%99%A9%EF%BC%81%EF%BC%81%EF%BC%81/"><i class="fa fa-chevron-left">  </i><span>记录一次有惊无险！！！</span></a></div><div class="next-post pull-right"><a href="/2020/01/15/%E6%97%B6%E9%92%9F%EF%BC%8C%E4%B8%B2%E5%8F%A3%E9%85%8D%E7%BD%AE/"><span>时钟，串口配置</span><i class="fa fa-chevron-right"></i></a></div></nav><div id="gitalk-container"></div><script>var gitalk = new Gitalk({
   clientID: 'dcbaba23dd5d2cbb1cc2',
   clientSecret: '39bc1e41152f9936638fa5d9f2c542ac945d9fe1',
