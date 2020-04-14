@@ -40,7 +40,7 @@
 <p><img src="https://i.loli.net/2020/03/27/e76bKhkrUN4FY1V.png" alt=""></p>
 <h3 id="PHP伪协议"><a href="#PHP伪协议" class="headerlink" title="PHP伪协议"></a>PHP伪协议</h3><h4 id="php-input"><a href="#php-input" class="headerlink" title="php://input"></a>php://input</h4><p>当<code>enctype=”multipart/form-data”</code>时<code>php://input</code>无效</p>
 <p>用法<code>?file=php://input</code>，利用POST传入</p>
-<p>利用php://input写马（亦可命令执行）：</p>
+<p>利用<code>php://input</code>写马（亦可命令执行）：</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">2.</span>php代码：</span><br><span class="line"><span class="meta">&lt;?php</span> $a = $_GET[<span class="string">'a'</span>]; <span class="keyword">include</span>($a);<span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
 
 <p>要求：同时开启 <code>allow_url_fopen</code> 和 <code>allow_url_include</code>（PHP &lt; 5.3.0）即可造成任意代码执行</p>
