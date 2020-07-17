@@ -175,8 +175,8 @@
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span></code></pre>
 <h1 id="USB转串口配置"><a href="#USB转串口配置" class="headerlink" title="USB转串口配置"></a>USB转串口配置</h1><p>CC2530具备两个串口，且每个串口都可以配置选择控制脚</p>
-<p><img src="https://gitee.com/Extrader/blogimage/raw/master/image/%E6%97%B6%E9%92%9F%EF%BC%8C%E4%B8%B2%E5%8F%A3%E9%85%8D%E7%BD%AE/image-0.png" alt="" loading="lazy"></p>
-<p><img src="https://gitee.com/Extrader/blogimage/raw/master/image/%E6%97%B6%E9%92%9F%EF%BC%8C%E4%B8%B2%E5%8F%A3%E9%85%8D%E7%BD%AE/image-91.png" alt="" loading="lazy"></p>
+<p><img src="https://gitee.com/Extrader/blogimage/raw/master/image/%E6%97%B6%E9%92%9F%EF%BC%8C%E4%B8%B2%E5%8F%A3%E9%85%8D%E7%BD%AE/image-0.png" alt=""></p>
+<p><img src="https://gitee.com/Extrader/blogimage/raw/master/image/%E6%97%B6%E9%92%9F%EF%BC%8C%E4%B8%B2%E5%8F%A3%E9%85%8D%E7%BD%AE/image-91.png" alt=""></p>
 <p><strong>步骤：</strong></p>
 <p>1、指定串口的IO位置</p>
 <pre class=" language-c"><code class="language-c">PERCFG <span class="token operator">&amp;</span><span class="token operator">=</span><span class="token number">0xFE</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">//1111 1110 选中串口0的的备用位置1</span></code></pre>
@@ -187,12 +187,12 @@
 <p>4、波特率设置</p>
 <pre class=" language-c"><code class="language-c">U0GCR <span class="token operator">=</span><span class="token number">8</span><span class="token punctuation">;</span>
 U0BAUD<span class="token operator">=</span><span class="token number">59</span><span class="token punctuation">;</span></code></pre>
-<img src="https://gitee.com/Extrader/blogimage/raw/master/image/时钟，串口配置/image-95.png" style="zoom: 80%;" / loading="lazy">
+<img src="https://gitee.com/Extrader/blogimage/raw/master/image/时钟，串口配置/image-95.png" style="zoom: 80%;" />
 
-<p><img src="https://gitee.com/Extrader/blogimage/raw/master/image/%E6%97%B6%E9%92%9F%EF%BC%8C%E4%B8%B2%E5%8F%A3%E9%85%8D%E7%BD%AE/image-92-e1579148396866.png" alt="" loading="lazy"></p>
-<img src="https://gitee.com/Extrader/blogimage/raw/master/image/时钟，串口配置/image-94.png" style="zoom:67%;" / loading="lazy">
+<p><img src="https://gitee.com/Extrader/blogimage/raw/master/image/%E6%97%B6%E9%92%9F%EF%BC%8C%E4%B8%B2%E5%8F%A3%E9%85%8D%E7%BD%AE/image-92-e1579148396866.png" alt=""></p>
+<img src="https://gitee.com/Extrader/blogimage/raw/master/image/时钟，串口配置/image-94.png" style="zoom:67%;" />
 
-<p><img src="https://gitee.com/Extrader/blogimage/raw/master/image/%E6%97%B6%E9%92%9F%EF%BC%8C%E4%B8%B2%E5%8F%A3%E9%85%8D%E7%BD%AE/image-93.png" alt="" loading="lazy"></p>
+<p><img src="https://gitee.com/Extrader/blogimage/raw/master/image/%E6%97%B6%E9%92%9F%EF%BC%8C%E4%B8%B2%E5%8F%A3%E9%85%8D%E7%BD%AE/image-93.png" alt=""></p>
 <p>5、开CPU中断，对应串口接收中断</p>
 <pre class=" language-c"><code class="language-c">EA<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">;</span>
 URX0IE<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">//结尾为0或8则可以直接选择赋值</span></code></pre>

