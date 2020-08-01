@@ -3,29 +3,6 @@
   
   
     
-    <entry>
-      <title>RSA算法浅析</title>
-      <link href="/posts/aa76c91b/"/>
-      <url>/posts/aa76c91b/</url>
-      
-        <content type="html"><![CDATA[<p>生成密钥</p><p>取两个大质数<code>p,q</code>，并计算他们的乘积<code>n</code>，一般要求<code>n</code>换算成二进制要大于2048位</p><p>则根据欧拉定理满足以下条件：<br>$$<br>\phi(n) = n (1 - \frac{1}{p_1}) (1 - \frac{1}{p_2})…(1 - \frac{1}{p_n}) = (p-1)(q-1) = \phi(p)\phi(q)<br>$$<br>计算 $ \phi(n) $</p><p>选择一个数<code>e</code>使得<code>e</code>与$ \phi(n) $互质</p><p>加解密的实现：</p><p>加密：</p><p><code>m</code>为要加密的信息，<code>(e,N)</code>组合起来为公钥，<code>c</code>和<code>k</code>分别为常数<br>$$<br>m^{e} - c = kN<br>$$<br>解密：</p><p><code>m</code>为要解密的信息，<code>(d,N)</code>组合起来为私钥，<code>c</code>和<code>k</code>分别为常数<br>$$<br>c^{d} - m = kN<br>$$</p><p><code>(e,N)</code>：公钥</p><p><code>(d,N)</code>：私钥</p><p><code>p,q</code>：<code>N=p*q</code> ，<code>p</code>和<code>q</code>都是两个大素数</p><p><code>c</code>：密文</p><p><code>m</code>：明文</p><p><code>N，e</code>是公开的情况下，想要知道<code>d</code>的值，必须要将<code>n</code>分解计算出<code>n</code>的欧拉函数值，而<code>n</code>是两个大素数<code>p，q</code>的乘积，将其分解是困难的。</p>]]></content>
-      
-      
-      <categories>
-          
-          <category> 算法 </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> 算法 </tag>
-            
-        </tags>
-      
-    </entry>
-    
     
     
     <entry>
