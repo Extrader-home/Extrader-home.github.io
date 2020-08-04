@@ -39,7 +39,7 @@
 }
 body {
   font-family: 'PingFang SC', 'Microsoft YaHei', Roboto, Arial, sans-serif;
-  font-weight: 300;
+  font-weight: 400;
   margin: 0;
   padding: 0;
   line-height: 2;
@@ -70,23 +70,23 @@ h6 {
 }
 h1 {
   font-size: 2.5rem;
-  font-weight: 300;
+  font-weight: 400;
 }
 h2 {
   font-size: 2.2rem;
-  font-weight: 300;
+  font-weight: 400;
 }
 h3 {
   font-size: 1.9rem;
-  font-weight: 300;
+  font-weight: 400;
 }
 h4 {
   font-size: 1.6rem;
-  font-weight: 300;
+  font-weight: 400;
 }
 h5 {
   font-size: 1.3rem;
-  font-weight: 300;
+  font-weight: 400;
 }
 h6 {
   font-size: 1rem false;
@@ -111,9 +111,9 @@ hr {
 :root {
   --hty-mode: 'light';
   --hty-primary-color: #0078e7;
-  --hty-bg-color: #cbbab0;
-  --hty-text-color: #000;
-  --hty-secondary-text-color: #303133;
+  --hty-bg-color: #f5f5d5;
+  --hty-text-color: #333;
+  --hty-secondary-text-color: #555;
   --post-block-bg-color: #fff;
 }
 html {
@@ -1272,7 +1272,8 @@ input {
   height: 1.5rem;
 }
 .markdown-body {
-  font-weight: 300;
+  color: var(--hty-text-color);
+  font-weight: 400;
 }
 .post-nav {
   display: flex;
@@ -1672,7 +1673,7 @@ input {
   line-height: 1.5;
 }
 .site-name {
-  color: var(--hty-secondary-text-color);
+  color: var(--hty-text-color);
   font-family: 'Songti SC', 'Noto Serif SC', STZhongsong, STKaiti, KaiTi, Roboto, serif;
   font-weight: 900;
 }
@@ -1697,7 +1698,7 @@ input {
   display: flex;
   padding: 0 15px;
   align-items: center;
-  border-left: 1px solid #ccc;
+  border-left: 1px solid #999;
 }
 .site-state-item:first-child,
 .site-state-item:last-child {
@@ -1715,7 +1716,7 @@ input {
   border: none;
 }
 .site-state-item-icon {
-  color: var(--hty-secondary-text-color);
+  color: var(--hty-text-color);
   line-height: 1;
 }
 .site-state-item-icon .icon {
@@ -1723,7 +1724,7 @@ input {
   height: 1.5rem;
 }
 .site-state-item-count {
-  color: var(--hty-secondary-text-color);
+  color: var(--hty-text-color);
   display: block;
   text-align: center;
   font-size: 1rem;
@@ -1816,6 +1817,7 @@ input {
   right: 0.8rem;
 }
 .search-input {
+  background: transparent;
   color: var(--hty-text-color);
   font-size: 1.5rem;
   border-radius: 3rem;
@@ -1866,7 +1868,7 @@ input {
   margin: 1rem;
 }
 .v[data-class=v] p {
-  color: var(--hty-secondary-text-color) !important;
+  color: var(--hty-text-color) !important;
 }
 .v[data-class=v] p code {
   color: #000;
@@ -1927,12 +1929,6 @@ input {
   :root:not([data-user-color-scheme]) body::before {
     background-image: url("https://cdn.jsdelivr.net/gh/YunYouJun/cdn/img/bg/galaxy.jpg");
   }
-  :root:not([data-user-color-scheme]) a {
-    color: #3ca1ff;
-  }
-  :root:not([data-user-color-scheme]) a:hover {
-    color: #0078e7;
-  }
   :root:not([data-user-color-scheme]) .char {
     background-color: rgba(0,0,0,0.5);
   }
@@ -1945,7 +1941,10 @@ input {
     background-image: url("");
   }
   :root:not([data-user-color-scheme]) .search-popup {
-    background-image: url("https://cdn.jsdelivr.net/gh/YunYouJun/cdn/img/bg/mountain.jpg");
+    background-image: url("https://cdn.jsdelivr.net/gh/YunYouJun/cdn/img/bg/mountain-blur-30px.jpg");
+  }
+  :root:not([data-user-color-scheme]) .post-title-link {
+    color: #3ca1ff;
   }
   :root:not([data-user-color-scheme]) .post-card {
     color: #fff;
@@ -2008,12 +2007,6 @@ input {
 [data-user-color-scheme='dark'] body::before {
   background-image: url("https://cdn.jsdelivr.net/gh/YunYouJun/cdn/img/bg/galaxy.jpg");
 }
-[data-user-color-scheme='dark'] a {
-  color: #3ca1ff;
-}
-[data-user-color-scheme='dark'] a:hover {
-  color: #0078e7;
-}
 [data-user-color-scheme='dark'] .char {
   background-color: rgba(0,0,0,0.5);
 }
@@ -2026,7 +2019,10 @@ input {
   background-image: url("");
 }
 [data-user-color-scheme='dark'] .search-popup {
-  background-image: url("https://cdn.jsdelivr.net/gh/YunYouJun/cdn/img/bg/mountain.jpg");
+  background-image: url("https://cdn.jsdelivr.net/gh/YunYouJun/cdn/img/bg/mountain-blur-30px.jpg");
+}
+[data-user-color-scheme='dark'] .post-title-link {
+  color: #3ca1ff;
 }
 [data-user-color-scheme='dark'] .post-card {
   color: #fff;
