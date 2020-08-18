@@ -199,10 +199,10 @@ if __name__ &#x3D;&#x3D; &#39;__main__&#39;:
 <p>访问<code>http://127.0.0.1:5000/hello/flask</code>则会输出<code>Hello flask!</code>标题</p>
 <p><strong>Jinja2</strong>模板引擎使用以下分隔符从HTML转义。</p>
 <ul>
-<li><strong>{ % … %}</strong>：用于语句</li>
-<li><strong>{ {  … } }</strong>：用于表达式可以打印到模板输出</li>
-<li><strong>{ # … # }</strong>：用于未包含在模板输出中的注释</li>
-<li><strong># … ##</strong>：用于行语句</li>
+<li><strong><code>&#123;% ... %&#125;</code></strong>：用于语句</li>
+<li><strong><code>&#123;&#123;  ... &#125;&#125;</code></strong>：用于表达式可以打印到模板输出</li>
+<li><strong><code>&#123;# ... #&#125;</code></strong>：用于未包含在模板输出中的注释</li>
+<li><strong><code># ... ##</code></strong>：用于行语句</li>
 </ul>
 <p>另外测试语句效果，修改hello.html为以下内容</p>
 <pre class="language-html" data-language="html"><code class="language-html"><span class="token doctype">&lt;!doctype html></span>
@@ -220,7 +220,7 @@ if __name__ &#x3D;&#x3D; &#39;__main__&#39;:
 <pre class="language-html" data-language="html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>html</span><span class="token punctuation">></span></span>
    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>head</span><span class="token punctuation">></span></span>
       <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span> <span class="token attr-name">type</span> <span class="token attr-value"><span class="token punctuation">=</span> <span class="token punctuation">"</span>text/javascript<span class="token punctuation">"</span></span> 
-         <span class="token attr-name">src</span> <span class="token attr-value"><span class="token punctuation">=</span> <span class="token punctuation">"</span>&#123; &#123;  url_for('static', filename = 'hello.js') &#125;&#125;<span class="token punctuation">"</span></span> <span class="token punctuation">></span></span><span class="token script"></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">></span></span>
+         <span class="token attr-name">src</span> <span class="token attr-value"><span class="token punctuation">=</span> <span class="token punctuation">"</span>&#123;&#123;  url_for('static', filename = 'hello.js') &#125;&#125;<span class="token punctuation">"</span></span> <span class="token punctuation">></span></span><span class="token script"></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">></span></span>
    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>head</span><span class="token punctuation">></span></span>
    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>body</span><span class="token punctuation">></span></span>
       <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span> <span class="token attr-name">type</span> <span class="token attr-value"><span class="token punctuation">=</span> <span class="token punctuation">"</span>button<span class="token punctuation">"</span></span> <span class="token attr-name">onclick</span> <span class="token attr-value"><span class="token punctuation">=</span> <span class="token punctuation">"</span>sayHello()<span class="token punctuation">"</span></span> <span class="token attr-name">value</span> <span class="token attr-value"><span class="token punctuation">=</span> <span class="token punctuation">"</span>Say Hello<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
