@@ -37,6 +37,9 @@
 .text-center {
   text-align: center;
 }
+.text-uppercase {
+  text-transform: uppercase;
+}
 body {
   font-family: 'PingFang SC', 'Microsoft YaHei', Roboto, Arial, sans-serif;
   font-weight: 400;
@@ -129,20 +132,20 @@ body::before {
   width: 100%;
   height: 100%;
   z-index: -1;
-  background-image: url("https://gitee.com/Extrader/blogimage/raw/master/image/bg_image/48351835.jpg");
+  background-image: url("https://cdn.jsdelivr.net/gh/YunYouJun/cdn/img/bg/stars-timing-0-blur-30px.jpg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   animation-name: bgFadeIn;
   animation-duration: 2s;
-  opacity: 0.8;
+  opacity: 1;
 }
 @-moz-keyframes bgFadeIn {
   from {
     opacity: 0;
   }
   to {
-    opacity: 0.8;
+    opacity: 1;
   }
 }
 @-webkit-keyframes bgFadeIn {
@@ -150,7 +153,7 @@ body::before {
     opacity: 0;
   }
   to {
-    opacity: 0.8;
+    opacity: 1;
   }
 }
 @-o-keyframes bgFadeIn {
@@ -158,7 +161,7 @@ body::before {
     opacity: 0;
   }
   to {
-    opacity: 0.8;
+    opacity: 1;
   }
 }
 @keyframes bgFadeIn {
@@ -166,7 +169,7 @@ body::before {
     opacity: 0;
   }
   to {
-    opacity: 0.8;
+    opacity: 1;
   }
 }
 body {
@@ -793,6 +796,7 @@ input {
   margin: 0 1rem;
   padding: 1rem;
   background-color: var(--post-block-bg-color);
+  backdrop-filter: blur(10px);
 }
 @media screen and (max-width: 768px) {
   .post-block {
@@ -1138,10 +1142,10 @@ input {
   transition-duration: 0.2s;
   transition-delay: 0s;
   background-color: rgba(255,255,255,0.8);
-  box-shadow: 0 1px 8px rgba(255,255,255,0.1);
+  box-shadow: 0 0 10px rgba(255,255,255,0.1);
 }
 .post-card:hover {
-  box-shadow: 0 1px 10px rgba(0,0,0,0.08);
+  box-shadow: 0 0px 25px rgba(0,0,0,0.05);
 }
 .post-card-header {
   padding-top: 0.5rem;
@@ -1211,6 +1215,27 @@ input {
   width: 1.5rem;
   height: 1.5rem;
 }
+pre[class*='language-'] {
+  position: relative;
+}
+pre[class*='language-']:hover .copy-btn {
+  opacity: 1;
+}
+.copy-btn {
+  opacity: 0;
+  color: #808080;
+  cursor: pointer;
+  line-height: 1.5;
+  padding: 1px 4px;
+  transition: opacity 0.2s;
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  border-radius: 4px;
+}
+.copy-btn:hover {
+  background-color: rgba(255,255,255,0.1);
+}
 .post-collapse {
   position: relative;
   margin: 0 5rem 2rem 5rem;
@@ -1243,7 +1268,7 @@ input {
   background: rgba(0,120,231,0.3);
 }
 .post-collapse .collection-title .archive-year {
-  font-family: 'Source Code Pro', 'Courier New', Courier, Consolas, Monaco, monospace;
+  font-family: 'Source Code Pro', Consolas, Monaco, SFMono-Regular, 'Ubuntu Mono', Menlo, monospace;
   color: #0078e7;
   margin: 0 1.5rem;
 }
@@ -1307,7 +1332,7 @@ input {
   margin-right: 0.3rem;
 }
 .post-collapse .post-header .post-meta {
-  font-family: 'Source Code Pro', 'Courier New', Courier, Consolas, Monaco, monospace;
+  font-family: 'Source Code Pro', Consolas, Monaco, SFMono-Regular, 'Ubuntu Mono', Menlo, monospace;
   font-size: 1rem;
   margin: 1rem 0 1rem 1.2rem;
   white-space: nowrap;
@@ -1381,6 +1406,10 @@ input {
 .markdown-body {
   color: var(--hty-text-color) !important;
   font-weight: 400;
+  font-family: 'PingFang SC', 'Microsoft YaHei', Roboto, Arial, sans-serif;
+}
+.markdown-body pre {
+  font-family: 'Source Code Pro', Consolas, Monaco, SFMono-Regular, 'Ubuntu Mono', Menlo, monospace;
 }
 .post-nav {
   display: flex;
@@ -1615,7 +1644,7 @@ input {
   color: #db2828;
 }
 .post-toc ol .toc-number {
-  font-family: 'Source Code Pro', 'Courier New', Courier, Consolas, Monaco, monospace;
+  font-family: 'Source Code Pro', Consolas, Monaco, SFMono-Regular, 'Ubuntu Mono', Menlo, monospace;
 }
 .post-toc ol .toc-child {
   font-size: 1rem;
@@ -1759,6 +1788,7 @@ input {
 .site-author-avatar {
   display: inline-block;
   line-height: 0;
+  position: relative;
 }
 .site-author-avatar img {
   height: 96px;
@@ -1897,7 +1927,7 @@ input {
   text-decoration: underline;
 }
 .search-popup {
-  background-image: url("https://cdn.jsdelivr.net/gh/YunYouJun/cdn/img/bg/stars-timing-0-blur-30px.jpg");
+  backdrop-filter: blur(30px);
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
@@ -2047,9 +2077,6 @@ input {
     background-color: rgba(27,31,46,0.95);
     background-image: none;
   }
-  :root:not([data-user-color-scheme]) .search-popup {
-    background-image: url("https://cdn.jsdelivr.net/gh/YunYouJun/cdn/img/bg/mountain-blur-30px.jpg");
-  }
   :root:not([data-user-color-scheme]) .post-title-link {
     color: #3ca1ff;
   }
@@ -2124,9 +2151,6 @@ input {
 [data-user-color-scheme='dark'] .sidebar {
   background-color: rgba(27,31,46,0.95);
   background-image: none;
-}
-[data-user-color-scheme='dark'] .search-popup {
-  background-image: url("https://cdn.jsdelivr.net/gh/YunYouJun/cdn/img/bg/mountain-blur-30px.jpg");
 }
 [data-user-color-scheme='dark'] .post-title-link {
   color: #3ca1ff;
