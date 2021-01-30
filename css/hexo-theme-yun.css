@@ -52,7 +52,7 @@ body {
   background: #8e71c1;
 }
 a {
-  color: #0078e7;
+  color: var(--smc-link-color);
   text-decoration: none;
   transition: color 0.1s;
 }
@@ -118,6 +118,7 @@ hr {
   --hty-text-color: #333;
   --hty-secondary-text-color: #555;
   --post-block-bg-color: #fff;
+  --smc-link-color: #0078e7;
 }
 html {
   scroll-behavior: smooth;
@@ -662,7 +663,7 @@ input {
   overflow: hidden;
 }
 #content {
-  overflow: hidden;
+  overflow: visible;
 }
 #page,
 #archive,
@@ -796,7 +797,6 @@ input {
   margin: 0 1rem;
   padding: 1rem;
   background-color: var(--post-block-bg-color);
-  backdrop-filter: blur(10px);
 }
 @media screen and (max-width: 768px) {
   .post-block {
@@ -872,7 +872,7 @@ input {
   font-size: 0.9rem;
   margin: 2rem 0;
   padding: 0.5rem 1rem;
-  border-left: 3px solid #f8722a;
+  border-left: 3px solid #ff5252;
   background-color: var(--hty-bg-color);
   list-style: none;
   word-break: break-all;
@@ -978,12 +978,14 @@ input {
 .hty-card {
   position: relative;
   display: flex;
-  margin: 1rem;
+  flex-direction: column;
+  box-sizing: border-box;
   transition-property: all;
   transition-duration: 0.2s;
   transition-delay: 0s;
-  flex-direction: column;
-  box-sizing: border-box;
+}
+.hty-card:hover {
+  box-shadow: 0 0 1rem rgba(0,0,0,0.1);
 }
 .planet-menu {
   border-radius: 50%;
@@ -1036,60 +1038,16 @@ input {
 }
 @-moz-keyframes rotateplane {
   0% {
-    -webkit-transform: perspective(120px);
-  }
-  50% {
-    -webkit-transform: perspective(120px) rotateY(180deg);
-  }
-  100% {
-    -webkit-transform: perspective(120px) rotateY(180deg) rotateX(180deg);
-  }
-}
-@-webkit-keyframes rotateplane {
-  0% {
-    -webkit-transform: perspective(120px);
-  }
-  50% {
-    -webkit-transform: perspective(120px) rotateY(180deg);
-  }
-  100% {
-    -webkit-transform: perspective(120px) rotateY(180deg) rotateX(180deg);
-  }
-}
-@-o-keyframes rotateplane {
-  0% {
-    -webkit-transform: perspective(120px);
-  }
-  50% {
-    -webkit-transform: perspective(120px) rotateY(180deg);
-  }
-  100% {
-    -webkit-transform: perspective(120px) rotateY(180deg) rotateX(180deg);
-  }
-}
-@keyframes rotateplane {
-  0% {
-    -webkit-transform: perspective(120px);
-  }
-  50% {
-    -webkit-transform: perspective(120px) rotateY(180deg);
-  }
-  100% {
-    -webkit-transform: perspective(120px) rotateY(180deg) rotateX(180deg);
-  }
-}
-@-moz-keyframes rotateplane {
-  0% {
     transform: perspective(120px) rotateX(0deg) rotateY(0deg);
     -webkit-transform: perspective(120px) rotateX(0deg) rotateY(0deg);
   }
   50% {
-    transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg);
+    transform: perspective(120px) rotateX(-180deg) rotateY(0deg);
     -webkit-transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg);
   }
   100% {
-    transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
-    -webkit-transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
+    transform: perspective(120px) rotateX(-180deg) rotateY(-180deg);
+    -webkit-transform: perspective(120px) rotateX(-180deg) rotateY(-180deg);
   }
 }
 @-webkit-keyframes rotateplane {
@@ -1098,12 +1056,12 @@ input {
     -webkit-transform: perspective(120px) rotateX(0deg) rotateY(0deg);
   }
   50% {
-    transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg);
+    transform: perspective(120px) rotateX(-180deg) rotateY(0deg);
     -webkit-transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg);
   }
   100% {
-    transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
-    -webkit-transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
+    transform: perspective(120px) rotateX(-180deg) rotateY(-180deg);
+    -webkit-transform: perspective(120px) rotateX(-180deg) rotateY(-180deg);
   }
 }
 @-o-keyframes rotateplane {
@@ -1112,12 +1070,12 @@ input {
     -webkit-transform: perspective(120px) rotateX(0deg) rotateY(0deg);
   }
   50% {
-    transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg);
+    transform: perspective(120px) rotateX(-180deg) rotateY(0deg);
     -webkit-transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg);
   }
   100% {
-    transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
-    -webkit-transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
+    transform: perspective(120px) rotateX(-180deg) rotateY(-180deg);
+    -webkit-transform: perspective(120px) rotateX(-180deg) rotateY(-180deg);
   }
 }
 @keyframes rotateplane {
@@ -1126,12 +1084,12 @@ input {
     -webkit-transform: perspective(120px) rotateX(0deg) rotateY(0deg);
   }
   50% {
-    transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg);
+    transform: perspective(120px) rotateX(-180deg) rotateY(0deg);
     -webkit-transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg);
   }
   100% {
-    transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
-    -webkit-transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
+    transform: perspective(120px) rotateX(-180deg) rotateY(-180deg);
+    -webkit-transform: perspective(120px) rotateX(-180deg) rotateY(-180deg);
   }
 }
 .post-card {
@@ -1170,6 +1128,9 @@ input {
   padding-left: 1rem;
   padding-right: 1rem;
   justify-content: space-between;
+}
+.post-card__actions .icon {
+  margin-bottom: -1px;
 }
 .post-card-tag {
   display: inline-flex;
@@ -1222,13 +1183,13 @@ pre[class*='language-']:hover .copy-btn {
   opacity: 1;
 }
 .copy-btn {
+  position: absolute;
   opacity: 0;
   color: #808080;
   cursor: pointer;
   line-height: 1.5;
   padding: 1px 4px;
   transition: opacity 0.2s;
-  position: absolute;
   top: 2px;
   right: 2px;
   border-radius: 4px;
@@ -1404,10 +1365,11 @@ pre[class*='language-']:hover .copy-btn {
   height: 1.5rem;
 }
 .markdown-body {
-  color: var(--hty-text-color) !important;
+  color: var(--hty-text-color);
   font-weight: 400;
   font-family: 'PingFang SC', 'Microsoft YaHei', Roboto, Arial, sans-serif;
 }
+.markdown-body code,
 .markdown-body pre {
   font-family: 'Source Code Pro', Consolas, Monaco, SFMono-Regular, 'Ubuntu Mono', Menlo, monospace;
 }
@@ -1444,7 +1406,7 @@ pre[class*='language-']:hover .copy-btn {
 .post-nav-next {
   display: inline-flex;
   align-items: center;
-  color: #0078e7;
+  color: var(--smc-link-color);
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -1483,7 +1445,7 @@ pre[class*='language-']:hover .copy-btn {
   display: inline-block;
   text-align: center;
   padding: 0.5rem;
-  color: #ff8718;
+  color: #df667f;
   border-radius: 100%;
   width: 1.5rem;
   height: 1.5rem;
@@ -1638,7 +1600,7 @@ pre[class*='language-']:hover .copy-btn {
   margin: 0;
 }
 .post-toc ol .toc-link {
-  color: #0078e7;
+  color: var(--smc-link-color);
 }
 .post-toc ol .toc-link:hover {
   color: #db2828;
@@ -1657,7 +1619,7 @@ pre[class*='language-']:hover .copy-btn {
   border-bottom: 1px solid #f2711c;
 }
 .post-toc ol .toc-item.active>.toc-child {
-  max-height: 1000px;
+  max-height: 10000px;
 }
 #menu-btn {
   display: none;
@@ -1793,6 +1755,8 @@ pre[class*='language-']:hover .copy-btn {
 .site-author-avatar img {
   height: 96px;
   width: 96px;
+  max-width: 100%;
+  margin: 0px;
   padding: 4px;
   background-color: #fff;
   box-shadow: 0 0 10px rgba(0,0,0,0.2);
@@ -1928,6 +1892,7 @@ pre[class*='language-']:hover .copy-btn {
 }
 .search-popup {
   backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
@@ -2000,6 +1965,9 @@ pre[class*='language-']:hover .copy-btn {
 .comment-tooltip {
   font-size: 0.8rem;
   color: var(--hty-text-color);
+  padding: 0.5rem;
+  border: 1px solid #f0f0f0;
+  margin-bottom: 1rem;
 }
 #github-issues {
   margin: 1rem;
@@ -2056,6 +2024,7 @@ pre[class*='language-']:hover .copy-btn {
     --banner-line-color: #fff;
     --banner-char-color: #fff;
     --post-block-bg-color: #1b1f2e;
+    --smc-link-color: #3ca1ff;
   }
   :root:not([data-user-color-scheme]) ::-webkit-input-placeholder {
     color: #fff;
@@ -2131,6 +2100,7 @@ pre[class*='language-']:hover .copy-btn {
   --banner-line-color: #fff;
   --banner-char-color: #fff;
   --post-block-bg-color: #1b1f2e;
+  --smc-link-color: #3ca1ff;
 }
 [data-user-color-scheme='dark'] ::-webkit-input-placeholder {
   color: #fff;
