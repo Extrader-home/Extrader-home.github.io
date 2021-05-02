@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>VulnHub-DC-2</title>
+      <link href="posts/ce8eed56/"/>
+      <url>posts/ce8eed56/</url>
+      
+        <content type="html"><![CDATA[<p>靶机地址：192.168.99.150（DC-2）<a href="https://www.vulnhub.com/entry/dc-2,311/">链接</a></p><p>渗透机：192.168.99.188（Kali）</p><p>物理主机：192.168.99.107（Windows10）</p><p>目标：尽可能拿到更多的flag，有5个</p><p>nmap主机发现：</p><p><img src="https://gitee.com/Extrader/blogimage/raw/master/image/VulnHub-DC-2/image-20210502172127928.png" alt loading="lazy"></p><p>访问80端口，发现是一个WordPress站点，首页有flag1，如下</p><p><img src="https://gitee.com/Extrader/blogimage/raw/master/image/VulnHub-DC-2/image-20210502172310497.png" alt loading="lazy"></p><p>似乎是让我们对用户进行爆破，但常规的密码字典里可能没有我们所需要的密码，于是采用<code>Cewl</code>进行密码信息搜集</p><pre class="language-none"><code class="language-none">cewl http:&#x2F;&#x2F;dc-2&#x2F; -m 3 -d 3 -e -v -w wppass.txt-m 最小单词长度-d：爬网深度-e：收集包含email地址信息-v：Verbose模式，该模式下，Cewl会导出目标网站的详细数据-w：保存字典文件</code></pre><p>得到字典后使用wpscan对网站后台进行扫描测试</p><pre class="language-none"><code class="language-none">wpscan --url http:&#x2F;&#x2F;dc-2&#x2F; -e u -P &#x2F;home&#x2F;kali&#x2F;msf_exp&#x2F;wppass.txt-e: 枚举 u表示枚举用户-P: 爆破密码字典路径</code></pre><p><img src="https://gitee.com/Extrader/blogimage/raw/master/image/VulnHub-DC-2/image-20210502173058881.png" alt loading="lazy"></p><p>拿到两个用户的用户名和密码</p><pre class="language-none"><code class="language-none">Username: jerry, Password: adipiscingUsername: tom, Password: parturient</code></pre><p>登录后台，在page里拿到flag2</p><p><img src="https://gitee.com/Extrader/blogimage/raw/master/image/VulnHub-DC-2/image-20210502173751322.png" alt loading="lazy"></p><p>找其它的切入点，前面nmap在0-1000的端口中只扫到了一个80端口，加大力度，改成0-10000</p><p><img src="https://gitee.com/Extrader/blogimage/raw/master/image/VulnHub-DC-2/image-20210502174409458.png" alt loading="lazy"></p><p>扫到一个7744的ssh端口，tom用户连上使用wp的后台密码即可登录，jerry不行，可能不是这个密码，也可能jerry不允许ssh登录</p><p><img src="https://gitee.com/Extrader/blogimage/raw/master/image/VulnHub-DC-2/image-20210502174816845.png" alt loading="lazy"></p><p>登录目录下找到flag3，less查看</p><p><img src="https://gitee.com/Extrader/blogimage/raw/master/image/VulnHub-DC-2/image-20210502174852430.png" alt loading="lazy"></p><p>随后尝试很多命令用不了，当前目录下的usr目录也进不去，查看当前目录下所有文件，查看<code>.bash_history</code></p><p><img src="https://gitee.com/Extrader/blogimage/raw/master/image/VulnHub-DC-2/image-20210502175516495.png" alt loading="lazy"></p><p><code>ls -al usr/bin</code></p><p><img src="https://gitee.com/Extrader/blogimage/raw/master/image/VulnHub-DC-2/image-20210502175312778.png" alt loading="lazy"></p><p>有四个命令可以用，并且使用的是rbash，一个功能受限的bash，限制性可能会有如下</p><ul><li>使用命令cd更改目录</li><li>设置或者取消环境变量的设置（SHELL, PATH, ENV, or BASH_ENV）</li><li>指定包含参数<code>&#39;/&#39;</code>的文件名</li><li>指定包含参数<code>&#39; - &#39;</code>的文件名</li><li>使用重定向输出<code>&#39;&gt;&#39;, &#39;&gt;&gt;&#39;, &#39;&gt; |&#39;, &#39;&lt;&gt;&#39; &#39;&gt;&amp;&#39;,&#39;&amp;&gt;&#39;</code></li></ul><p><img src="https://gitee.com/Extrader/blogimage/raw/master/image/VulnHub-DC-2/image-20210502193832294.png" alt loading="lazy"></p><p>使用scp绕过</p><p><img src="https://gitee.com/Extrader/blogimage/raw/master/image/VulnHub-DC-2/image-20210502193742568.png" alt loading="lazy"></p><p>还可以这样</p><p><img src="https://gitee.com/Extrader/blogimage/raw/master/image/VulnHub-DC-2/image-20210502200235932.png" alt loading="lazy"></p><p>也可以用vi，方法不唯一，搬张图，可参考文末的链接</p><p><img src="https://gitee.com/Extrader/blogimage/raw/master/image/VulnHub-DC-2/image-20210502200311594.png" alt loading="lazy"></p><p>在jerry的用户目录下找到<code>flag4.txt</code></p><p><img src="https://gitee.com/Extrader/blogimage/raw/master/image/VulnHub-DC-2/image-20210502200512732.png" alt loading="lazy"></p><p><code>you&#39;re on your own now.  :-)</code>，线索<code>git</code></p><p>配置当前shell环境变量</p><pre class="language-none"><code class="language-none">export PATH&#x3D;$PATH:&#x2F;bin&#x2F;export PATH&#x3D;$PATH:&#x2F;usr&#x2F;bin</code></pre><p><img src="https://gitee.com/Extrader/blogimage/raw/master/image/VulnHub-DC-2/image-20210502211021164.png" alt loading="lazy"></p><p>大部分命令可用了</p><p>根据flag3的提示，su切换到jerry，密码就是上面的密码，<code>sudo -l</code>看看用户可以用sudo运行一些命令</p><p><img src="https://gitee.com/Extrader/blogimage/raw/master/image/VulnHub-DC-2/image-20210502213404125.png" alt loading="lazy"></p><p>git可用，git提权</p><pre class="language-none"><code class="language-none">sudo git help config  在末行命令模式输入 !&#x2F;bin&#x2F;bash 或 !&#39;sh&#39;</code></pre><p><img src="https://gitee.com/Extrader/blogimage/raw/master/image/VulnHub-DC-2/image-20210502213732806.png" alt loading="lazy"></p><p>成功拿到最后的flag    </p><p><strong>参考：</strong></p><ul><li><a href="https://cloud.tencent.com/developer/article/1680551">RBash - 受限的Bash绕过</a></li><li><a href="https://www.const27.com/2021/03/12/Linux%E6%8F%90%E6%9D%83%E6%80%BB%E7%BB%93/">Linux 提权总结</a></li><li><a href="https://www.secpulse.com/archives/72965.html">利用通配符实现Linux本地提权</a></li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> 渗透 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 靶机 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>VulnHub-DC-1</title>
       <link href="posts/5787bcec/"/>
       <url>posts/5787bcec/</url>
