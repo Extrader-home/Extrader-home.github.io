@@ -5,7 +5,7 @@
   --hty-danger-color: #db2828;
   --hty-info-color: #42b8dd;
   --hty-link-color: #0078e7;
-  --hty-gray-color: #999;
+  --hty-base-color: #999;
   --hty-yellow-color: #ff8718;
 }
 .primary {
@@ -38,9 +38,9 @@
   --blockquote-border-left-color: var(--hty-link-color);
   --blockquote-bg-color: rgba(0,120,231,0.1);
 }
-.gray {
+.base {
   color: #808080;
-  --blockquote-border-left-color: var(--hty-gray-color);
+  --blockquote-border-left-color: var(--hty-base-color);
   --blockquote-bg-color: rgba(153,153,153,0.1);
 }
 .yellow {
@@ -657,6 +657,24 @@ input {
     transform: scale(1.1);
   }
 }
+.hty-layout-grid {
+  display: grid;
+  box-sizing: border-box;
+  grid-gap: 1rem;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  margin: auto;
+  padding: 1rem 0;
+}
+.hty-layout-grid__cell {
+  width: 100%;
+  box-sizing: border-box;
+  justify-content: center;
+}
+.hty-layout-grid__cell--span-12 {
+  margin: 0;
+  width: auto;
+  grid-column-end: span 12;
+}
 .link-items {
   display: flex;
   padding: 0 0.5rem;
@@ -722,10 +740,6 @@ input {
 }
 #content {
   overflow: visible;
-}
-#recent-posts {
-  row-gap: 1rem;
-  margin: 1rem 0;
 }
 #page,
 #archive,
@@ -1456,7 +1470,7 @@ input {
 }
 .markdown-body video {
   width: 100%;
-  max-height: 100vh;
+  max-height: 90vh;
 }
 .markdown-body iframe {
   border: none;
@@ -2080,25 +2094,6 @@ input {
 #say #say-from {
   display: block;
 }
-.notice {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  font-family: 'Songti SC', 'Noto Serif SC', STZhongsong, STKaiti, KaiTi, Roboto, serif;
-  font-weight: bold;
-  padding: 1rem;
-  margin: 1rem auto;
-  border: 1px solid #000;
-  max-width: calc(900px - 2rem);
-  background-color: rgba(255,255,255,0.3);
-}
-@media screen and (max-width: 768px) {
-  .notice {
-    border-left-width: 0px;
-    border-right-width: 0px;
-  }
-}
 .hidden {
   display: none;
 }
@@ -2107,15 +2102,6 @@ input {
 }
 .text-uppercase {
   text-transform: uppercase;
-}
-.flex {
-  display: flex;
-}
-.flex-col {
-  flex-direction: column;
-}
-.w-full {
-  width: 100%;
 }
 @media (prefers-color-scheme: dark) {
   :root {
