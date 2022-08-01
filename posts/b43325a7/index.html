@@ -1,0 +1,358 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="theme-color" content="#0078E7"><meta name="author" content="Extrader"><meta name="copyright" content="Extrader"><meta name="generator" content="Hexo 6.2.0"><meta name="theme" content="hexo-theme-yun"><title>Wazuh集成Yara小记 | Extraderの博客</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@900&amp;display=swap" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/star-markdown-css@0.3.3/dist/yun/yun-markdown.min.css"><link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/prism-theme-vars/base.css"><script src="https://fastly.jsdelivr.net/npm/scrollreveal/dist/scrollreveal.min.js" defer></script><script>function initScrollReveal() {
+  [".post-card",".markdown-body img"].forEach((target)=> {
+    ScrollReveal().reveal(target);
+  })
+}
+document.addEventListener("DOMContentLoaded", initScrollReveal);
+document.addEventListener("pjax:success", initScrollReveal);
+</script><link class="aplayer-style-marker" rel="stylesheet" type="text/css" href="https://fastly.jsdelivr.net/npm/aplayer@latest/dist/APlayer.min.css"><script class="aplayer-script-marker" src="https://fastly.jsdelivr.net/npm/aplayer@latest/dist/APlayer.min.js" defer></script><script class="meting-script-marker" src="https://fastly.jsdelivr.net/npm/meting@1/dist/Meting.min.js" defer></script><link rel="icon" type="image/png" href="/favico.ico"><link rel="mask-icon" href="/favico.ico" color="#0078E7"><link rel="preload" href="/css/hexo-theme-yun.css" as="style"><link rel="prefetch" href="/js/sidebar.js" as="script"><link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin><link rel="preconnect" href="https://fastly.jsdelivr.net/npm/" crossorigin><script id="yun-config">
+    window.Yun = {}
+    window.CONFIG = {"hostname":"www.extrader.top","root":"/","title":["Under","The","Sea"],"version":"1.10.6","mode":"auto","copycode":true,"page":{"isPost":true},"i18n":{"placeholder":"搜索...","empty":"找不到您查询的内容: ${query}","hits":"找到 ${hits} 条结果","hits_time":"找到 ${hits} 条结果（用时 ${time} 毫秒）"},"anonymous_image":"https://cdn.yunyoujun.cn/img/avatar/none.jpg","say":{"api":"https://v1.hitokoto.cn","hitokoto":true},"local_search":{"path":"/search.xml"},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false,"src":"/js/search/local-search.js"},"fireworks":{"colors":["102, 167, 221","62, 131, 225","33, 78, 194","3, 28, 95","0, 8, 55"]},"vendors":{"host":"https://fastly.jsdelivr.net/npm/","darken":"https://fastly.jsdelivr.net/npm/darken@1.5.0"}};
+  </script><link rel="stylesheet" href="/css/hexo-theme-yun.css"><script src="/js/hexo-theme-yun.js" type="module"></script><link rel="alternate" href="/atom.xml" title="Extraderの博客" type="application/atom+xml"><script>(function(){
+  var bp = document.createElement('script');
+  var curProtocol = window.location.protocol.split(':')[0];
+  if (curProtocol === 'https') {
+    bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+  }
+  else {
+    bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+  }
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(bp, s);
+})();</script><meta name="description" content="环境部署系统环境全都是CentOS 7.9 我们主要目的是在Wazuh上测试Yara，所以选择最快的部署方式 Manager的部署直接使用官方现有的ova文件导入虚拟机，参考Virtual Machine (OVA) 部署好之后我们直接访问虚拟机的ip地址即可，默认账号密码admin&#x2F;admin，如果页面没加载出来只显示一行英文，尝试启动wazuh-indexer，systemctl start">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Wazuh集成Yara小记">
+<meta property="og:url" content="https://www.extrader.top/posts/b43325a7/index.html">
+<meta property="og:site_name" content="Extraderの博客">
+<meta property="og:description" content="环境部署系统环境全都是CentOS 7.9 我们主要目的是在Wazuh上测试Yara，所以选择最快的部署方式 Manager的部署直接使用官方现有的ova文件导入虚拟机，参考Virtual Machine (OVA) 部署好之后我们直接访问虚拟机的ip地址即可，默认账号密码admin&#x2F;admin，如果页面没加载出来只显示一行英文，尝试启动wazuh-indexer，systemctl start">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-08-01T12:00:00.000Z">
+<meta property="article:modified_time" content="2022-08-01T12:57:45.268Z">
+<meta property="article:author" content="Extrader">
+<meta property="article:tag" content="Wazuh">
+<meta property="article:tag" content="Yara">
+<meta name="twitter:card" content="summary"><script>(function() {
+  const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+  const setting = localStorage.getItem('darken-mode') || 'auto'
+  if (setting === 'dark' || (prefersDark && setting !== 'light'))
+    document.documentElement.classList.toggle('dark', true)
+})()</script></head><body><script src="https://code.iconify.design/2/2.1.1/iconify.min.js"></script><script>// Define global variable
+IconifyProviders = {
+  // Empty prefix: overwrite default API provider configuration
+  '': {
+    // Use custom API first, use Iconify public API as backup
+    resources: [
+        'https://api.iconify.design',
+    ],
+    // Wait for 1 second before switching API hosts
+    rotate: 1000,
+  },
+};</script><script defer src="https://fastly.jsdelivr.net/npm/animejs@latest"></script><script defer src="/js/ui/fireworks.js" type="module"></script><canvas class="fireworks"></canvas><div class="container"><a class="sidebar-toggle hty-icon-button" id="menu-btn"><div class="hamburger hamburger--spin" type="button"><span class="hamburger-box"><span class="hamburger-inner"></span></span></div></a><div class="sidebar-toggle sidebar-overlay"></div><aside class="sidebar"><script src="/js/sidebar.js" type="module"></script><ul class="sidebar-nav"><li class="sidebar-nav-item sidebar-nav-toc hty-icon-button sidebar-nav-active" data-target="post-toc-wrap" title="文章目录"><span class="icon iconify" data-icon="ri:list-ordered"></span></li><li class="sidebar-nav-item sidebar-nav-overview hty-icon-button" data-target="site-overview-wrap" title="站点概览"><span class="icon iconify" data-icon="ri:passport-line"></span></li></ul><div class="sidebar-panel" id="site-overview-wrap"><div class="site-info fix-top"><a class="site-author-avatar" href="/about/" title="Extrader"><img width="96" loading="lazy" src="/images/avatar.png" alt="Extrader"></a><div class="site-author-name"><a href="/about/">Extrader</a></div><span class="site-name">Extraderの博客</span><sub class="site-subtitle"></sub><div class="site-description">不要给自己制造舒适区</div></div><nav class="site-state"><a class="site-state-item hty-icon-button icon-home" href="/" title="首页"><span class="site-state-item-icon"><span class="icon iconify" data-icon="ri:home-4-line"></span></span></a><div class="site-state-item"><a href="/archives/" title="归档"><span class="site-state-item-icon"><span class="icon iconify" data-icon="ri:archive-line"></span></span><span class="site-state-item-count">56</span></a></div><div class="site-state-item"><a href="/categories/" title="分类"><span class="site-state-item-icon"><span class="icon iconify" data-icon="ri:folder-2-line"></span></span><span class="site-state-item-count">8</span></a></div><div class="site-state-item"><a href="/tags/" title="标签"><span class="site-state-item-icon"><span class="icon iconify" data-icon="ri:price-tag-3-line"></span></span><span class="site-state-item-count">38</span></a></div><a class="site-state-item hty-icon-button" href="/links/" title="友链"><span class="site-state-item-icon"><span class="icon iconify" data-icon="ri:open-arm-line"></span></span></a></nav><hr style="margin-bottom:0.5rem"><div class="links-of-author"><a class="links-of-author-item hty-icon-button" rel="noopener" href="/atom.xml" title="RSS" target="_blank" style="color:orange"><span class="icon iconify" data-icon="ri:rss-line"></span></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="mailto:nowczj@gmail.com" title="E-Mail" target="_blank" style="color:#8E71C1"><span class="icon iconify" data-icon="ri:mail-line"></span></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://travellings.link" title="Travelling" target="_blank" style="color:var(--hty-text-color)"><span class="icon iconify" data-icon="ri:send-plane-2-line"></span></a></div><hr style="margin:0.5rem 1rem"><div class="links"><a class="links-item hty-icon-button" href="/girls/" title="喜欢的女孩子" style="color:hotpink"><span class="icon iconify" data-icon="ri:women-line"></span></a><a class="links-item hty-icon-button" href="/albums/" title="相册" style="color:undefined"><span class="icon iconify" data-icon="ri:gallery-line"></span></a></div><br><a class="links-item hty-icon-button" id="toggle-mode-btn" href="javascript:;" title="Mode" style="color: #f1cb64"><span class="icon iconify" data-icon="ri:contrast-2-line"></span></a></div><div class="sidebar-panel sidebar-panel-active" id="post-toc-wrap"><div class="post-toc"><div class="post-toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83%E9%83%A8%E7%BD%B2"><span class="toc-number">1.</span> <span class="toc-text">环境部署</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Wazuh%E9%9B%86%E6%88%90Yara"><span class="toc-number">2.</span> <span class="toc-text">Wazuh集成Yara</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#EndPoint%E9%85%8D%E7%BD%AE"><span class="toc-number">2.1.</span> <span class="toc-text">EndPoint配置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Manager%E9%85%8D%E7%BD%AE"><span class="toc-number">2.2.</span> <span class="toc-text">Manager配置</span></a></li></ol></li></ol></div></div></div></aside><main class="sidebar-translate" id="content"><div id="post"><article class="hty-card post-block" itemscope itemtype="https://schema.org/Article" style="--smc-primary:#0078E7;"><link itemprop="mainEntityOfPage" href="https://www.extrader.top/posts/b43325a7/"><span hidden itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="Extrader"><meta itemprop="description"></span><span hidden itemprop="publisher" itemscope itemtype="https://schema.org/Organization"><meta itemprop="name" content="Extraderの博客"></span><header class="post-header"><h1 class="post-title" itemprop="name headline">Wazuh集成Yara小记</h1><div class="post-meta"><div class="post-time" style="display:block"><span class="post-meta-item-icon"><span class="icon iconify" data-icon="ri:calendar-line"></span></span> <span class="post-meta-icon-text">发表于</span> <time title="创建时间：2022-08-01 20:00:00" itemprop="dateCreated datePublished" datetime="2022-08-01T20:00:00+08:00">2022-08-01</time></div><span class="post-count"><span class="post-symbolcount"><span class="post-meta-item-icon" title="本文字数"><span class="icon iconify" data-icon="ri:file-word-line"></span></span> <span title="本文字数">1.8k</span><span class="post-meta-divider">-</span><span class="post-meta-item-icon" title="阅读时长"><span class="icon iconify" data-icon="ri:timer-line"></span></span> <span title="阅读时长">9m</span></span></span><div class="post-classify"><span class="post-category"> <span class="post-meta-item-icon" style="margin-right:3px;"><span class="icon iconify" data-icon="ri:folder-line"></span></span><span itemprop="about" itemscope itemtype="https://schema.org/Thing"><a class="category-item" href="/categories/%E5%A4%87%E5%BF%98%E5%BD%95/" style="--text-color:var(--hty-text-color)" itemprop="url" rel="index"><span itemprop="text">备忘录</span></a></span></span><span class="post-tag"><span class="post-meta-divider">-</span><a class="tag-item" href="/tags/Wazuh/" style="--text-color:var(--hty-text-color)"><span class="post-meta-item-icon"><span class="icon iconify" data-icon="ri:price-tag-3-line"></span></span><span class="tag-name">Wazuh</span></a><a class="tag-item" href="/tags/Yara/" style="--text-color:var(--hty-text-color)"><span class="post-meta-item-icon"><span class="icon iconify" data-icon="ri:price-tag-3-line"></span></span><span class="tag-name">Yara</span></a></span></div></div></header><section class="post-body" itemprop="articleBody"><div class="post-content markdown-body"><h3 id="环境部署"><a href="#环境部署" class="headerlink" title="环境部署"></a>环境部署</h3><p>系统环境全都是CentOS 7.9</p>
+<p>我们主要目的是在Wazuh上测试Yara，所以选择最快的部署方式</p>
+<p>Manager的部署直接使用官方现有的ova文件导入虚拟机，参考<a target="_blank" rel="noopener" href="https://documentation.wazuh.com/current/deployment-options/virtual-machine/virtual-machine.html">Virtual Machine (OVA)</a></p>
+<p>部署好之后我们直接访问虚拟机的ip地址即可，默认账号密码admin/admin，如果页面没加载出来只显示一行英文，尝试启动<code>wazuh-indexer</code>，<code>systemctl start wazuh-indexer</code>。</p>
+<p>登录后在Agent面板有个Deploy new agent按钮，一台agent都没有的显示的直接就是这个界面，在里面选择需要装agent的endpoint的选项，组默认default，然后复制后面的命令到endpoint里执行就可以了。</p>
+<pre class="language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token assign-left variable">WAZUH_MANAGER</span><span class="token operator">=</span><span class="token string">'192.168.88.135'</span> <span class="token assign-left variable">WAZUH_AGENT_GROUP</span><span class="token operator">=</span><span class="token string">'default'</span> yum <span class="token function">install</span> https://packages.wazuh.com/4.x/yum/wazuh-agent-4.3.6-1.x86_64.rpm</code></pre>
+
+<p>这里补充一个agent注册方法，当我们需要在一台已经装了agent的endpoint上重新连接新的manager的时候，可以参考<a target="_blank" rel="noopener" href="https://documentation.wazuh.com/current/user-manual/agent-enrollment/via-manager-API/requesting-the-key.html">Requesting the key</a> ，使用密钥的方式。</p>
+<pre class="language-bash" data-language="bash"><code class="language-bash"><span class="token assign-left variable">TOKEN</span><span class="token operator">=</span><span class="token variable"><span class="token variable">$(</span><span class="token function">curl</span> -u wazuh:wazuh -k -X GET <span class="token string">"https://192.168.88.135:55000/security/user/authenticate?raw=true"</span><span class="token variable">)</span></span>
+<span class="token function">curl</span> -k -X POST -d <span class="token string">'&#123;"name":"k8smaster"&#125;'</span> <span class="token string">"https://192.168.88.135:55000/agents?pretty=true"</span> -H <span class="token string">"Content-Type:application/json"</span> -H <span class="token string">"Authorization: Bearer <span class="token variable">$TOKEN</span>"</span></code></pre>
+
+<p>请求后会返回一个Key，我们在endpoint上执行<code>/var/ossec/bin/manage_agents -i &lt;key&gt;</code></p>
+<p>然后再重启agent，<code>systemctl restart wazuh-agent</code>，就可以与manager连接。</p>
+<h3 id="Wazuh集成Yara"><a href="#Wazuh集成Yara" class="headerlink" title="Wazuh集成Yara"></a>Wazuh集成Yara</h3><p>可以参考官方文档的集成Yara功能</p>
+<p><a target="_blank" rel="noopener" href="https://documentation.wazuh.com/current/proof-of-concept-guide/detect-malware-yara-integration.html">Detecting malware using Yara integration</a></p>
+<p><a target="_blank" rel="noopener" href="https://documentation.wazuh.com/current/user-manual/capabilities/active-response/ar-use-cases/wazuh-with-yara.html">How to integrate Wazuh with YARA</a></p>
+<p>这里对过程进行简要的记录</p>
+<h4 id="EndPoint配置"><a href="#EndPoint配置" class="headerlink" title="EndPoint配置"></a>EndPoint配置</h4><p>Yara部署可以参考 <a target="_blank" rel="noopener" href="https://yara.readthedocs.io/en/stable/gettingstarted.html">Compiling and installing YARA</a>，注意这个仅需要在endpoint上安装即可</p>
+<p>我们需要使用jq对wazuh的<code>active-response</code>功能所输出的json进行解析来传入我们的脚本</p>
+<p>于是需要在endpoint上安装jq，jq找不到参考  <a target="_blank" rel="noopener" href="https://www.cnblogs.com/CaptainLin/p/7064520.html">centos7 yum 安装jq</a>，命令如下</p>
+<pre class="language-bash" data-language="bash"><code class="language-bash"><span class="token function">wget</span> http://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+<span class="token function">rpm</span> -ivh epel-release-latest-7.noarch.rpm
+yum repolist
+yum <span class="token function">install</span> jq</code></pre>
+
+<p>我们使用yara官方开源的rule <a target="_blank" rel="noopener" href="https://github.com/Yara-Rules/rules">Yara-Rules</a> 来测试yara功能是否能正常使用</p>
+<p>yara命令参考：<code>yara /home/yara/rules/index.yar /home/yara/malware/1.txt</code></p>
+<p>测试会报错，显示规则文件中的一些函数不可用，到<code>index.yar</code>文件编辑，只留下webshell的include，其它的都注释掉或者删掉，然后我们添加一条自己的规则（如下），include到index.yar文件中去</p>
+<pre class="language-none"><code class="language-none">rule silent_banker : banker
+&#123;
+    meta:
+        description &#x3D; &quot;This is just an example&quot;
+        thread_level &#x3D; 3
+        in_the_wild &#x3D; true
+    strings:
+        $a &#x3D; &#123;6A 40 68 00 30 00 00 6A 14 8D 91&#125;
+        $b &#x3D; &#123;8D 4D B0 2B C1 83 C0 27 99 6A 4E 59 F7 F9&#125;
+        $c &#x3D; &quot;UVODFRYSIHLNWPEJXQZAKCBGMT&quot;
+		$d &#x3D; &#123;4D 5A&#125;
+    condition:
+        $a or $b or $c or $d
+&#125;</code></pre>
+
+<p>测试会正常输出检测到的文件，</p>
+<p>添加一个<code>yara.sh</code>脚本到<code>/var/ossec/active-response/bin</code>目录下</p>
+<pre class="language-bash" data-language="bash"><code class="language-bash"><span class="token shebang important">#!/bin/bash</span>
+<span class="token comment"># Wazuh - Yara active response</span>
+<span class="token comment"># Copyright (C) 2015-2022, Wazuh Inc.</span>
+<span class="token comment">#</span>
+<span class="token comment"># This program is free software; you can redistribute it</span>
+<span class="token comment"># and/or modify it under the terms of the GNU General Public</span>
+<span class="token comment"># License (version 2) as published by the FSF - Free Software</span>
+<span class="token comment"># Foundation.</span>
+<span class="token comment">#------------------------- Gather parameters -------------------------#</span>
+
+<span class="token comment"># Static active response parameters</span>
+<span class="token assign-left variable">LOCAL</span><span class="token operator">=</span><span class="token variable"><span class="token variable">`</span><span class="token function">dirname</span> $0<span class="token variable">`</span></span>
+
+<span class="token comment"># Extra arguments</span>
+<span class="token builtin class-name">read</span> -r INPUT_JSON
+<span class="token assign-left variable">YARA_PATH</span><span class="token operator">=</span><span class="token variable"><span class="token variable">$(</span><span class="token builtin class-name">echo</span> $INPUT_JSON <span class="token operator">|</span> jq -r .parameters.extra_args<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token variable">)</span></span>
+<span class="token assign-left variable">YARA_RULES</span><span class="token operator">=</span><span class="token variable"><span class="token variable">$(</span><span class="token builtin class-name">echo</span> $INPUT_JSON <span class="token operator">|</span> jq -r .parameters.extra_args<span class="token punctuation">[</span><span class="token number">3</span><span class="token punctuation">]</span><span class="token variable">)</span></span>
+<span class="token assign-left variable">FILENAME</span><span class="token operator">=</span><span class="token variable"><span class="token variable">$(</span><span class="token builtin class-name">echo</span> $INPUT_JSON <span class="token operator">|</span> jq -r .parameters.alert.syscheck.path<span class="token variable">)</span></span>
+<span class="token assign-left variable">COMMAND</span><span class="token operator">=</span><span class="token variable"><span class="token variable">$(</span><span class="token builtin class-name">echo</span> $INPUT_JSON <span class="token operator">|</span> jq -r .command<span class="token variable">)</span></span>
+
+<span class="token comment"># Move to the active response folder</span>
+<span class="token builtin class-name">cd</span> <span class="token variable">$LOCAL</span>
+<span class="token builtin class-name">cd</span> <span class="token punctuation">..</span>/
+
+<span class="token comment"># Set LOG_FILE path</span>
+<span class="token assign-left variable"><span class="token environment constant">PWD</span></span><span class="token operator">=</span><span class="token variable"><span class="token variable">`</span><span class="token builtin class-name">pwd</span><span class="token variable">`</span></span>
+<span class="token assign-left variable">LOG_FILE</span><span class="token operator">=</span><span class="token string">"<span class="token variable">$&#123;<span class="token environment constant">PWD</span>&#125;</span>/../logs/active-responses.log"</span>
+
+<span class="token comment">#----------------------- Analyze parameters -----------------------#</span>
+
+<span class="token keyword">if</span> <span class="token punctuation">[</span><span class="token punctuation">[</span> <span class="token operator">!</span> <span class="token variable">$YARA_PATH</span> <span class="token punctuation">]</span><span class="token punctuation">]</span> <span class="token operator">||</span> <span class="token punctuation">[</span><span class="token punctuation">[</span> <span class="token operator">!</span> <span class="token variable">$YARA_RULES</span> <span class="token punctuation">]</span><span class="token punctuation">]</span>
+<span class="token keyword">then</span>
+  <span class="token builtin class-name">echo</span> <span class="token string">"wazuh-yara: ERROR - Yara active response error. Yara path and rules parameters are mandatory."</span> <span class="token operator">>></span> <span class="token variable">$&#123;LOG_FILE&#125;</span>
+  <span class="token builtin class-name">exit</span>
+<span class="token keyword">fi</span>
+
+<span class="token comment">#------------------------ Analyze command -------------------------#</span>
+<span class="token keyword">if</span> <span class="token punctuation">[</span> <span class="token variable">$&#123;COMMAND&#125;</span> <span class="token operator">=</span> <span class="token string">"add"</span> <span class="token punctuation">]</span>
+<span class="token keyword">then</span>
+  <span class="token comment"># Send control message to execd</span>
+  <span class="token builtin class-name">printf</span> <span class="token string">'&#123;"version":1,"origin":&#123;"name":"yara","module":"active-response"&#125;,"command":"check_keys", "parameters":&#123;"keys":[]&#125;&#125;\n'</span>
+
+  <span class="token builtin class-name">read</span> RESPONSE
+  <span class="token assign-left variable">COMMAND2</span><span class="token operator">=</span><span class="token variable"><span class="token variable">$(</span><span class="token builtin class-name">echo</span> $RESPONSE <span class="token operator">|</span> jq -r .command<span class="token variable">)</span></span>
+  <span class="token keyword">if</span> <span class="token punctuation">[</span> <span class="token variable">$&#123;COMMAND2&#125;</span> <span class="token operator">!=</span> <span class="token string">"continue"</span> <span class="token punctuation">]</span>
+  <span class="token keyword">then</span>
+    <span class="token builtin class-name">echo</span> <span class="token string">"wazuh-yara: INFO - Yara active response aborted."</span> <span class="token operator">>></span> <span class="token variable">$&#123;LOG_FILE&#125;</span>
+    <span class="token builtin class-name">exit</span> <span class="token number">1</span><span class="token punctuation">;</span>
+  <span class="token keyword">fi</span>
+<span class="token keyword">fi</span>
+
+<span class="token comment">#------------------------- Main workflow --------------------------#</span>
+
+<span class="token comment"># Execute Yara scan on the specified filename</span>
+<span class="token assign-left variable">yara_output</span><span class="token operator">=</span><span class="token string">"<span class="token variable"><span class="token variable">$(</span>"$<span class="token punctuation">&#123;</span>YARA_PATH<span class="token punctuation">&#125;</span><span class="token string">"/yara -w -r "</span>$YARA_RULES<span class="token string">" "</span>$FILENAME"<span class="token variable">)</span></span>"</span>
+
+<span class="token keyword">if</span> <span class="token punctuation">[</span><span class="token punctuation">[</span> <span class="token variable">$yara_output</span> <span class="token operator">!=</span> <span class="token string">""</span> <span class="token punctuation">]</span><span class="token punctuation">]</span>
+<span class="token keyword">then</span>
+  <span class="token comment"># Iterate every detected rule and append it to the LOG_FILE</span>
+  <span class="token keyword">while</span> <span class="token builtin class-name">read</span> -r line<span class="token punctuation">;</span> <span class="token keyword">do</span>
+  <span class="token builtin class-name">echo</span> <span class="token string">"wazuh-yara: INFO - Scan result: <span class="token variable">$line</span>"</span> <span class="token operator">>></span> <span class="token variable">$&#123;LOG_FILE&#125;</span>
+  <span class="token keyword">done</span> <span class="token operator">&lt;&lt;&lt;</span> <span class="token string">"<span class="token variable">$yara_output</span>"</span>
+<span class="token keyword">fi</span>
+
+<span class="token builtin class-name">exit</span> <span class="token number">1</span><span class="token punctuation">;</span></code></pre>
+
+<p>这个脚本的作用是为了响应<code>active-response</code>所编写的脚本，参考的json读取内容如下，注意这里低版本wazuh没有json输出给脚本文件读取，实测4.1.5无json输出，4.2.5可以</p>
+<pre class="language-json" data-language="json"><code class="language-json"><span class="token punctuation">&#123;</span>
+  <span class="token property">"version"</span><span class="token operator">:</span><span class="token number">1</span><span class="token punctuation">,</span>
+  <span class="token property">"origin"</span><span class="token operator">:</span><span class="token punctuation">&#123;</span>
+    <span class="token property">"name"</span><span class="token operator">:</span><span class="token string">"node01"</span><span class="token punctuation">,</span>
+    <span class="token property">"module"</span><span class="token operator">:</span><span class="token string">"wazuh-execd"</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token property">"command"</span><span class="token operator">:</span><span class="token string">"add"</span><span class="token punctuation">,</span>
+  <span class="token property">"parameters"</span><span class="token operator">:</span><span class="token punctuation">&#123;</span>
+    <span class="token property">"extra_args"</span><span class="token operator">:</span><span class="token punctuation">[</span><span class="token string">"-yara_path"</span><span class="token punctuation">,</span>
+                  <span class="token string">"/usr/local/bin"</span><span class="token punctuation">,</span>
+                  <span class="token string">"-yara_rules"</span><span class="token punctuation">,</span>
+                  <span class="token string">"/home/yara/rules/index.yar"</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token property">"alert"</span><span class="token operator">:</span><span class="token punctuation">&#123;</span>
+      <span class="token property">"timestamp"</span><span class="token operator">:</span><span class="token string">"2022-08-01T07:23:34.120+0000"</span><span class="token punctuation">,</span>
+      <span class="token property">"rule"</span><span class="token operator">:</span><span class="token punctuation">&#123;</span>
+        <span class="token property">"level"</span><span class="token operator">:</span><span class="token number">7</span><span class="token punctuation">,</span>
+        <span class="token property">"description"</span><span class="token operator">:</span><span class="token string">"File added to /home/yara/malware/ directory."</span><span class="token punctuation">,</span>
+        <span class="token property">"id"</span><span class="token operator">:</span><span class="token string">"100301"</span><span class="token punctuation">,</span>
+        <span class="token property">"firedtimes"</span><span class="token operator">:</span><span class="token number">1</span><span class="token punctuation">,</span>
+        <span class="token property">"mail"</span><span class="token operator">:</span><span class="token boolean">false</span><span class="token punctuation">,</span>
+        <span class="token property">"groups"</span><span class="token operator">:</span><span class="token punctuation">[</span><span class="token string">"syscheck"</span><span class="token punctuation">]</span>
+      <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+      <span class="token property">"agent"</span><span class="token operator">:</span><span class="token punctuation">&#123;</span>
+        <span class="token property">"id"</span><span class="token operator">:</span><span class="token string">"002"</span><span class="token punctuation">,</span>
+        <span class="token property">"name"</span><span class="token operator">:</span><span class="token string">"k8smaster"</span><span class="token punctuation">,</span>
+        <span class="token property">"ip"</span><span class="token operator">:</span><span class="token string">"192.168.88.136"</span>
+      <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+      <span class="token property">"manager"</span><span class="token operator">:</span><span class="token punctuation">&#123;</span>
+        <span class="token property">"name"</span><span class="token operator">:</span><span class="token string">"wazuh-server"</span>
+      <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+      <span class="token property">"id"</span><span class="token operator">:</span><span class="token string">"1659338614.788337"</span><span class="token punctuation">,</span>
+      <span class="token property">"full_log"</span><span class="token operator">:</span><span class="token string">"File '/home/yara/malware/5.txt' added\nMode: whodata\n"</span><span class="token punctuation">,</span>
+      <span class="token property">"syscheck"</span><span class="token operator">:</span><span class="token punctuation">&#123;</span>
+        <span class="token property">"path"</span><span class="token operator">:</span><span class="token string">"/home/yara/malware/5.txt"</span><span class="token punctuation">,</span>
+        <span class="token property">"mode"</span><span class="token operator">:</span><span class="token string">"whodata"</span><span class="token punctuation">,</span>
+        <span class="token property">"size_after"</span><span class="token operator">:</span><span class="token string">"27"</span><span class="token punctuation">,</span>
+        <span class="token property">"perm_after"</span><span class="token operator">:</span><span class="token string">"rw-r--r--"</span><span class="token punctuation">,</span>
+        <span class="token property">"uid_after"</span><span class="token operator">:</span><span class="token string">"0"</span><span class="token punctuation">,</span>
+        <span class="token property">"gid_after"</span><span class="token operator">:</span><span class="token string">"0"</span><span class="token punctuation">,</span>
+        <span class="token property">"md5_after"</span><span class="token operator">:</span><span class="token string">"b0461abc874bd98d753a54fe83861cad"</span><span class="token punctuation">,</span>
+        <span class="token property">"sha1_after"</span><span class="token operator">:</span><span class="token string">"673d0c5490e051efa2d317f6fb08d26732a91a44"</span><span class="token punctuation">,</span>
+        <span class="token property">"sha256_after"</span><span class="token operator">:</span><span class="token string">"463e92b10416cfd4bfc402d1bf2dbda84f4a74db971dceede3cec07c3e4fef6d"</span><span class="token punctuation">,</span>
+        <span class="token property">"uname_after"</span><span class="token operator">:</span><span class="token string">"root"</span><span class="token punctuation">,</span>
+        <span class="token property">"gname_after"</span><span class="token operator">:</span><span class="token string">"root"</span><span class="token punctuation">,</span>
+        <span class="token property">"mtime_after"</span><span class="token operator">:</span><span class="token string">"2022-08-01T07:23:34"</span><span class="token punctuation">,</span>
+        <span class="token property">"inode_after"</span><span class="token operator">:</span><span class="token number">34679532</span><span class="token punctuation">,</span>
+        <span class="token property">"event"</span><span class="token operator">:</span><span class="token string">"added"</span><span class="token punctuation">,</span>
+        <span class="token property">"audit"</span><span class="token operator">:</span><span class="token punctuation">&#123;</span>
+          <span class="token property">"user"</span><span class="token operator">:</span><span class="token punctuation">&#123;</span>
+            <span class="token property">"id"</span><span class="token operator">:</span><span class="token string">"0"</span><span class="token punctuation">,</span>
+            <span class="token property">"name"</span><span class="token operator">:</span><span class="token string">"root"</span>
+          <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+          <span class="token property">"process"</span><span class="token operator">:</span><span class="token punctuation">&#123;</span>
+            <span class="token property">"id"</span><span class="token operator">:</span><span class="token string">"21354"</span><span class="token punctuation">,</span>
+            <span class="token property">"name"</span><span class="token operator">:</span><span class="token string">"/usr/bin/cp"</span><span class="token punctuation">,</span>
+            <span class="token property">"cwd"</span><span class="token operator">:</span><span class="token string">"/home/yara/malware"</span><span class="token punctuation">,</span>
+            <span class="token property">"parent_name"</span><span class="token operator">:</span><span class="token string">"/usr/bin/bash"</span><span class="token punctuation">,</span>
+            <span class="token property">"parent_cwd"</span><span class="token operator">:</span><span class="token string">"/home/yara/malware"</span><span class="token punctuation">,</span>
+            <span class="token property">"ppid"</span><span class="token operator">:</span><span class="token string">"20631"</span>
+          <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+          <span class="token property">"group"</span><span class="token operator">:</span><span class="token punctuation">&#123;</span>
+            <span class="token property">"id"</span><span class="token operator">:</span><span class="token string">"0"</span><span class="token punctuation">,</span>
+            <span class="token property">"name"</span><span class="token operator">:</span><span class="token string">"root"</span>
+          <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+          <span class="token property">"login_user"</span><span class="token operator">:</span><span class="token punctuation">&#123;</span>
+            <span class="token property">"id"</span><span class="token operator">:</span><span class="token string">"0"</span><span class="token punctuation">,</span>
+            <span class="token property">"name"</span><span class="token operator">:</span><span class="token string">"root"</span>
+          <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+          <span class="token property">"effective_user"</span><span class="token operator">:</span><span class="token punctuation">&#123;</span>
+            <span class="token property">"id"</span><span class="token operator">:</span><span class="token string">"0"</span><span class="token punctuation">,</span>
+            <span class="token property">"name"</span><span class="token operator">:</span><span class="token string">"root"</span>
+          <span class="token punctuation">&#125;</span>
+        <span class="token punctuation">&#125;</span>
+      <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+      <span class="token property">"decoder"</span><span class="token operator">:</span><span class="token punctuation">&#123;</span>
+        <span class="token property">"name"</span><span class="token operator">:</span><span class="token string">"syscheck_new_entry"</span>
+      <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+      <span class="token property">"location"</span><span class="token operator">:</span><span class="token string">"syscheck"</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+    <span class="token property">"program"</span><span class="token operator">:</span><span class="token string">"active-response/bin/yara.sh"</span>
+  <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span></code></pre>
+
+<p>要想再<code>ossec.log</code>输出如上结果需要在<code>/var/ossec/etc/local_internal_options.conf</code> 中配置<code>execd.debug=2</code></p>
+<p>这个脚本读取json随后将yara分析的结果以某种格式输出到<code>/var/ossec/logs/active-responses.log</code>文件中，参考格式如下</p>
+<pre class="language-none"><code class="language-none">wazuh-yara: INFO - Scan result: silent_banker &#x2F;home&#x2F;yara&#x2F;malware&#x2F;5.txt</code></pre>
+
+<p>还需要在endpoint中配置一个syscheck以表示需要wazuh监控该目录</p>
+<pre class="language-none"><code class="language-none">&lt;directories whodata&#x3D;&quot;yes&quot;&gt;&#x2F;home&#x2F;yara&#x2F;malware&lt;&#x2F;directories&gt;</code></pre>
+
+<p><code>whodata=&quot;yes&quot;</code>配置是否有效可以通过<code>auditctl -l | grep wazuh</code>检查，具体可参考官方<a target="_blank" rel="noopener" href="https://documentation.wazuh.com/current/user-manual/capabilities/auditing-whodata/who-linux.html">Auditing who-data in Linux</a></p>
+<p>每次修改<code>ossec.conf</code>都需要重启<code>wazuh-agent</code>才能生效，<code>systemctl restart wazuh-agent</code></p>
+<p>至此Agent的配置就好了</p>
+<h4 id="Manager配置"><a href="#Manager配置" class="headerlink" title="Manager配置"></a>Manager配置</h4><p>我们需要在Manager上配置<code>active-response</code>功能以主动响应</p>
+<p>在<code>/var/ossec/etc/ossec.conf</code>中添加</p>
+<pre class="language-markup" data-language="markup"><code class="language-markup"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>ossec_config</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>localfile</span><span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>log_format</span><span class="token punctuation">></span></span>syslog<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>log_format</span><span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>location</span><span class="token punctuation">></span></span>/var/ossec/logs/active-responses.log<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>location</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>localfile</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>command</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>name</span><span class="token punctuation">></span></span>yara<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>name</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>executable</span><span class="token punctuation">></span></span>yara.sh<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>executable</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>extra_args</span><span class="token punctuation">></span></span>-yara_path /usr/local/bin -yara_rules /home/yara/rules/index.yar<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>extra_args</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>timeout_allowed</span><span class="token punctuation">></span></span>no<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>timeout_allowed</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>command</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>active-response</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>command</span><span class="token punctuation">></span></span>yara<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>command</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>location</span><span class="token punctuation">></span></span>local<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>location</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>rules_id</span><span class="token punctuation">></span></span>100300,100301<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>rules_id</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>active-response</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>ossec_config</span><span class="token punctuation">></span></span></code></pre>
+
+<p>修改<code>ossec.conf</code>的配置需要重启manager，<code>systemctl restart wazuh-manager</code></p>
+<p>在<code>/var/ossec/etc/rules</code>目录下添加文件<code>yara_rules.xml</code>文件，内容如下</p>
+<pre class="language-markup" data-language="markup"><code class="language-markup"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>group</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>syscheck,<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>rule</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>100300<span class="token punctuation">"</span></span> <span class="token attr-name">level</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>7<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>if_sid</span><span class="token punctuation">></span></span>550<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>if_sid</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>field</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>file<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>/home/yara/malware/<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>field</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>description</span><span class="token punctuation">></span></span>File modified in /home/yara/malware/ directory.<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>description</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>rule</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>rule</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>100301<span class="token punctuation">"</span></span> <span class="token attr-name">level</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>7<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>if_sid</span><span class="token punctuation">></span></span>554<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>if_sid</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>field</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>file<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>/home/yara/malware/<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>field</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>description</span><span class="token punctuation">></span></span>File added to /home/yara/malware/ directory.<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>description</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>rule</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>group</span><span class="token punctuation">></span></span>
+
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>group</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>yara,<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>rule</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>108000<span class="token punctuation">"</span></span> <span class="token attr-name">level</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>0<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>decoded_as</span><span class="token punctuation">></span></span>yara_decoder<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>decoded_as</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>description</span><span class="token punctuation">></span></span>Yara grouping rule<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>description</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>rule</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>rule</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>108001<span class="token punctuation">"</span></span> <span class="token attr-name">level</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>12<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>if_sid</span><span class="token punctuation">></span></span>108000<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>if_sid</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>match</span><span class="token punctuation">></span></span>wazuh-yara: INFO - Scan result: <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>match</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>description</span><span class="token punctuation">></span></span>File "$(yara_scanned_file)" is a positive match. Yara rule: $(yara_rule)<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>description</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>rule</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>group</span><span class="token punctuation">></span></span></code></pre>
+
+<p>在<code>/var/ossec/etc/decoders</code>目录中添加文件<code>yara_decoders.xml</code>，内容如下</p>
+<pre class="language-markup" data-language="markup"><code class="language-markup"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>decoder</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>yara_decoder<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>prematch</span><span class="token punctuation">></span></span>wazuh-yara:<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>prematch</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>decoder</span><span class="token punctuation">></span></span>
+
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>decoder</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>yara_decoder1<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>parent</span><span class="token punctuation">></span></span>yara_decoder<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>parent</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>regex</span><span class="token punctuation">></span></span>wazuh-yara: (\S+) - Scan result: (\S+) (\S+)<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>regex</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>order</span><span class="token punctuation">></span></span>log_type, yara_rule, yara_scanned_file<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>order</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>decoder</span><span class="token punctuation">></span></span></code></pre>
+
+<p>流程是，通过监控<code>/home/yara/malware/</code>目录中的文件添加和修改动作，然后触发<code>yara command</code>执行sh脚本，写内容到endpoint的<code>/var/ossec/logs/active-responses.log</code>文件，wazuh监控到log文件的变化，读取后通过yara_decoder解析内容，匹配到后以一个新的<code>rule.group</code>为<code>yara</code>的组显示到<code>Kibana</code>界面上</p>
+<p>至此流程拉通</p>
+<p>Wazuh还有很多功能需要探索</p>
+<p>能把官方文档看明白，wazuh就算入门了</p>
+</div></section><div id="reward-container"><span class="hty-icon-button button-glow" id="reward-button" title="打赏" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === &quot;none&quot;) ? &quot;block&quot; : &quot;none&quot;;"><span class="icon iconify" data-icon="ri:hand-coin-line"></span></span><div id="reward-comment">I'm so cute. Please give me money.</div><div id="qr" style="display:none;"><div style="display:inline-block"><a href="/images/zfb.jpg"><img loading="lazy" src="/images/zfb.jpg" alt="支付宝" title="支付宝"></a><div><span style="color:#00A3EE"><span class="icon iconify" data-icon="ri:alipay-line"></span></span></div></div><div style="display:inline-block"><a href="/images/qq.png"><img loading="lazy" src="/images/qq.png" alt="QQ 支付" title="QQ 支付"></a><div><span style="color:#12B7F5"><span class="icon iconify" data-icon="ri:qq-line"></span></span></div></div><div style="display:inline-block"><a href="/images/wx.png"><img loading="lazy" src="/images/wx.png" alt="微信支付" title="微信支付"></a><div><span style="color:#2DC100"><span class="icon iconify" data-icon="ri:wechat-pay-line"></span></span></div></div></div></div><ul class="post-copyright"><li class="post-copyright-author"><strong>本文作者：</strong>Extrader</li><li class="post-copyright-link"><strong>本文链接：</strong><a href="https://www.extrader.top/posts/b43325a7/" title="Wazuh集成Yara小记">https://www.extrader.top/posts/b43325a7/</a></li><li class="post-copyright-license"><strong>版权声明：</strong>本博客所有文章除特别声明外，均默认采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="noopener" title="CC BY-NC-SA 4.0 "><span class="icon iconify" data-icon="ri:creative-commons-line"></span><span class="icon iconify" data-icon="ri:creative-commons-by-line"></span><span class="icon iconify" data-icon="ri:creative-commons-nc-line"></span><span class="icon iconify" data-icon="ri:creative-commons-sa-line"></span></a> 许可协议。</li></ul></article><div class="post-nav"><div class="post-nav-item"></div><div class="post-nav-item"><a class="post-nav-next" href="/posts/3ed094c3/" rel="next" title="蓝帽杯_2021_One_Pointer_PHP"><span class="post-nav-text">蓝帽杯_2021_One_Pointer_PHP</span><span class="icon iconify" data-icon="ri:arrow-right-s-line"></span></a></div></div></div><div class="hty-card" id="comment"><div class="comment-tooltip text-center"><span>若您想及时得到回复提醒，建议跳转 GitHub Issues 评论。</span><br><span>若没有本文 Issue，您可以使用 Comment 模版新建。</span><br><a class="hty-button hty-button--raised" id="github-issues" target="_blank" rel="noopener" href="https://github.com/Extrader-home/Extrader-home.github.io/issues?q=is:issue+Wazuh集成Yara小记">GitHub Issues</a></div><style>.utterances {
+  max-width: 100%;
+}</style><script src="https://giscus.app/client.js" data-repo="Extrader-home/Extrader-home.github.io" data-repo-id="MDEwOlJlcG9zaXRvcnkyMzcxMzM4MzI=" data-category="Giscus Comment" data-category-id="DIC_kwDODiJgCM4CBJAK" data-mapping="title" data-reactions-enabled="1" data-emit-metadata="0" data-theme="light" crossorigin="anonymous" async></script></div></main><footer class="sidebar-translate" id="footer"><div class="beian"><a rel="noopener" href="https://beian.miit.gov.cn/" target="_blank">湘ICP备2021001321号</a></div><div class="copyright"><span>&copy; 2020 – 2022 </span><span class="with-love" id="animate"><span class="icon iconify" data-icon="ri:cloud-line"></span></span><span class="author"> Extrader</span></div><div class="powered"><span>由 <a href="https://hexo.io" target="_blank" rel="noopener">Hexo</a> 驱动 v6.2.0</span><span class="footer-separator">|</span><span>主题 - <a rel="noopener" href="https://github.com/YunYouJun/hexo-theme-yun" target="_blank"><span>Yun</span></a> v1.10.6</span></div><div class="live-time"><span>本博客已运行</span><span id="display_live_time"></span><span class="moe-text">(●'◡'●)</span><script>function blog_live_time() {
+  setTimeout(blog_live_time, 1000);
+  const start = new Date('2020-01-08T00:00:00');
+  const now = new Date();
+  const timeDiff = (now.getTime() - start.getTime());
+  const msPerMinute = 60 * 1000;
+  const msPerHour = 60 * msPerMinute;
+  const msPerDay = 24 * msPerHour;
+  const passDay = Math.floor(timeDiff / msPerDay);
+  const passHour = Math.floor((timeDiff % msPerDay) / 60 / 60 / 1000);
+  const passMinute = Math.floor((timeDiff % msPerHour) / 60 / 1000);
+  const passSecond = Math.floor((timeDiff % msPerMinute) / 1000);
+  display_live_time.innerHTML = ` ${passDay} 天 ${passHour} 小时 ${passMinute} 分 ${passSecond} 秒`;
+}
+blog_live_time();
+</script></div></footer></div><a class="hty-icon-button" id="back-to-top" aria-label="back-to-top" href="#"><span class="icon iconify" data-icon="ri:arrow-up-s-line"></span><svg class="progress-circle-container" viewBox="0 0 100 100"><circle class="progress-circle" id="progressCircle" cx="50" cy="50" r="48" fill="none" stroke="#0078E7" stroke-width="2" stroke-linecap="round"></circle></svg></a><a class="popup-trigger hty-icon-button icon-search" id="search" href="javascript:;" title="搜索"><span class="site-state-item-icon"><span class="icon iconify" data-icon="ri:search-line"></span></span></a><script>window.addEventListener("DOMContentLoaded", () => {
+  // Handle and trigger popup window
+  document.querySelector(".popup-trigger").addEventListener("click", () => {
+    document.querySelector(".popup").classList.add("show");
+    setTimeout(() => {
+      document.querySelector(".search-input").focus();
+    }, 100);
+  });
+
+  // Monitor main search box
+  const onPopupClose = () => {
+    document.querySelector(".popup").classList.remove("show");
+  };
+
+  document.querySelector(".popup-btn-close").addEventListener("click", () => {
+    onPopupClose();
+  });
+
+  window.addEventListener("keyup", event => {
+    if (event.key === "Escape") {
+      onPopupClose();
+    }
+  });
+});
+</script><script src="https://fastly.jsdelivr.net/npm/hexo-generator-searchdb@1.4.0/dist/search.js"></script><script src="/js/search/local-search.js" defer type="module"></script><div class="popup search-popup"><div class="search-header"><span class="popup-btn-close close-icon hty-icon-button"><span class="icon iconify" data-icon="ri:close-line"></span></span></div><div class="search-input-container"><input class="search-input" id="local-search-input" type="text" placeholder="搜索..." value=""></div><div class="search-result-container"></div></div><script src="https://cdn.jsdelivr.net/npm/live2d-widget@^3.1.3/lib/L2Dwidget.min.js"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"https://cdn.jsdelivr.net/npm/live2d-widget-model-wanko@1.0.5/assets/wanko.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true},"react":{"opacity":0.7},"log":false});</script></body></html>
